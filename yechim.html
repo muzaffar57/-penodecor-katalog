@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PenoDecorPro - Keng Qamrovlik Yechim</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f8f9fa; font-family: Arial, sans-serif; padding: 20px; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 22px; }
+        .loyiha { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        .loyiha-title { font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e8f4f8; }
+        .loyiha-content { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .loyiha-content { grid-template-columns: 1fr; } }
+        .bino img { width: 100%; border-radius: 8px; cursor: pointer; }
+        .detallar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .detal img { width: 100%; height: 100px; object-fit: contain; border-radius: 6px; background: #f0f0f0; cursor: pointer; }
+        .detal p { text-align: center; font-size: 11px; color: #7f8c8d; margin-top: 3px; }
+
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; }
+        .lightbox.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .lightbox img { max-width: 95%; max-height: 80vh; object-fit: contain; border-radius: 8px; }
+        .lightbox-title { color: white; font-size: 16px; font-weight: bold; margin-top: 15px; }
+        .lightbox-close { position: absolute; top: 15px; right: 20px; color: white; font-size: 40px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🌟 Keng Qamrovlik Yechim</h1>
+
+    <!-- LOYIHA 1 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 1</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_01.jpg" onclick="openLightbox('Loyiha_01.jpg','Loyiha 1')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_01_detal_01.jpg" onclick="openLightbox('Loyiha_01_detal_01.jpg','Loyiha 1 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_02.jpg" onclick="openLightbox('Loyiha_01_detal_02.jpg','Loyiha 1 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_03.jpg" onclick="openLightbox('Loyiha_01_detal_03.jpg','Loyiha 1 - Detal 3')"><p>Detal 3</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_04.jpg" onclick="openLightbox('Loyiha_01_detal_04.jpg','Loyiha 1 - Detal 4')"><p>Detal 4</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_05.jpg" onclick="openLightbox('Loyiha_01_detal_05.jpg','Loyiha 1 - Detal 5')"><p>Detal 5</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_06.jpg" onclick="openLightbox('Loyiha_01_detal_06.jpg','Loyiha 1 - Detal 6')"><p>Detal 6</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_07.jpg" onclick="openLightbox('Loyiha_01_detal_07.jpg','Loyiha 1 - Detal 7')"><p>Detal 7</p></div>
+                <div class="detal"><img src="Loyiha_01_detal_08.jpg" onclick="openLightbox('Loyiha_01_detal_08.jpg','Loyiha 1 - Detal 8')"><p>Detal 8</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 2 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 2</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_02.jpg" onclick="openLightbox('Loyiha_02.jpg','Loyiha 2')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_02_detal_01.jpg" onclick="openLightbox('Loyiha_02_detal_01.jpg','Loyiha 2 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_02_detal_02.jpg" onclick="openLightbox('Loyiha_02_detal_02.jpg','Loyiha 2 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_02_detal_03.jpg" onclick="openLightbox('Loyiha_02_detal_03.jpg','Loyiha 2 - Detal 3')"><p>Detal 3</p></div>
+                <div class="detal"><img src="Loyiha_02_detal_04.jpg" onclick="openLightbox('Loyiha_02_detal_04.jpg','Loyiha 2 - Detal 4')"><p>Detal 4</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 3 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 3</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_03.jpg" onclick="openLightbox('Loyiha_03.jpg','Loyiha 3')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_03_detal_01.jpg" onclick="openLightbox('Loyiha_03_detal_01.jpg','Loyiha 3 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_03_detal_02.jpg" onclick="openLightbox('Loyiha_03_detal_02.jpg','Loyiha 3 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_03_detal_03.jpg" onclick="openLightbox('Loyiha_03_detal_03.jpg','Loyiha 3 - Detal 3')"><p>Detal 3</p></div>
+                <div class="detal"><img src="Loyiha_03_detal_04.jpg" onclick="openLightbox('Loyiha_03_detal_04.jpg','Loyiha 3 - Detal 4')"><p>Detal 4</p></div>
+                <div class="detal"><img src="Loyiha_03_detal_05.jpg" onclick="openLightbox('Loyiha_03_detal_05.jpg','Loyiha 3 - Detal 5')"><p>Detal 5</p></div>
+                <div class="detal"><img src="Loyiha_03_detal_06.jpg" onclick="openLightbox('Loyiha_03_detal_06.jpg','Loyiha 3 - Detal 6')"><p>Detal 6</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 4 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 4</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_04.jpg" onclick="openLightbox('Loyiha_04.jpg','Loyiha 4')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_04_detal_01.jpg" onclick="openLightbox('Loyiha_04_detal_01.jpg','Loyiha 4 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_04_detal_02.jpg" onclick="openLightbox('Loyiha_04_detal_02.jpg','Loyiha 4 - Detal 2')"><p>Detal 2</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 5 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 5</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_05.jpg" onclick="openLightbox('Loyiha_05.jpg','Loyiha 5')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_05_detal_01.jpg" onclick="openLightbox('Loyiha_05_detal_01.jpg','Loyiha 5 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_05_detal_02.jpg" onclick="openLightbox('Loyiha_05_detal_02.jpg','Loyiha 5 - Detal 2')"><p>Detal 2</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 6 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 6</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_06.jpg" onclick="openLightbox('Loyiha_06.jpg','Loyiha 6')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_06_detal_01.jpg" onclick="openLightbox('Loyiha_06_detal_01.jpg','Loyiha 6 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_06_detal_02.jpg" onclick="openLightbox('Loyiha_06_detal_02.jpg','Loyiha 6 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_06_detal_03.jpg" onclick="openLightbox('Loyiha_06_detal_03.jpg','Loyiha 6 - Detal 3')"><p>Detal 3</p></div>
+                <div class="detal"><img src="Loyiha_06_detal_04.jpg" onclick="openLightbox('Loyiha_06_detal_04.jpg','Loyiha 6 - Detal 4')"><p>Detal 4</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 7 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 7</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_07.jpg" onclick="openLightbox('Loyiha_07.jpg','Loyiha 7')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_07_detal_01.jpg" onclick="openLightbox('Loyiha_07_detal_01.jpg','Loyiha 7 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_07_detal_02.jpg" onclick="openLightbox('Loyiha_07_detal_02.jpg','Loyiha 7 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_07_detal_03.jpg" onclick="openLightbox('Loyiha_07_detal_03.jpg','Loyiha 7 - Detal 3')"><p>Detal 3</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOYIHA 8 -->
+    <div class="loyiha">
+        <div class="loyiha-title">🏠 Loyiha 8</div>
+        <div class="loyiha-content">
+            <div class="bino"><img src="Loyiha_08.jpg" onclick="openLightbox('Loyiha_08.jpg','Loyiha 8')"></div>
+            <div class="detallar">
+                <div class="detal"><img src="Loyiha_08_detal_01.jpg" onclick="openLightbox('Loyiha_08_detal_01.jpg','Loyiha 8 - Detal 1')"><p>Detal 1</p></div>
+                <div class="detal"><img src="Loyiha_08_detal_02.jpg" onclick="openLightbox('Loyiha_08_detal_02.jpg','Loyiha 8 - Detal 2')"><p>Detal 2</p></div>
+                <div class="detal"><img src="Loyiha_08_detal_03.jpg" onclick="openLightbox('Loyiha_08_detal_03.jpg','Loyiha 8 - Detal 3')"><p>Detal 3</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" ontouchstart="closeLightbox()" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="" ontouchstart="closeLightbox()" onclick="closeLightbox()">
+        <div class="lightbox-title" id="lightbox-title"></div>
+    </div>
+
+    <script>
+        function openLightbox(src, title) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-title').textContent = title;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
