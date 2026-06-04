@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PenoDecorPro - Kapitel va Baza Katalogi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f8f9fa; font-family: Arial, sans-serif; padding: 20px; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; font-size: 22px; }
+        .section-title { text-align: center; color: #2c3e50; font-size: 18px; font-weight: bold; margin: 30px 0 15px; padding: 10px; background: #e8f4f8; border-radius: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1000px; margin: 0 auto; }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+        .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .card a { display: block; text-decoration: none; }
+        .card img { width: 100%; height: 150px; object-fit: contain; border-radius: 5px; background: #f0f0f0; }
+        .card h3 { margin-top: 8px; color: #2c3e50; font-size: 13px; }
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; }
+        .lightbox.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .lightbox img { max-width: 95%; max-height: 80vh; object-fit: contain; border-radius: 8px; }
+        .lightbox-title { color: white; font-size: 18px; font-weight: bold; margin-top: 15px; }
+        .lightbox-close { position: absolute; top: 15px; right: 20px; color: white; font-size: 40px; cursor: pointer; line-height: 1; }
+    </style>
+</head>
+<body>
+    <h1>Kapitel va Baza Katalogi</h1>
+
+    <div class="section-title">🏛 Kapitellar</div>
+    <div class="grid">
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_01.jpg','KAPITEL-01');return false;"><img src="KOPITEL_01.jpg"><h3>KAPITEL-01</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_02.jpg','KAPITEL-02');return false;"><img src="KOPITEL_02.jpg"><h3>KAPITEL-02</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_03.jpg','KAPITEL-03');return false;"><img src="KOPITEL_03.jpg"><h3>KAPITEL-03</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_04.jpg','KAPITEL-04');return false;"><img src="KOPITEL_04.jpg"><h3>KAPITEL-04</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_05.jpg','KAPITEL-05');return false;"><img src="KOPITEL_05.jpg"><h3>KAPITEL-05</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_06.jpg','KAPITEL-06');return false;"><img src="KOPITEL_06.jpg"><h3>KAPITEL-06</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_07.jpg','KAPITEL-07');return false;"><img src="KOPITEL_07.jpg"><h3>KAPITEL-07</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('KOPITEL_08.jpg','KAPITEL-08');return false;"><img src="KOPITEL_08.jpg"><h3>KAPITEL-08</h3></a></div>
+    </div>
+
+    <div class="section-title">🏗️ Bazalar</div>
+    <div class="grid">
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_01.jpg','BAZA-01');return false;"><img src="BAZA_01.jpg"><h3>BAZA-01</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_02.jpg','BAZA-02');return false;"><img src="BAZA_02.jpg"><h3>BAZA-02</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_03.jpg','BAZA-03');return false;"><img src="BAZA_03.jpg"><h3>BAZA-03</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_04.jpg','BAZA-04');return false;"><img src="BAZA_04.jpg"><h3>BAZA-04</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_05.jpg','BAZA-05');return false;"><img src="BAZA_05.jpg"><h3>BAZA-05</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_06.jpg','BAZA-06');return false;"><img src="BAZA_06.jpg"><h3>BAZA-06</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_07.jpg','BAZA-07');return false;"><img src="BAZA_07.jpg"><h3>BAZA-07</h3></a></div>
+        <div class="card"><a href="#" onclick="openLightbox('BAZA_08.jpg','BAZA-08');return false;"><img src="BAZA_08.jpg"><h3>BAZA-08</h3></a></div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" ontouchstart="closeLightbox()" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="" ontouchstart="closeLightbox()" onclick="closeLightbox()">
+        <div class="lightbox-title" id="lightbox-title"></div>
+    </div>
+
+    <script>
+        function openLightbox(src, title) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-title').textContent = title;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
