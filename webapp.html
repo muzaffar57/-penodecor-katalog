@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PenoDecorPro</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F3EF;--dark:#1C1C1E;--accent:#C9A96E;--accent2:#8B6914;--card:#fff;--text:#2C2C2E;--muted:#8E8E93;--border:#E5E1D8;--shadow:0 2px 16px rgba(0,0,0,0.07)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);min-height:100vh;padding-bottom:120px}
+.header{background:var(--dark);padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.header img{height:38px;width:auto;border-radius:6px;object-fit:contain}
+.header-info h1{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:white}
+.header-info p{font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.cart-badge{margin-left:auto;background:var(--accent);color:var(--dark);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;display:none}
+.cart-badge.show{display:block}
+.categories{display:flex;gap:6px;padding:12px 12px 6px;overflow-x:auto;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.cat-btn.active{background:var(--dark);border-color:var(--dark);color:white}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--dark);padding:10px 12px 4px}
+.products{padding:6px 12px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp 0.3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card-top{display:flex}
+.card-img{width:100px;height:100px;object-fit:cover;flex-shrink:0;background:var(--bg)}
+.card-img-err{width:100px;height:100px;flex-shrink:0;background:linear-gradient(135deg,#E8E0D0,#D5C9B5);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;color:#9B8866}
+.card-info{flex:1;padding:12px 12px 8px;display:flex;flex-direction:column;justify-content:space-between}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--dark);line-height:1.3}
+.card-razmer{font-size:11px;color:var(--muted);margin-top:2px}
+.card-price{font-size:14px;font-weight:600;color:var(--accent2);margin-top:4px}
+.card-unit{font-size:10px;color:var(--muted);font-weight:400}
+.card-bottom{display:flex;align-items:center;gap:6px;padding:8px 12px 12px;border-top:1px solid var(--border)}
+.qty-input{flex:1;height:38px;border:1.5px solid var(--border);border-radius:8px;padding:0 10px;font-family:'Jost',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.2s}
+.qty-input:focus{border-color:var(--accent)}
+.qty-input::placeholder{color:var(--muted);font-size:12px}
+.add-btn{height:38px;padding:0 14px;background:var(--dark);color:white;border:none;border-radius:8px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.add-btn:active{transform:scale(0.96)}
+.add-btn.added{background:#27AE60}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:190;display:none;backdrop-filter:blur(2px)}
+.overlay.show{display:block}
+.cart-panel{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,0.12);z-index:200;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:75vh;overflow-y:auto}
+.cart-panel.open{transform:translateY(0)}
+.cart-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.cart-header{padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.cart-header h2{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700}
+.cart-close{width:30px;height:30px;border-radius:50%;background:var(--bg);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-items{padding:10px 18px}
+.cart-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);gap:6px}
+.cart-item:last-child{border-bottom:none}
+.cart-item-name{font-size:13px;font-weight:500;flex:1;line-height:1.3}
+.cart-item-detail{font-size:11px;color:var(--muted);margin-top:1px}
+.cart-item-price{font-size:13px;font-weight:600;color:var(--accent2);white-space:nowrap}
+.cart-item-del{width:26px;height:26px;border-radius:50%;background:#FEE;border:none;color:#C0392B;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-total{margin:6px 18px 18px;padding:12px 14px;background:var(--bg);border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.cart-total span:first-child{font-size:13px;color:var(--muted);font-weight:500}
+.cart-total span:last-child{font-size:17px;font-weight:700;color:var(--dark)}
+.cart-fab{position:fixed;bottom:24px;right:16px;background:var(--dark);color:white;border:none;border-radius:50px;padding:12px 18px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.22);display:none;align-items:center;gap:6px;z-index:150;transition:transform 0.2s}
+.cart-fab.show{display:flex}
+.cart-fab:active{transform:scale(0.96)}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" onerror="this.style.display='none'" alt="logo">
+  <div class="header-info">
+    <h1>PenoDecorPro</h1>
+    <p>Fasad bezaklari</p>
+  </div>
+  <div class="cart-badge" id="cartBadge">🛒 0</div>
+</div>
+
+<div class="categories">
+  <button class="cat-btn active" onclick="filterCat('all',this)">Hammasi</button>
+  <button class="cat-btn" onclick="filterCat('karniz',this)">Karnizlar</button>
+  <button class="cat-btn" onclick="filterCat('belbog',this)">Belbog'</button>
+  <button class="cat-btn" onclick="filterCat('ustun',this)">Ustunlar</button>
+  <button class="cat-btn" onclick="filterCat('rom',this)">Rom bezak</button>
+  <button class="cat-btn" onclick="filterCat('ramka',this)">Ramkalar</button>
+  <button class="cat-btn" onclick="filterCat('kapitel',this)">Kapitel</button>
+  <button class="cat-btn" onclick="filterCat('baza',this)">Baza</button>
+</div>
+
+<div id="productsContainer"></div>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-handle"></div>
+  <div class="cart-header">
+    <h2>🛒 Savat</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-total" id="cartTotal" style="display:none">
+    <span>Jami summa:</span>
+    <span id="totalPrice">0 so'm</span>
+  </div>
+</div>
+
+<button class="cart-fab" id="cartFab" onclick="openCart()">
+  🛒 <span id="fabText">Savat</span>
+</button>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.setHeaderColor && tg.setHeaderColor('#1C1C1E');
+
+const products = [
+  {id:1,cat:"karniz",name:"Karniz MODEL-01",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_01.jpg",price:38000,unit:"metr"},
+  {id:2,cat:"karniz",name:"Karniz MODEL-01",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_01.jpg",price:48000,unit:"metr"},
+  {id:3,cat:"karniz",name:"Karniz MODEL-01",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_01.jpg",price:70000,unit:"metr"},
+  {id:4,cat:"karniz",name:"Karniz MODEL-02",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_02.jpg",price:22000,unit:"metr"},
+  {id:5,cat:"karniz",name:"Karniz MODEL-02",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_02.jpg",price:32000,unit:"metr"},
+  {id:6,cat:"karniz",name:"Karniz MODEL-02",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_02.jpg",price:45000,unit:"metr"},
+  {id:7,cat:"karniz",name:"Karniz MODEL-03",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_03.jpg",price:32000,unit:"metr"},
+  {id:8,cat:"karniz",name:"Karniz MODEL-03",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_03.jpg",price:42000,unit:"metr"},
+  {id:9,cat:"karniz",name:"Karniz MODEL-03",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_03.jpg",price:55000,unit:"metr"},
+  {id:10,cat:"karniz",name:"Karniz MODEL-04",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_04.jpg",price:30000,unit:"metr"},
+  {id:11,cat:"karniz",name:"Karniz MODEL-04",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_04.jpg",price:42000,unit:"metr"},
+  {id:12,cat:"karniz",name:"Karniz MODEL-04",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_04.jpg",price:60000,unit:"metr"},
+  {id:13,cat:"karniz",name:"Karniz MODEL-05",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_05.jpg",price:20000,unit:"metr"},
+  {id:14,cat:"karniz",name:"Karniz MODEL-05",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_05.jpg",price:25000,unit:"metr"},
+  {id:15,cat:"karniz",name:"Karniz MODEL-05",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_05.jpg",price:42000,unit:"metr"},
+  {id:16,cat:"karniz",name:"Karniz MODEL-06",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_06.jpg",price:19000,unit:"metr"},
+  {id:17,cat:"karniz",name:"Karniz MODEL-06",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_06.jpg",price:25000,unit:"metr"},
+  {id:18,cat:"karniz",name:"Karniz MODEL-06",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_06.jpg",price:34000,unit:"metr"},
+  {id:19,cat:"karniz",name:"Karniz MODEL-07",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_07.jpg",price:16000,unit:"metr"},
+  {id:20,cat:"karniz",name:"Karniz MODEL-07",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_07.jpg",price:20000,unit:"metr"},
+  {id:21,cat:"karniz",name:"Karniz MODEL-07",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_07.jpg",price:28000,unit:"metr"},
+  {id:22,cat:"karniz",name:"Karniz MODEL-08",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_08.jpg",price:26000,unit:"metr"},
+  {id:23,cat:"karniz",name:"Karniz MODEL-08",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_08.jpg",price:34000,unit:"metr"},
+  {id:24,cat:"karniz",name:"Karniz MODEL-08",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_08.jpg",price:50000,unit:"metr"},
+  {id:25,cat:"karniz",name:"Karniz MODEL-09",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_09.jpg",price:19000,unit:"metr"},
+  {id:26,cat:"karniz",name:"Karniz MODEL-09",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_09.jpg",price:26000,unit:"metr"},
+  {id:27,cat:"karniz",name:"Karniz MODEL-09",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_09.jpg",price:40000,unit:"metr"},
+  {id:28,cat:"karniz",name:"Karniz MODEL-10",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_10.jpg",price:17000,unit:"metr"},
+  {id:29,cat:"karniz",name:"Karniz MODEL-10",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_10.jpg",price:24000,unit:"metr"},
+  {id:30,cat:"karniz",name:"Karniz MODEL-10",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_10.jpg",price:36000,unit:"metr"},
+  {id:31,cat:"karniz",name:"Karniz MODEL-11",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_11.jpg",price:22000,unit:"metr"},
+  {id:32,cat:"karniz",name:"Karniz MODEL-11",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_11.jpg",price:30000,unit:"metr"},
+  {id:33,cat:"karniz",name:"Karniz MODEL-11",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_11.jpg",price:44000,unit:"metr"},
+  {id:34,cat:"karniz",name:"Karniz MODEL-12",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_12.jpg",price:17000,unit:"metr"},
+  {id:35,cat:"karniz",name:"Karniz MODEL-12",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_12.jpg",price:28000,unit:"metr"},
+  {id:36,cat:"karniz",name:"Karniz MODEL-12",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_12.jpg",price:44000,unit:"metr"},
+  {id:37,cat:"karniz",name:"Karniz MODEL-13",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_13.jpg",price:21000,unit:"metr"},
+  {id:38,cat:"karniz",name:"Karniz MODEL-13",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_13.jpg",price:28000,unit:"metr"},
+  {id:39,cat:"karniz",name:"Karniz MODEL-13",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_13.jpg",price:45000,unit:"metr"},
+  {id:40,cat:"karniz",name:"Karniz MODEL-14",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_14.jpg",price:18000,unit:"metr"},
+  {id:41,cat:"karniz",name:"Karniz MODEL-14",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_14.jpg",price:25000,unit:"metr"},
+  {id:42,cat:"karniz",name:"Karniz MODEL-14",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_14.jpg",price:36000,unit:"metr"},
+  {id:43,cat:"karniz",name:"Karniz MODEL-15",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_15.jpg",price:20000,unit:"metr"},
+  {id:44,cat:"karniz",name:"Karniz MODEL-15",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_15.jpg",price:28000,unit:"metr"},
+  {id:45,cat:"karniz",name:"Karniz MODEL-15",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_15.jpg",price:45000,unit:"metr"},
+  {id:46,cat:"karniz",name:"Karniz MODEL-16",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_16.jpg",price:14000,unit:"metr"},
+  {id:47,cat:"karniz",name:"Karniz MODEL-16",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_16.jpg",price:18000,unit:"metr"},
+  {id:48,cat:"karniz",name:"Karniz MODEL-16",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_16.jpg",price:25000,unit:"metr"},
+  {id:49,cat:"karniz",name:"Karniz MODEL-17",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_17.jpg",price:25000,unit:"metr"},
+  {id:50,cat:"karniz",name:"Karniz MODEL-17",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_17.jpg",price:44000,unit:"metr"},
+  {id:51,cat:"karniz",name:"Karniz MODEL-17",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_17.jpg",price:55000,unit:"metr"},
+  {id:52,cat:"karniz",name:"Karniz MODEL-18",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_18.jpg",price:27000,unit:"metr"},
+  {id:53,cat:"karniz",name:"Karniz MODEL-18",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_18.jpg",price:36000,unit:"metr"},
+  {id:54,cat:"karniz",name:"Karniz MODEL-18",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_18.jpg",price:55000,unit:"metr"},
+  {id:55,cat:"karniz",name:"Karniz MODEL-19",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_19.jpg",price:33000,unit:"metr"},
+  {id:56,cat:"karniz",name:"Karniz MODEL-19",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_19.jpg",price:42000,unit:"metr"},
+  {id:57,cat:"karniz",name:"Karniz MODEL-19",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_19.jpg",price:65000,unit:"metr"},
+  {id:58,cat:"karniz",name:"Karniz MODEL-20",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_20.jpg",price:30000,unit:"metr"},
+  {id:59,cat:"karniz",name:"Karniz MODEL-20",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_20.jpg",price:42000,unit:"metr"},
+  {id:60,cat:"karniz",name:"Karniz MODEL-20",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_20.jpg",price:65000,unit:"metr"},
+  {id:61,cat:"karniz",name:"Karniz MODEL-21",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_21.jpg",price:32000,unit:"metr"},
+  {id:62,cat:"karniz",name:"Karniz MODEL-21",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_21.jpg",price:44000,unit:"metr"},
+  {id:63,cat:"karniz",name:"Karniz MODEL-21",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_21.jpg",price:66000,unit:"metr"},
+  {id:64,cat:"karniz",name:"Karniz MODEL-22",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_22.jpg",price:14000,unit:"metr"},
+  {id:65,cat:"karniz",name:"Karniz MODEL-22",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_22.jpg",price:18000,unit:"metr"},
+  {id:66,cat:"karniz",name:"Karniz MODEL-22",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_22.jpg",price:24000,unit:"metr"},
+  {id:67,cat:"karniz",name:"Karniz MODEL-23",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_23.jpg",price:23000,unit:"metr"},
+  {id:68,cat:"karniz",name:"Karniz MODEL-23",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_23.jpg",price:37000,unit:"metr"},
+  {id:69,cat:"karniz",name:"Karniz MODEL-23",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_23.jpg",price:50000,unit:"metr"},
+  {id:70,cat:"karniz",name:"Karniz MODEL-24",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_24.jpg",price:16000,unit:"metr"},
+  {id:71,cat:"karniz",name:"Karniz MODEL-24",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_24.jpg",price:20000,unit:"metr"},
+  {id:72,cat:"karniz",name:"Karniz MODEL-24",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_24.jpg",price:30000,unit:"metr"},
+  {id:73,cat:"karniz",name:"Karniz MODEL-25",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_25.jpg",price:20000,unit:"metr"},
+  {id:74,cat:"karniz",name:"Karniz MODEL-25",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_25.jpg",price:30000,unit:"metr"},
+  {id:75,cat:"karniz",name:"Karniz MODEL-25",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_25.jpg",price:43000,unit:"metr"},
+  {id:76,cat:"karniz",name:"Karniz MODEL-26",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_26.jpg",price:32000,unit:"metr"},
+  {id:77,cat:"karniz",name:"Karniz MODEL-26",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_26.jpg",price:40000,unit:"metr"},
+  {id:78,cat:"karniz",name:"Karniz MODEL-26",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_26.jpg",price:62000,unit:"metr"},
+  {id:79,cat:"belbog",name:"Belbog MODEL-01",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_01.jpg",price:22000,unit:"metr"},
+  {id:80,cat:"belbog",name:"Belbog MODEL-01",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_01.jpg",price:30000,unit:"metr"},
+  {id:81,cat:"belbog",name:"Belbog MODEL-01",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_01.jpg",price:46000,unit:"metr"},
+  {id:82,cat:"belbog",name:"Belbog MODEL-02",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_02.jpg",price:18000,unit:"metr"},
+  {id:83,cat:"belbog",name:"Belbog MODEL-02",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_02.jpg",price:26000,unit:"metr"},
+  {id:84,cat:"belbog",name:"Belbog MODEL-02",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_02.jpg",price:42000,unit:"metr"},
+  {id:85,cat:"belbog",name:"Belbog MODEL-03",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_03.jpg",price:14000,unit:"metr"},
+  {id:86,cat:"belbog",name:"Belbog MODEL-03",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_03.jpg",price:20000,unit:"metr"},
+  {id:87,cat:"belbog",name:"Belbog MODEL-03",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_03.jpg",price:30000,unit:"metr"},
+  {id:88,cat:"belbog",name:"Belbog MODEL-04",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_04.jpg",price:14000,unit:"metr"},
+  {id:89,cat:"belbog",name:"Belbog MODEL-04",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_04.jpg",price:20000,unit:"metr"},
+  {id:90,cat:"belbog",name:"Belbog MODEL-04",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_04.jpg",price:30000,unit:"metr"},
+  {id:91,cat:"belbog",name:"Belbog MODEL-05",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_05.jpg",price:14000,unit:"metr"},
+  {id:92,cat:"belbog",name:"Belbog MODEL-05",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_05.jpg",price:20000,unit:"metr"},
+  {id:93,cat:"belbog",name:"Belbog MODEL-05",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_05.jpg",price:30000,unit:"metr"},
+  {id:94,cat:"belbog",name:"Belbog MODEL-06",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_06.jpg",price:14000,unit:"metr"},
+  {id:95,cat:"belbog",name:"Belbog MODEL-06",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_06.jpg",price:20000,unit:"metr"},
+  {id:96,cat:"belbog",name:"Belbog MODEL-06",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_06.jpg",price:30000,unit:"metr"},
+  {id:97,cat:"belbog",name:"Belbog MODEL-07",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_07.jpg",price:14000,unit:"metr"},
+  {id:98,cat:"belbog",name:"Belbog MODEL-07",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_07.jpg",price:20000,unit:"metr"},
+  {id:99,cat:"belbog",name:"Belbog MODEL-07",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_07.jpg",price:30000,unit:"metr"},
+  {id:100,cat:"belbog",name:"Belbog MODEL-08",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_08.jpg",price:17000,unit:"metr"},
+  {id:101,cat:"belbog",name:"Belbog MODEL-08",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_08.jpg",price:22000,unit:"metr"},
+  {id:102,cat:"belbog",name:"Belbog MODEL-08",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_08.jpg",price:30000,unit:"metr"},
+  {id:103,cat:"belbog",name:"Belbog MODEL-09",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_09.jpg",price:14000,unit:"metr"},
+  {id:104,cat:"belbog",name:"Belbog MODEL-09",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_09.jpg",price:20000,unit:"metr"},
+  {id:105,cat:"belbog",name:"Belbog MODEL-09",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_09.jpg",price:30000,unit:"metr"},
+  {id:106,cat:"belbog",name:"Belbog MODEL-10",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_10.jpg",price:14000,unit:"metr"},
+  {id:107,cat:"belbog",name:"Belbog MODEL-10",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_10.jpg",price:20000,unit:"metr"},
+  {id:108,cat:"belbog",name:"Belbog MODEL-10",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_10.jpg",price:30000,unit:"metr"},
+  {id:109,cat:"belbog",name:"Belbog MODEL-11",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_11.jpg",price:17000,unit:"metr"},
+  {id:110,cat:"belbog",name:"Belbog MODEL-11",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_11.jpg",price:20000,unit:"metr"},
+  {id:111,cat:"belbog",name:"Belbog MODEL-11",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_11.jpg",price:35000,unit:"metr"},
+  {id:112,cat:"belbog",name:"Belbog MODEL-12",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_12.jpg",price:14000,unit:"metr"},
+  {id:113,cat:"belbog",name:"Belbog MODEL-12",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_12.jpg",price:20000,unit:"metr"},
+  {id:114,cat:"belbog",name:"Belbog MODEL-12",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_12.jpg",price:30000,unit:"metr"},
+  {id:115,cat:"belbog",name:"Belbog MODEL-13",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_13.jpg",price:15000,unit:"metr"},
+  {id:116,cat:"belbog",name:"Belbog MODEL-13",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_13.jpg",price:21000,unit:"metr"},
+  {id:117,cat:"belbog",name:"Belbog MODEL-13",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_13.jpg",price:31000,unit:"metr"},
+  {id:118,cat:"belbog",name:"Belbog MODEL-14",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_14.jpg",price:18000,unit:"metr"},
+  {id:119,cat:"belbog",name:"Belbog MODEL-14",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_14.jpg",price:24000,unit:"metr"},
+  {id:120,cat:"belbog",name:"Belbog MODEL-14",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_14.jpg",price:30000,unit:"metr"},
+  {id:121,cat:"belbog",name:"Belbog MODEL-15",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_15.jpg",price:19000,unit:"metr"},
+  {id:122,cat:"belbog",name:"Belbog MODEL-15",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_15.jpg",price:27000,unit:"metr"},
+  {id:123,cat:"belbog",name:"Belbog MODEL-15",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_15.jpg",price:40000,unit:"metr"},
+  {id:124,cat:"belbog",name:"Belbog MODEL-16",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_16.jpg",price:14000,unit:"metr"},
+  {id:125,cat:"belbog",name:"Belbog MODEL-16",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_16.jpg",price:20000,unit:"metr"},
+  {id:126,cat:"belbog",name:"Belbog MODEL-16",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_16.jpg",price:30000,unit:"metr"},
+  {id:127,cat:"belbog",name:"Belbog MODEL-17",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_17.jpg",price:14000,unit:"metr"},
+  {id:128,cat:"belbog",name:"Belbog MODEL-17",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_17.jpg",price:21000,unit:"metr"},
+  {id:129,cat:"belbog",name:"Belbog MODEL-17",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_17.jpg",price:33000,unit:"metr"},
+  {id:130,cat:"belbog",name:"Belbog MODEL-18",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_18.jpg",price:14000,unit:"metr"},
+  {id:131,cat:"belbog",name:"Belbog MODEL-18",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_18.jpg",price:20000,unit:"metr"},
+  {id:132,cat:"belbog",name:"Belbog MODEL-18",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_18.jpg",price:30000,unit:"metr"},
+  {id:133,cat:"belbog",name:"Belbog MODEL-19",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_19.jpg",price:14000,unit:"metr"},
+  {id:134,cat:"belbog",name:"Belbog MODEL-19",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_19.jpg",price:18000,unit:"metr"},
+  {id:135,cat:"belbog",name:"Belbog MODEL-19",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_19.jpg",price:20000,unit:"metr"},
+  {id:136,cat:"belbog",name:"Belbog MODEL-20",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_20.jpg",price:15000,unit:"metr"},
+  {id:137,cat:"belbog",name:"Belbog MODEL-20",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_20.jpg",price:21000,unit:"metr"},
+  {id:138,cat:"belbog",name:"Belbog MODEL-20",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_20.jpg",price:32000,unit:"metr"},
+  {id:139,cat:"belbog",name:"Belbog MODEL-21",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_21.jpg",price:16000,unit:"metr"},
+  {id:140,cat:"belbog",name:"Belbog MODEL-21",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_21.jpg",price:22000,unit:"metr"},
+  {id:141,cat:"belbog",name:"Belbog MODEL-21",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_21.jpg",price:32000,unit:"metr"},
+  {id:142,cat:"belbog",name:"Belbog MODEL-22",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_22.jpg",price:20000,unit:"metr"},
+  {id:143,cat:"belbog",name:"Belbog MODEL-22",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_22.jpg",price:27000,unit:"metr"},
+  {id:144,cat:"belbog",name:"Belbog MODEL-22",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_22.jpg",price:42000,unit:"metr"},
+  {id:145,cat:"belbog",name:"Belbog MODEL-23",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_23.jpg",price:21000,unit:"metr"},
+  {id:146,cat:"belbog",name:"Belbog MODEL-23",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_23.jpg",price:28000,unit:"metr"},
+  {id:147,cat:"belbog",name:"Belbog MODEL-23",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_23.jpg",price:42000,unit:"metr"},
+  {id:148,cat:"belbog",name:"Belbog MODEL-24",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_24.jpg",price:14000,unit:"metr"},
+  {id:149,cat:"belbog",name:"Belbog MODEL-24",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_24.jpg",price:20000,unit:"metr"},
+  {id:150,cat:"belbog",name:"Belbog MODEL-24",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_24.jpg",price:28000,unit:"metr"},
+  {id:151,cat:"belbog",name:"Belbog MODEL-25",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_25.jpg",price:14000,unit:"metr"},
+  {id:152,cat:"belbog",name:"Belbog MODEL-25",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_25.jpg",price:18000,unit:"metr"},
+  {id:153,cat:"belbog",name:"Belbog MODEL-25",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_25.jpg",price:29000,unit:"metr"},
+  {id:154,cat:"belbog",name:"Belbog MODEL-26",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_26.jpg",price:14000,unit:"metr"},
+  {id:155,cat:"belbog",name:"Belbog MODEL-26",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_26.jpg",price:19000,unit:"metr"},
+  {id:156,cat:"belbog",name:"Belbog MODEL-26",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_26.jpg",price:29000,unit:"metr"},
+  {id:157,cat:"belbog",name:"Belbog MODEL-27",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_27.jpg",price:16000,unit:"metr"},
+  {id:158,cat:"belbog",name:"Belbog MODEL-27",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_27.jpg",price:22000,unit:"metr"},
+  {id:159,cat:"belbog",name:"Belbog MODEL-27",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_27.jpg",price:32500,unit:"metr"},
+  {id:160,cat:"belbog",name:"Belbog MODEL-28",razmer:"17sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_28.jpg",price:13000,unit:"metr"},
+  {id:161,cat:"belbog",name:"Belbog MODEL-28",razmer:"20sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_28.jpg",price:20000,unit:"metr"},
+  {id:162,cat:"belbog",name:"Belbog MODEL-28",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_28.jpg",price:30000,unit:"metr"},
+  {id:163,cat:"ustun",name:"Ustun",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:18000,unit:"metr"},
+  {id:164,cat:"ustun",name:"Ustun",razmer:"30sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:21000,unit:"metr"},
+  {id:165,cat:"ustun",name:"Ustun",razmer:"35sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:24000,unit:"metr"},
+  {id:166,cat:"ustun",name:"Ustun",razmer:"40sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:28000,unit:"metr"},
+  {id:167,cat:"ustun",name:"Ustun",razmer:"45sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:32000,unit:"metr"},
+  {id:168,cat:"ustun",name:"Ustun",razmer:"50sm",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",price:36000,unit:"metr"},
+  {id:169,cat:"rom",name:"Rom bezak MODEL-01",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/01.jpg",price:140000,unit:"dona"},
+  {id:170,cat:"rom",name:"Rom bezak MODEL-01",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/01.jpg",price:110000,unit:"dona"},
+  {id:171,cat:"rom",name:"Rom bezak MODEL-01",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/01.jpg",price:110000,unit:"dona"},
+  {id:172,cat:"rom",name:"Rom bezak MODEL-01",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/01.jpg",price:85000,unit:"dona"},
+  {id:173,cat:"rom",name:"Rom bezak MODEL-02",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/02.jpg",price:110000,unit:"dona"},
+  {id:174,cat:"rom",name:"Rom bezak MODEL-02",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/02.jpg",price:80000,unit:"dona"},
+  {id:175,cat:"rom",name:"Rom bezak MODEL-02",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/02.jpg",price:80000,unit:"dona"},
+  {id:176,cat:"rom",name:"Rom bezak MODEL-02",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/02.jpg",price:60000,unit:"dona"},
+  {id:177,cat:"rom",name:"Rom bezak MODEL-03",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/03.jpg",price:120000,unit:"dona"},
+  {id:178,cat:"rom",name:"Rom bezak MODEL-03",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/03.jpg",price:96000,unit:"dona"},
+  {id:179,cat:"rom",name:"Rom bezak MODEL-03",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/03.jpg",price:90000,unit:"dona"},
+  {id:180,cat:"rom",name:"Rom bezak MODEL-03",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/03.jpg",price:70000,unit:"dona"},
+  {id:181,cat:"rom",name:"Rom bezak MODEL-04",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/04.jpg",price:150000,unit:"dona"},
+  {id:182,cat:"rom",name:"Rom bezak MODEL-04",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/04.jpg",price:120000,unit:"dona"},
+  {id:183,cat:"rom",name:"Rom bezak MODEL-04",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/04.jpg",price:110000,unit:"dona"},
+  {id:184,cat:"rom",name:"Rom bezak MODEL-04",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/04.jpg",price:90000,unit:"dona"},
+  {id:185,cat:"rom",name:"Rom bezak MODEL-05",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/05.jpg",price:150000,unit:"dona"},
+  {id:186,cat:"rom",name:"Rom bezak MODEL-05",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/05.jpg",price:110000,unit:"dona"},
+  {id:187,cat:"rom",name:"Rom bezak MODEL-05",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/05.jpg",price:140000,unit:"dona"},
+  {id:188,cat:"rom",name:"Rom bezak MODEL-05",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/05.jpg",price:100000,unit:"dona"},
+  {id:189,cat:"rom",name:"Rom bezak MODEL-06",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/06.jpg",price:150000,unit:"dona"},
+  {id:190,cat:"rom",name:"Rom bezak MODEL-06",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/06.jpg",price:110000,unit:"dona"},
+  {id:191,cat:"rom",name:"Rom bezak MODEL-06",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/06.jpg",price:140000,unit:"dona"},
+  {id:192,cat:"rom",name:"Rom bezak MODEL-06",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/06.jpg",price:100000,unit:"dona"},
+  {id:193,cat:"rom",name:"Rom bezak MODEL-07",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/07.jpg",price:120000,unit:"dona"},
+  {id:194,cat:"rom",name:"Rom bezak MODEL-07",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/07.jpg",price:100000,unit:"dona"},
+  {id:195,cat:"rom",name:"Rom bezak MODEL-07",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/07.jpg",price:90000,unit:"dona"},
+  {id:196,cat:"rom",name:"Rom bezak MODEL-07",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/07.jpg",price:70000,unit:"dona"},
+  {id:197,cat:"rom",name:"Rom bezak MODEL-08",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/08.jpg",price:140000,unit:"dona"},
+  {id:198,cat:"rom",name:"Rom bezak MODEL-08",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/08.jpg",price:105000,unit:"dona"},
+  {id:199,cat:"rom",name:"Rom bezak MODEL-08",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/08.jpg",price:110000,unit:"dona"},
+  {id:200,cat:"rom",name:"Rom bezak MODEL-08",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/08.jpg",price:90000,unit:"dona"},
+  {id:201,cat:"rom",name:"Rom bezak MODEL-09",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/09.jpg",price:140000,unit:"dona"},
+  {id:202,cat:"rom",name:"Rom bezak MODEL-09",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/09.jpg",price:110000,unit:"dona"},
+  {id:203,cat:"rom",name:"Rom bezak MODEL-09",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/09.jpg",price:110000,unit:"dona"},
+  {id:204,cat:"rom",name:"Rom bezak MODEL-09",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/09.jpg",price:90000,unit:"dona"},
+  {id:205,cat:"rom",name:"Rom bezak MODEL-10",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/10.jpg",price:150000,unit:"dona"},
+  {id:206,cat:"rom",name:"Rom bezak MODEL-10",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/10.jpg",price:120000,unit:"dona"},
+  {id:207,cat:"rom",name:"Rom bezak MODEL-10",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/10.jpg",price:120000,unit:"dona"},
+  {id:208,cat:"rom",name:"Rom bezak MODEL-10",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/10.jpg",price:100000,unit:"dona"},
+  {id:209,cat:"rom",name:"Rom bezak MODEL-11",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/11.jpg",price:140000,unit:"dona"},
+  {id:210,cat:"rom",name:"Rom bezak MODEL-11",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/11.jpg",price:110000,unit:"dona"},
+  {id:211,cat:"rom",name:"Rom bezak MODEL-11",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/11.jpg",price:85000,unit:"dona"},
+  {id:212,cat:"rom",name:"Rom bezak MODEL-11",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/11.jpg",price:70000,unit:"dona"},
+  {id:213,cat:"rom",name:"Rom bezak MODEL-12",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/12.jpg",price:160000,unit:"dona"},
+  {id:214,cat:"rom",name:"Rom bezak MODEL-12",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/12.jpg",price:130000,unit:"dona"},
+  {id:215,cat:"rom",name:"Rom bezak MODEL-12",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/12.jpg",price:120000,unit:"dona"},
+  {id:216,cat:"rom",name:"Rom bezak MODEL-12",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/12.jpg",price:100000,unit:"dona"},
+  {id:217,cat:"rom",name:"Rom bezak MODEL-13",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/13.jpg",price:160000,unit:"dona"},
+  {id:218,cat:"rom",name:"Rom bezak MODEL-13",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/13.jpg",price:130000,unit:"dona"},
+  {id:219,cat:"rom",name:"Rom bezak MODEL-13",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/13.jpg",price:120000,unit:"dona"},
+  {id:220,cat:"rom",name:"Rom bezak MODEL-13",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/13.jpg",price:100000,unit:"dona"},
+  {id:221,cat:"rom",name:"Rom bezak MODEL-14",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/14.jpg",price:160000,unit:"dona"},
+  {id:222,cat:"rom",name:"Rom bezak MODEL-14",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/14.jpg",price:130000,unit:"dona"},
+  {id:223,cat:"rom",name:"Rom bezak MODEL-14",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/14.jpg",price:120000,unit:"dona"},
+  {id:224,cat:"rom",name:"Rom bezak MODEL-14",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/14.jpg",price:100000,unit:"dona"},
+  {id:225,cat:"rom",name:"Rom bezak MODEL-15",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/15.jpg",price:150000,unit:"dona"},
+  {id:226,cat:"rom",name:"Rom bezak MODEL-15",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/15.jpg",price:120000,unit:"dona"},
+  {id:227,cat:"rom",name:"Rom bezak MODEL-15",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/15.jpg",price:120000,unit:"dona"},
+  {id:228,cat:"rom",name:"Rom bezak MODEL-15",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/15.jpg",price:100000,unit:"dona"},
+  {id:229,cat:"rom",name:"Rom bezak MODEL-16",razmer:"Rom katta",img:"https://muzaffar57.github.io/-penodecor-katalog/16.jpg",price:130000,unit:"dona"},
+  {id:230,cat:"rom",name:"Rom bezak MODEL-16",razmer:"Rom kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/16.jpg",price:100000,unit:"dona"},
+  {id:231,cat:"rom",name:"Rom bezak MODEL-16",razmer:"Eshik katta",img:"https://muzaffar57.github.io/-penodecor-katalog/16.jpg",price:100000,unit:"dona"},
+  {id:232,cat:"rom",name:"Rom bezak MODEL-16",razmer:"Eshik kichik",img:"https://muzaffar57.github.io/-penodecor-katalog/16.jpg",price:80000,unit:"dona"},
+  {id:233,cat:"ramka",name:"Devorga ramka MODEL-01",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_01.jpg",price:180000,unit:"dona"},
+  {id:234,cat:"ramka",name:"Devorga ramka MODEL-02",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_02.jpg",price:250000,unit:"dona"},
+  {id:235,cat:"ramka",name:"Devorga ramka MODEL-03",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_03.jpg",price:240000,unit:"dona"},
+  {id:236,cat:"ramka",name:"Devorga ramka MODEL-04",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_04.jpg",price:190000,unit:"dona"},
+  {id:237,cat:"ramka",name:"Devorga ramka MODEL-05",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_05.jpg",price:290000,unit:"dona"},
+  {id:238,cat:"ramka",name:"Devorga ramka MODEL-06",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_06.jpg",price:220000,unit:"dona"},
+  {id:239,cat:"ramka",name:"Devorga ramka MODEL-07",razmer:"standart",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_07.jpg",price:250000,unit:"dona"},
+  {id:240,cat:"kapitel",name:"Kapitel",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:14000,unit:"dona"},
+  {id:241,cat:"kapitel",name:"Kapitel",razmer:"30sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:16000,unit:"dona"},
+  {id:242,cat:"kapitel",name:"Kapitel",razmer:"35sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:18000,unit:"dona"},
+  {id:243,cat:"kapitel",name:"Kapitel",razmer:"40sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:20000,unit:"dona"},
+  {id:244,cat:"kapitel",name:"Kapitel",razmer:"45sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:22000,unit:"dona"},
+  {id:245,cat:"kapitel",name:"Kapitel",razmer:"50sm",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",price:24000,unit:"dona"},
+  {id:246,cat:"baza",name:"Baza",razmer:"25sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:12000,unit:"dona"},
+  {id:247,cat:"baza",name:"Baza",razmer:"30sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:14000,unit:"dona"},
+  {id:248,cat:"baza",name:"Baza",razmer:"35sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:16000,unit:"dona"},
+  {id:249,cat:"baza",name:"Baza",razmer:"40sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:18000,unit:"dona"},
+  {id:250,cat:"baza",name:"Baza",razmer:"45sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:20000,unit:"dona"},
+  {id:251,cat:"baza",name:"Baza",razmer:"50sm",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",price:22000,unit:"dona"}
+];
+const catNames = {all:"Barcha mahsulotlar",karniz:"Karnizlar",belbog:"Belbog' karnizlar",ustun:"Ustunlar",rom:"Rom bezaklari",ramka:"Devorga ramkalar",kapitel:"Kapitel",baza:"Baza"};
+let savat = [];
+let currentCat = 'all';
+
+function fmt(n){return n.toLocaleString('ru-RU')+" so'm";}
+
+function renderProducts(cat){
+  const filtered = cat==='all' ? products : products.filter(p=>p.cat===cat);
+  const container = document.getElementById('productsContainer');
+  container.innerHTML = '<div class="section-title">'+catNames[cat]+'</div>';
+  if(!filtered.length){container.innerHTML+='<div class="empty">Mahsulot topilmadi</div>';return;}
+  const grid = document.createElement('div');
+  grid.className = 'products';
+  filtered.forEach((p,i)=>{
+    const inCart = savat.find(s=>s.id===p.id);
+    const delay = Math.min(i*0.04, 0.5);
+    grid.innerHTML += `<div class="card" style="animation-delay:${delay}s">
+      <div class="card-top">
+        <img class="card-img" src="${p.img}" alt="${p.name}" onerror="this.outerHTML='<div class=\\'card-img-err\\'>📐</div>'">
+        <div class="card-info">
+          <div>
+            <div class="card-name">${p.name}</div>
+            <div class="card-razmer">📏 ${p.razmer}</div>
+          </div>
+          <div class="card-price">${fmt(p.price)} <span class="card-unit">/${p.unit}</span></div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <input class="qty-input" id="qty_${p.id}" type="number" min="0.5" step="0.5" placeholder="Necha ${p.unit}?" value="${inCart?inCart.qty:''}">
+        <button class="add-btn ${inCart?'added':''}" id="btn_${p.id}" onclick="addToCart(${p.id})">${inCart?'✓ Savatda':'+ Qo\'shish'}</button>
+      </div>
+    </div>`;
+  });
+  container.appendChild(grid);
+}
+
+function filterCat(cat,btn){
+  currentCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  const qtyInput=document.getElementById('qty_'+id);
+  const qty=parseFloat(qtyInput.value);
+  if(!qty||qty<=0){qtyInput.style.borderColor='#C0392B';qtyInput.focus();setTimeout(()=>qtyInput.style.borderColor='',1200);return;}
+  const ex=savat.findIndex(s=>s.id===id);
+  if(ex>=0){savat[ex].qty=qty;savat[ex].jami=qty*p.price;}
+  else{savat.push({id,name:p.name,razmer:p.razmer,unit:p.unit,price:p.price,qty,jami:qty*p.price});}
+  const btn=document.getElementById('btn_'+id);
+  btn.textContent='✓ Savatda';btn.classList.add('added');
+  updateUI();
+}
+
+function removeFromCart(id){
+  savat=savat.filter(s=>s.id!==id);
+  updateUI();renderCartItems();renderProducts(currentCat);
+}
+
+function updateUI(){
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const count=savat.length;
+  const badge=document.getElementById('cartBadge');
+  badge.textContent='🛒 '+count;
+  badge.classList.toggle('show',count>0);
+  const fab=document.getElementById('cartFab');
+  fab.classList.toggle('show',count>0);
+  document.getElementById('fabText').textContent=count+' ta — '+fmt(total);
+  if(count>0){
+    tg.MainButton.setText('✅ Buyurtmani tasdiqlash — '+fmt(total));
+    tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
+  }
+  renderCartItems();
+}
+
+function renderCartItems(){
+  const c=document.getElementById('cartItems');
+  const t=document.getElementById('cartTotal');
+  if(!savat.length){c.innerHTML='<p style="text-align:center;color:#8E8E93;padding:20px 0;font-size:13px">Savat bo\'sh</p>';t.style.display='none';return;}
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  c.innerHTML=savat.map(item=>`<div class="cart-item">
+    <div><div class="cart-item-name">${item.name}</div><div class="cart-item-detail">📏 ${item.razmer} • ${item.qty} ${item.unit} × ${fmt(item.price)}</div></div>
+    <div class="cart-item-price">${fmt(item.jami)}</div>
+    <button class="cart-item-del" onclick="removeFromCart(${item.id})">✕</button>
+  </div>`).join('');
+  document.getElementById('totalPrice').textContent=fmt(total);
+  t.style.display='flex';
+}
+
+function openCart(){document.getElementById('cartPanel').classList.add('open');document.getElementById('overlay').classList.add('show');}
+function closeCart(){document.getElementById('cartPanel').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+
+tg.MainButton.onClick(()=>{
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const data={savat:savat.map(i=>({mahsulot:i.name+" ("+i.razmer+")",miqdor:i.qty+" "+i.unit,birlik_narx:i.price,jami:i.jami})),jami_summa:total};
+  tg.sendData(JSON.stringify(data));
+});
+
+renderProducts('all');
+tg.ready();
+</script>
+</body>
+</html>
