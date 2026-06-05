@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belbog' Karnizlar — PenoDecorPro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark:#1A252F;--red:#E74C3C;--gold:#F39C12;--shadow:0 8px 32px rgba(26,37,47,0.12)}
+  body{background:#F0F2F5;font-family:'DM Sans',sans-serif;min-height:100vh}
+  .header{background:var(--dark);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+  .logo{width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:white;font-size:22px;font-weight:700;flex-shrink:0}
+  .header-title{color:white}.header-title h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}.header-title p{font-size:11px;color:#BDC3C7;margin-top:2px}
+  .back-btn{margin-left:auto;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;text-decoration:none}
+  .notice{background:linear-gradient(135deg,#FFF3CD,#FFF8E1);border-left:4px solid var(--gold);margin:20px;padding:14px 18px;border-radius:0 12px 12px 0}
+  .notice p{font-size:13px;color:#856404;line-height:1.6}.notice strong{color:var(--red)}
+  .section-title{text-align:center;font-family:'Playfair Display',serif;font-size:22px;color:var(--dark);margin:24px 0 16px;padding:0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:0 16px 100px}
+  .card{background:white;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(26,37,47,0.18)}
+  .card-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;transition:transform 0.3s}
+  .card:hover .card-img{transform:scale(1.05)}
+  .card-label{padding:10px 12px}.card-label h3{font-size:13px;font-weight:600;color:var(--dark)}.card-label p{font-size:11px;color:#888;margin-top:2px}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+  .overlay.active{display:flex}
+  .modal{background:white;border-radius:20px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:20px 20px 0 0}
+  .modal-body{padding:20px}
+  .modal-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);margin-bottom:4px}
+  .modal-sub{font-size:12px;color:#888;margin-bottom:16px}
+  .price-table{background:#F8F9FA;border-radius:12px;overflow:hidden;margin-bottom:16px}
+  .price-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E9ECEF}
+  .price-row:last-child{border-bottom:none}
+  .price-label{font-size:14px;color:#555;display:flex;align-items:center;gap:8px}
+  .price-value{font-weight:600;color:var(--dark);font-size:15px}
+  .price-unit{font-size:11px;color:#888;font-weight:400}
+  .qoplama-box{background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border-radius:10px;padding:12px 14px;font-size:12px;color:#2E7D32;line-height:1.6;margin-bottom:16px}
+  .close-btn{width:100%;padding:14px;background:var(--dark);color:white;border:none;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer}
+  .close-btn:hover{background:var(--red)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">P</div>
+  <div class="header-title"><h1>PenoDecorPro</h1><p>Belbog' karnizlar katalogi</p></div>
+  <a href="javascript:history.back()" class="back-btn">← Orqaga</a>
+</div>
+<div class="notice">
+  <p>⚠️ <strong>Diqqat!</strong> Bir xil bo'yli belbog' karnizlar qalinligi turlicha bo'lishi mumkin. Qalin karniz qimmatroq chiqadi. Rasmga bosib narxlarni ko'ring.</p>
+</div>
+<h2 class="section-title">Belbog' Karnizlar — 28 model</h2>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <img id="modal-img" class="modal-img" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-sub">Belbog' karnizlar • Narxlar metrga (qoplama bilan)</div>
+      <div class="price-table" id="price-table"></div>
+      <div class="qoplama-box">🖌️ Barcha narxlar <strong>qoplama bilan</strong> hisoblangan. Qoplama kerak bo'lmasa — narx <strong>2 barobar arzon!</strong></div>
+      <button class="close-btn" onclick="document.getElementById('overlay').classList.remove('active')">Yopish</button>
+    </div>
+  </div>
+</div>
+<script>
+const narxlar={
+  "MODEL-01":{"17sm":22000,"20sm":30000,"25sm":46000},
+  "MODEL-02":{"17sm":18000,"20sm":26000,"25sm":42000},
+  "MODEL-03":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-04":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-05":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-06":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-07":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-08":{"17sm":17000,"20sm":22000,"25sm":30000},
+  "MODEL-09":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-10":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-11":{"17sm":17000,"20sm":20000,"25sm":35000},
+  "MODEL-12":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-13":{"17sm":15000,"20sm":21000,"25sm":31000},
+  "MODEL-14":{"17sm":18000,"20sm":24000,"25sm":30000},
+  "MODEL-15":{"17sm":19000,"20sm":27000,"25sm":40000},
+  "MODEL-16":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-17":{"17sm":14000,"20sm":21000,"25sm":33000},
+  "MODEL-18":{"17sm":14000,"20sm":20000,"25sm":30000},
+  "MODEL-19":{"17sm":14000,"20sm":18000,"25sm":20000},
+  "MODEL-20":{"17sm":15000,"20sm":21000,"25sm":32000},
+  "MODEL-21":{"17sm":16000,"20sm":22000,"25sm":32000},
+  "MODEL-22":{"17sm":20000,"20sm":27000,"25sm":42000},
+  "MODEL-23":{"17sm":21000,"20sm":28000,"25sm":42000},
+  "MODEL-24":{"17sm":14000,"20sm":20000,"25sm":28000},
+  "MODEL-25":{"17sm":14000,"20sm":18000,"25sm":29000},
+  "MODEL-26":{"17sm":14000,"20sm":19000,"25sm":29000},
+  "MODEL-27":{"17sm":16000,"20sm":22000,"25sm":32500},
+  "MODEL-28":{"17sm":13000,"20sm":20000,"25sm":30000}
+};
+function fmt(n){return n.toLocaleString('ru-RU')+' so\'m';}
+const grid=document.getElementById('grid');
+for(let i=1;i<=28;i++){
+  const code='MODEL-'+String(i).padStart(2,'0');
+  const img='Belbog karniz_'+String(i).padStart(2,'0')+'.jpg';
+  const prices=narxlar[code];
+  const minPrice=Math.min(...Object.values(prices));
+  const card=document.createElement('div');
+  card.className='card';
+  card.innerHTML=`<img class="card-img" src="${img}" alt="${code}" onerror="this.style.background='#1A252F'"><div class="card-label"><h3>${code}</h3><p>dan ${fmt(minPrice)}/m</p></div>`;
+  card.onclick=()=>openModal(code,img,prices);
+  grid.appendChild(card);
+}
+function openModal(code,img,prices){
+  document.getElementById('modal-img').src=img;
+  document.getElementById('modal-title').textContent=code;
+  let html='';
+  for(const[razmer,narx]of Object.entries(prices)){
+    html+=`<div class="price-row"><div class="price-label"><span>📏</span> Bo'yi ${razmer}</div><div class="price-value">${fmt(narx)} <span class="price-unit">/metr</span></div></div>`;
+  }
+  html+=`<div class="price-row" style="background:#FFF3CD"><div class="price-label"><span>📞</span> 25sm dan katta</div><div class="price-value" style="color:#856404;font-size:13px">Aloqaga chiqing</div></div>`;
+  document.getElementById('price-table').innerHTML=html;
+  document.getElementById('overlay').classList.add('active');
+}
+function closeModal(e){if(e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('active');}
+</script>
+</body>
+</html>
