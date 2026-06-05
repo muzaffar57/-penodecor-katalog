@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shohona Karnizlar — PenoDecorPro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark:#1A252F;--red:#E74C3C;--gold:#F39C12;--shadow:0 8px 32px rgba(26,37,47,0.12)}
+  body{background:#F0F2F5;font-family:'DM Sans',sans-serif;min-height:100vh}
+  .header{background:var(--dark);padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+  .logo{width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:white;font-size:22px;font-weight:700;flex-shrink:0}
+  .header-title{color:white}.header-title h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}.header-title p{font-size:11px;color:#BDC3C7;margin-top:2px}
+  .back-btn{margin-left:auto;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;text-decoration:none}
+  .notice{background:linear-gradient(135deg,#FFF3CD,#FFF8E1);border-left:4px solid var(--gold);margin:20px;padding:14px 18px;border-radius:0 12px 12px 0}
+  .notice p{font-size:13px;color:#856404;line-height:1.6}.notice strong{color:var(--red)}
+  .section-title{text-align:center;font-family:'Playfair Display',serif;font-size:22px;color:var(--dark);margin:24px 0 16px;padding:0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:0 16px 100px}
+  .card{background:white;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(26,37,47,0.18)}
+  .card-img{width:100%;aspect-ratio:4/3;object-fit:contain;display:block;background:#f8f8f8;transition:transform 0.3s}
+  .card:hover .card-img{transform:scale(1.05)}
+  .card-label{padding:10px 12px}.card-label h3{font-size:13px;font-weight:600;color:var(--dark)}.card-label p{font-size:11px;color:#888;margin-top:2px}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+  .overlay.active{display:flex}
+  .modal{background:white;border-radius:20px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#f8f8f8;border-radius:20px 20px 0 0}
+  .modal-body{padding:20px}
+  .modal-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);margin-bottom:4px}
+  .modal-sub{font-size:12px;color:#888;margin-bottom:16px}
+  .price-box{background:#F8F9FA;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+  .price-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #E9ECEF}
+  .price-row:last-child{border-bottom:none}
+  .price-label{font-size:13px;color:#555;display:flex;align-items:center;gap:8px}
+  .price-value{font-weight:600;color:var(--dark);font-size:14px}
+  .info-box{background:linear-gradient(135deg,#E3F2FD,#EDE7F6);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#1565C0;line-height:1.7}
+  .pokak-box{background:linear-gradient(135deg,#FFF3E0,#FFF8E1);border-radius:10px;padding:12px 14px;font-size:12px;color:#E65100;line-height:1.6;margin-bottom:16px}
+  .close-btn{width:100%;padding:14px;background:var(--dark);color:white;border:none;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer}
+  .order-btn{display:block;width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;margin-bottom:8px;transition:background 0.2s}
+  .order-btn:hover{background:#C0392B}
+  .close-btn:hover{background:var(--red)}
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="LOGO.jpg" style="height:44px;width:auto;border-radius:8px;object-fit:contain;">
+  <div class="header-title"><h1>PenoDecorPro</h1><p>Shohona karnizlar katalogi</p></div>
+  <a href="javascript:history.back()" class="back-btn">← Orqaga</a>
+</div>
+<div class="notice">
+  <p>⚠️ <strong>Diqqat!</strong> Shohona karnizlarning eng kichik razmeri <strong>40sm</strong>. Narx bo'yiga va metrga qarab hisoblanadi. Rasmga bosib ma'lumot oling.</p>
+</div>
+<h2 class="section-title">Shohona Karnizlar — 12 model</h2>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <img id="modal-img" class="modal-img" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-sub">Shohona karnizlar • Narx metrga (po'kak holatda)</div>
+
+      <div class="price-box">
+        <div class="price-row">
+          <div class="price-label"><span>📏</span> Bo'yi 40sm (eng kichik)</div>
+          <div class="price-value">90,000 so'm/metr</div>
+        </div>
+        <div class="price-row">
+          <div class="price-label"><span>📐</span> Kattaroq razmer</div>
+          <div class="price-value">Narx oshadi</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        ℹ️ <strong>Aniq narx hisoblash uchun:</strong><br>
+        Botda quyidagilarni kiriting:<br>
+        • Bo'yi necha sm kerak<br>
+        • Qancha metr kerak<br><br>
+        Biz sizga aniq narxni hisoblab yuboramiz!
+      </div>
+
+      <div class="pokak-box">
+        🏆 Bu karnizlar <strong>po'kak holatda</strong> narxlangan. Ustiga qoplama sepilmaydi — sifat saqlanadi!
+      </div>
+
+      <a id="order-link" class="order-btn" href="https://t.me/penodecorprobot">🛒 Botda buyurtma qilish</a>
+      <button class="close-btn" onclick="document.getElementById('overlay').classList.remove('active')">Yopish</button>
+    </div>
+  </div>
+</div>
+<script>
+const grid=document.getElementById('grid');
+for(let i=1;i<=12;i++){
+  const code='MODEL-'+String(i).padStart(2,'0');
+  const img='shohona karniz_'+String(i).padStart(2,'0')+'.jpg';
+  const card=document.createElement('div');
+  card.className='card';
+  card.innerHTML=`<img class="card-img" src="${img}" alt="${code}" onerror="this.style.background='#1A252F'"><div class="card-label"><h3>${code}</h3><p>dan 90,000 so'm/metr</p></div>`;
+  card.onclick=()=>openModal(code,img);
+  grid.appendChild(card);
+}
+function openModal(code,img){
+  document.getElementById('modal-img').src=img;
+  document.getElementById('modal-title').textContent=code;
+  document.getElementById('order-link').href='https://t.me/penodecorprobot?start=shohona_'+code.replace('-','_');
+  document.getElementById('overlay').classList.add('active');
+}
+function closeModal(e){if(e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('active');}
+</script>
+</body>
+</html>
