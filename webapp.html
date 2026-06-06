@@ -553,7 +553,7 @@ function renderRom(c) {
           <div class="fl-label">Korona jami (dona)</div>
           <input class="sinp" id="rom-korona" type="number" min="0" step="1" placeholder="Masalan: 4" oninput="calcRom()">
         </div>
-        <div class="fl-group" id="rom-kalvak-wrap" style="display:none">
+        <div class="fl-group">
           <div class="fl-label">Kalvak jami (dona)</div>
           <input class="sinp" id="rom-kalvak" type="number" min="0" step="1" placeholder="Masalan: 8" oninput="calcRom()">
         </div>
@@ -678,13 +678,14 @@ function calcRom() {
   const {metrNarx,donaNarx}=getRomNarx();
   const jami_metr_raw=nalichnik+karniz+padakolnik+ramka;
   const jami_metr=Math.ceil(jami_metr_raw/2)*2;
-  const jami_dona=korona+kalvak;
   const metr_sum=jami_metr*metrNarx;
-  const dona_sum=jami_dona*donaNarx;
-  const jami=metr_sum+dona_sum;
+  const korona_sum=korona*donaNarx;
+  const kalvak_sum=kalvak*donaNarx;
+  const jami=metr_sum+korona_sum+kalvak_sum;
   el.innerHTML=`<b>Model-${romModel} (${romOlcham==='katta'?'Katta':'Kichik'} komplekt)</b><br>
     \ud83d\udccf Metraj: ${jami_metr_raw.toFixed(1)}m \u2192 yaxlitlangan: <b>${jami_metr}m</b> \u00d7 ${fmt(metrNarx)} = ${fmt(metr_sum)}<br>
-    ${jami_dona>0?`\ud83d\udce6 Donabay: ${jami_dona} dona \u00d7 ${fmt(donaNarx)} = ${fmt(dona_sum)}<br>`:''}
+    ${korona>0?`\ud83d\udc51 Korona: ${korona} dona \u00d7 ${fmt(donaNarx)} = ${fmt(korona_sum)}<br>`:''}
+    ${kalvak>0?`\ud83d\udd29 Kalvak: ${kalvak} dona \u00d7 ${fmt(donaNarx)} = ${fmt(kalvak_sum)}<br>`:''}
     \ud83d\udcb0 <b>Jami: ${fmt(jami)}</b>`;
 }
 
@@ -700,11 +701,12 @@ function addRom() {
   const {metrNarx,donaNarx}=getRomNarx();
   const jami_metr_raw=nalichnik+karniz+padakolnik+ramka;
   const jami_metr=Math.ceil(jami_metr_raw/2)*2;
-  const jami_dona=korona+kalvak;
-  const jami=(jami_metr*metrNarx)+(jami_dona*donaNarx);
+  const korona_sum=korona*donaNarx;
+  const kalvak_sum=kalvak*donaNarx;
+  const jami=(jami_metr*metrNarx)+korona_sum+kalvak_sum;
   const olchamNom=romOlcham==='katta'?'Katta komplekt':'Kichik komplekt';
   const nom=`Rom bezagi Model-${romModel} (${olchamNom})`;
-  const razmer=`Xomashyo: ${jami_metr}m (${jami_metr_raw.toFixed(1)}m\u2192yaxl.) | Donabay: ${jami_dona} dona`;
+  const razmer=`Xomashyo: ${jami_metr}m (${jami_metr_raw.toFixed(1)}m\u2192yaxl.) | Korona: ${korona} dona | Kalvak: ${kalvak} dona`;
   upsertSavat('rom_'+Date.now(),nom,razmer,'set',jami,1,'rom');
   setBtnAdded('rom-add');
 }
