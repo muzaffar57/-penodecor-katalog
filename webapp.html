@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PenoDecorPro</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F3EF;--dark:#1C1C1E;--accent:#C9A96E;--accent2:#8B6914;--card:#fff;--text:#2C2C2E;--muted:#8E8E93;--border:#E5E1D8;--shadow:0 2px 16px rgba(0,0,0,0.07);--green:#27AE60;--red:#C0392B}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);min-height:100vh;padding-bottom:120px}
+.header{background:var(--dark);padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.header img{height:38px;width:auto;border-radius:6px;object-fit:contain}
+.header-info h1{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:white}
+.header-info p{font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.cart-badge{margin-left:auto;background:var(--accent);color:var(--dark);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;display:none}
+.cart-badge.show{display:block}
+.categories{display:flex;gap:6px;padding:12px 12px 6px;overflow-x:auto;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.cat-btn.active{background:var(--dark);border-color:var(--dark);color:white}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--dark);padding:10px 12px 4px}
+.products{padding:6px 12px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp 0.3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card-top{display:flex}
+.card-img{width:110px;height:110px;object-fit:cover;flex-shrink:0;background:var(--bg);cursor:pointer;transition:opacity 0.2s}
+.card-img:active{opacity:0.8}
+.card-img-err{width:110px;height:110px;flex-shrink:0;background:linear-gradient(135deg,#E8E0D0,#D5C9B5);display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer}
+.card-info{flex:1;padding:10px 12px 8px}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--dark);line-height:1.3}
+.razmer-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.razmer-btn{padding:4px 10px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.razmer-btn.active{background:var(--dark);border-color:var(--dark);color:white}
+.card-price{font-size:15px;font-weight:600;color:var(--accent2);margin-top:8px}
+.card-unit{font-size:10px;color:var(--muted);font-weight:400}
+.card-bottom{display:flex;align-items:center;gap:6px;padding:8px 12px 12px;border-top:1px solid var(--border)}
+.qty-input{flex:1;height:38px;border:1.5px solid var(--border);border-radius:8px;padding:0 10px;font-family:'Jost',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.2s}
+.qty-input:focus{border-color:var(--accent)}
+.qty-input::placeholder{color:var(--muted);font-size:12px}
+.add-btn{height:38px;padding:0 14px;background:var(--dark);color:white;border:none;border-radius:8px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.add-btn:active{transform:scale(0.96)}
+.add-btn.added{background:var(--green)}
+
+/* RASM MODAL */
+.img-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.img-overlay.show{display:flex}
+.img-modal{max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;animation:zoomIn 0.25s ease}
+@keyframes zoomIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.img-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* SAVAT */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:190;display:none;backdrop-filter:blur(2px)}
+.overlay.show{display:block}
+.cart-panel{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,0.12);z-index:200;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:75vh;overflow-y:auto}
+.cart-panel.open{transform:translateY(0)}
+.cart-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.cart-header{padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.cart-header h2{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700}
+.cart-close{width:30px;height:30px;border-radius:50%;background:var(--bg);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-items{padding:10px 18px}
+.cart-item{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);gap:6px}
+.cart-item:last-child{border-bottom:none}
+.cart-item-name{font-size:13px;font-weight:500;flex:1;line-height:1.3}
+.cart-item-detail{font-size:11px;color:var(--muted);margin-top:1px}
+.cart-item-price{font-size:13px;font-weight:600;color:var(--accent2);white-space:nowrap}
+.cart-item-del{width:26px;height:26px;border-radius:50%;background:#FEE;border:none;color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-total{margin:6px 18px 18px;padding:12px 14px;background:var(--bg);border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.cart-total span:first-child{font-size:13px;color:var(--muted)}
+.cart-total span:last-child{font-size:17px;font-weight:700;color:var(--dark)}
+.cart-fab{position:fixed;bottom:24px;right:16px;background:var(--dark);color:white;border:none;border-radius:50px;padding:12px 18px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.22);display:none;align-items:center;gap:6px;z-index:150}
+.cart-fab.show{display:flex}
+.cart-fab:active{transform:scale(0.96)}
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" onerror="this.style.display='none'" alt="">
+  <div class="header-info">
+    <h1>PenoDecorPro</h1>
+    <p>Fasad bezaklari</p>
+  </div>
+  <div class="cart-badge" id="cartBadge">🛒 0</div>
+</div>
+
+<div class="categories">
+  <button class="cat-btn active" onclick="filterCat('all',this)">Hammasi</button>
+  <button class="cat-btn" onclick="filterCat('karniz',this)">Karnizlar</button>
+  <button class="cat-btn" onclick="filterCat('belbog',this)">Belbog'</button>
+  <button class="cat-btn" onclick="filterCat('ustun',this)">Ustunlar</button>
+  <button class="cat-btn" onclick="filterCat('rom',this)">Rom bezak</button>
+  <button class="cat-btn" onclick="filterCat('ramka',this)">Ramkalar</button>
+  <button class="cat-btn" onclick="filterCat('kapitel',this)">Kapitel</button>
+  <button class="cat-btn" onclick="filterCat('baza',this)">Baza</button>
+</div>
+
+<div id="productsContainer"></div>
+
+<!-- Rasm modal -->
+<div class="img-overlay" id="imgOverlay" onclick="closeImg()">
+  <button class="img-close" onclick="closeImg()">✕</button>
+  <img class="img-modal" id="imgModal" src="" alt="">
+</div>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-handle"></div>
+  <div class="cart-header">
+    <h2>🛒 Savat</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-total" id="cartTotal" style="display:none">
+    <span>Jami summa:</span>
+    <span id="totalPrice">0 so'm</span>
+  </div>
+</div>
+
+<button class="cart-fab" id="cartFab" onclick="openCart()">
+  🛒 <span id="fabText">Savat</span>
+</button>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.setHeaderColor && tg.setHeaderColor('#1C1C1E');
+const products = [
+  {id:1,cat:"karniz",name:"Karniz MODEL-01",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_01.jpg",razmerlar:{"17sm":38000,"20sm":48000,"25sm":70000},unit:"metr"},
+  {id:2,cat:"karniz",name:"Karniz MODEL-02",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_02.jpg",razmerlar:{"17sm":22000,"20sm":32000,"25sm":45000},unit:"metr"},
+  {id:3,cat:"karniz",name:"Karniz MODEL-03",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_03.jpg",razmerlar:{"17sm":32000,"20sm":42000,"25sm":55000},unit:"metr"},
+  {id:4,cat:"karniz",name:"Karniz MODEL-04",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_04.jpg",razmerlar:{"17sm":30000,"20sm":42000,"25sm":60000},unit:"metr"},
+  {id:5,cat:"karniz",name:"Karniz MODEL-05",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_05.jpg",razmerlar:{"17sm":20000,"20sm":25000,"25sm":42000},unit:"metr"},
+  {id:6,cat:"karniz",name:"Karniz MODEL-06",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_06.jpg",razmerlar:{"17sm":19000,"20sm":25000,"25sm":34000},unit:"metr"},
+  {id:7,cat:"karniz",name:"Karniz MODEL-07",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_07.jpg",razmerlar:{"17sm":16000,"20sm":20000,"25sm":28000},unit:"metr"},
+  {id:8,cat:"karniz",name:"Karniz MODEL-08",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_08.jpg",razmerlar:{"17sm":26000,"20sm":34000,"25sm":50000},unit:"metr"},
+  {id:9,cat:"karniz",name:"Karniz MODEL-09",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_09.jpg",razmerlar:{"17sm":19000,"20sm":26000,"25sm":40000},unit:"metr"},
+  {id:10,cat:"karniz",name:"Karniz MODEL-10",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_10.jpg",razmerlar:{"17sm":17000,"20sm":24000,"25sm":36000},unit:"metr"},
+  {id:11,cat:"karniz",name:"Karniz MODEL-11",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_11.jpg",razmerlar:{"17sm":22000,"20sm":30000,"25sm":44000},unit:"metr"},
+  {id:12,cat:"karniz",name:"Karniz MODEL-12",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_12.jpg",razmerlar:{"17sm":17000,"20sm":28000,"25sm":44000},unit:"metr"},
+  {id:13,cat:"karniz",name:"Karniz MODEL-13",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_13.jpg",razmerlar:{"17sm":21000,"20sm":28000,"25sm":45000},unit:"metr"},
+  {id:14,cat:"karniz",name:"Karniz MODEL-14",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_14.jpg",razmerlar:{"17sm":18000,"20sm":25000,"25sm":36000},unit:"metr"},
+  {id:15,cat:"karniz",name:"Karniz MODEL-15",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_15.jpg",razmerlar:{"17sm":20000,"20sm":28000,"25sm":45000},unit:"metr"},
+  {id:16,cat:"karniz",name:"Karniz MODEL-16",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_16.jpg",razmerlar:{"17sm":14000,"20sm":18000,"25sm":25000},unit:"metr"},
+  {id:17,cat:"karniz",name:"Karniz MODEL-17",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_17.jpg",razmerlar:{"17sm":25000,"20sm":44000,"25sm":55000},unit:"metr"},
+  {id:18,cat:"karniz",name:"Karniz MODEL-18",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_18.jpg",razmerlar:{"17sm":27000,"20sm":36000,"25sm":55000},unit:"metr"},
+  {id:19,cat:"karniz",name:"Karniz MODEL-19",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_19.jpg",razmerlar:{"17sm":33000,"20sm":42000,"25sm":65000},unit:"metr"},
+  {id:20,cat:"karniz",name:"Karniz MODEL-20",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_20.jpg",razmerlar:{"17sm":30000,"20sm":42000,"25sm":65000},unit:"metr"},
+  {id:21,cat:"karniz",name:"Karniz MODEL-21",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_21.jpg",razmerlar:{"17sm":32000,"20sm":44000,"25sm":66000},unit:"metr"},
+  {id:22,cat:"karniz",name:"Karniz MODEL-22",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_22.jpg",razmerlar:{"17sm":14000,"20sm":18000,"25sm":24000},unit:"metr"},
+  {id:23,cat:"karniz",name:"Karniz MODEL-23",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_23.jpg",razmerlar:{"17sm":23000,"20sm":37000,"25sm":50000},unit:"metr"},
+  {id:24,cat:"karniz",name:"Karniz MODEL-24",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_24.jpg",razmerlar:{"17sm":16000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:25,cat:"karniz",name:"Karniz MODEL-25",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_25.jpg",razmerlar:{"17sm":20000,"20sm":30000,"25sm":43000},unit:"metr"},
+  {id:26,cat:"karniz",name:"Karniz MODEL-26",img:"https://muzaffar57.github.io/-penodecor-katalog/Karniz_26.jpg",razmerlar:{"17sm":32000,"20sm":40000,"25sm":62000},unit:"metr"},
+  {id:27,cat:"belbog",name:"Belbog MODEL-01",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_01.jpg",razmerlar:{"17sm":22000,"20sm":30000,"25sm":46000},unit:"metr"},
+  {id:28,cat:"belbog",name:"Belbog MODEL-02",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_02.jpg",razmerlar:{"17sm":18000,"20sm":26000,"25sm":42000},unit:"metr"},
+  {id:29,cat:"belbog",name:"Belbog MODEL-03",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_03.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:30,cat:"belbog",name:"Belbog MODEL-04",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_04.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:31,cat:"belbog",name:"Belbog MODEL-05",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_05.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:32,cat:"belbog",name:"Belbog MODEL-06",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_06.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:33,cat:"belbog",name:"Belbog MODEL-07",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_07.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:34,cat:"belbog",name:"Belbog MODEL-08",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_08.jpg",razmerlar:{"17sm":17000,"20sm":22000,"25sm":30000},unit:"metr"},
+  {id:35,cat:"belbog",name:"Belbog MODEL-09",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_09.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:36,cat:"belbog",name:"Belbog MODEL-10",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_10.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:37,cat:"belbog",name:"Belbog MODEL-11",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_11.jpg",razmerlar:{"17sm":17000,"20sm":20000,"25sm":35000},unit:"metr"},
+  {id:38,cat:"belbog",name:"Belbog MODEL-12",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_12.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:39,cat:"belbog",name:"Belbog MODEL-13",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_13.jpg",razmerlar:{"17sm":15000,"20sm":21000,"25sm":31000},unit:"metr"},
+  {id:40,cat:"belbog",name:"Belbog MODEL-14",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_14.jpg",razmerlar:{"17sm":18000,"20sm":24000,"25sm":30000},unit:"metr"},
+  {id:41,cat:"belbog",name:"Belbog MODEL-15",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_15.jpg",razmerlar:{"17sm":19000,"20sm":27000,"25sm":40000},unit:"metr"},
+  {id:42,cat:"belbog",name:"Belbog MODEL-16",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_16.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:43,cat:"belbog",name:"Belbog MODEL-17",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_17.jpg",razmerlar:{"17sm":14000,"20sm":21000,"25sm":33000},unit:"metr"},
+  {id:44,cat:"belbog",name:"Belbog MODEL-18",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_18.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:45,cat:"belbog",name:"Belbog MODEL-19",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_19.jpg",razmerlar:{"17sm":14000,"20sm":18000,"25sm":20000},unit:"metr"},
+  {id:46,cat:"belbog",name:"Belbog MODEL-20",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_20.jpg",razmerlar:{"17sm":15000,"20sm":21000,"25sm":32000},unit:"metr"},
+  {id:47,cat:"belbog",name:"Belbog MODEL-21",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_21.jpg",razmerlar:{"17sm":16000,"20sm":22000,"25sm":32000},unit:"metr"},
+  {id:48,cat:"belbog",name:"Belbog MODEL-22",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_22.jpg",razmerlar:{"17sm":20000,"20sm":27000,"25sm":42000},unit:"metr"},
+  {id:49,cat:"belbog",name:"Belbog MODEL-23",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_23.jpg",razmerlar:{"17sm":21000,"20sm":28000,"25sm":42000},unit:"metr"},
+  {id:50,cat:"belbog",name:"Belbog MODEL-24",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_24.jpg",razmerlar:{"17sm":14000,"20sm":20000,"25sm":28000},unit:"metr"},
+  {id:51,cat:"belbog",name:"Belbog MODEL-25",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_25.jpg",razmerlar:{"17sm":14000,"20sm":18000,"25sm":29000},unit:"metr"},
+  {id:52,cat:"belbog",name:"Belbog MODEL-26",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_26.jpg",razmerlar:{"17sm":14000,"20sm":19000,"25sm":29000},unit:"metr"},
+  {id:53,cat:"belbog",name:"Belbog MODEL-27",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_27.jpg",razmerlar:{"17sm":16000,"20sm":22000,"25sm":32500},unit:"metr"},
+  {id:54,cat:"belbog",name:"Belbog MODEL-28",img:"https://muzaffar57.github.io/-penodecor-katalog/Belbog karniz_28.jpg",razmerlar:{"17sm":13000,"20sm":20000,"25sm":30000},unit:"metr"},
+  {id:55,cat:"ustun",name:"Ustunlar",img:"https://muzaffar57.github.io/-penodecor-katalog/ustun_01.jpg",razmerlar:{"25sm":18000,"30sm":21000,"35sm":24000,"40sm":28000,"45sm":32000,"50sm":36000},unit:"metr"},
+  {id:56,cat:"rom",name:"Rom bezak MODEL-01",img:"https://muzaffar57.github.io/-penodecor-katalog/01.jpg",razmerlar:{"Rom katta":140000,"Rom kichik":110000,"Eshik katta":110000,"Eshik kichik":85000},unit:"dona"},
+  {id:57,cat:"rom",name:"Rom bezak MODEL-02",img:"https://muzaffar57.github.io/-penodecor-katalog/02.jpg",razmerlar:{"Rom katta":110000,"Rom kichik":80000,"Eshik katta":80000,"Eshik kichik":60000},unit:"dona"},
+  {id:58,cat:"rom",name:"Rom bezak MODEL-03",img:"https://muzaffar57.github.io/-penodecor-katalog/03.jpg",razmerlar:{"Rom katta":120000,"Rom kichik":96000,"Eshik katta":90000,"Eshik kichik":70000},unit:"dona"},
+  {id:59,cat:"rom",name:"Rom bezak MODEL-04",img:"https://muzaffar57.github.io/-penodecor-katalog/04.jpg",razmerlar:{"Rom katta":150000,"Rom kichik":120000,"Eshik katta":110000,"Eshik kichik":90000},unit:"dona"},
+  {id:60,cat:"rom",name:"Rom bezak MODEL-05",img:"https://muzaffar57.github.io/-penodecor-katalog/05.jpg",razmerlar:{"Rom katta":150000,"Rom kichik":110000,"Eshik katta":140000,"Eshik kichik":100000},unit:"dona"},
+  {id:61,cat:"rom",name:"Rom bezak MODEL-06",img:"https://muzaffar57.github.io/-penodecor-katalog/06.jpg",razmerlar:{"Rom katta":150000,"Rom kichik":110000,"Eshik katta":140000,"Eshik kichik":100000},unit:"dona"},
+  {id:62,cat:"rom",name:"Rom bezak MODEL-07",img:"https://muzaffar57.github.io/-penodecor-katalog/07.jpg",razmerlar:{"Rom katta":120000,"Rom kichik":100000,"Eshik katta":90000,"Eshik kichik":70000},unit:"dona"},
+  {id:63,cat:"rom",name:"Rom bezak MODEL-08",img:"https://muzaffar57.github.io/-penodecor-katalog/08.jpg",razmerlar:{"Rom katta":140000,"Rom kichik":105000,"Eshik katta":110000,"Eshik kichik":90000},unit:"dona"},
+  {id:64,cat:"rom",name:"Rom bezak MODEL-09",img:"https://muzaffar57.github.io/-penodecor-katalog/09.jpg",razmerlar:{"Rom katta":140000,"Rom kichik":110000,"Eshik katta":110000,"Eshik kichik":90000},unit:"dona"},
+  {id:65,cat:"rom",name:"Rom bezak MODEL-10",img:"https://muzaffar57.github.io/-penodecor-katalog/10.jpg",razmerlar:{"Rom katta":150000,"Rom kichik":120000,"Eshik katta":120000,"Eshik kichik":100000},unit:"dona"},
+  {id:66,cat:"rom",name:"Rom bezak MODEL-11",img:"https://muzaffar57.github.io/-penodecor-katalog/11.jpg",razmerlar:{"Rom katta":140000,"Rom kichik":110000,"Eshik katta":85000,"Eshik kichik":70000},unit:"dona"},
+  {id:67,cat:"rom",name:"Rom bezak MODEL-12",img:"https://muzaffar57.github.io/-penodecor-katalog/12.jpg",razmerlar:{"Rom katta":160000,"Rom kichik":130000,"Eshik katta":120000,"Eshik kichik":100000},unit:"dona"},
+  {id:68,cat:"rom",name:"Rom bezak MODEL-13",img:"https://muzaffar57.github.io/-penodecor-katalog/13.jpg",razmerlar:{"Rom katta":160000,"Rom kichik":130000,"Eshik katta":120000,"Eshik kichik":100000},unit:"dona"},
+  {id:69,cat:"rom",name:"Rom bezak MODEL-14",img:"https://muzaffar57.github.io/-penodecor-katalog/14.jpg",razmerlar:{"Rom katta":160000,"Rom kichik":130000,"Eshik katta":120000,"Eshik kichik":100000},unit:"dona"},
+  {id:70,cat:"rom",name:"Rom bezak MODEL-15",img:"https://muzaffar57.github.io/-penodecor-katalog/15.jpg",razmerlar:{"Rom katta":150000,"Rom kichik":120000,"Eshik katta":120000,"Eshik kichik":100000},unit:"dona"},
+  {id:71,cat:"rom",name:"Rom bezak MODEL-16",img:"https://muzaffar57.github.io/-penodecor-katalog/16.jpg",razmerlar:{"Rom katta":130000,"Rom kichik":100000,"Eshik katta":100000,"Eshik kichik":80000},unit:"dona"},
+  {id:72,cat:"ramka",name:"Devorga ramka MODEL-01",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_01.jpg",razmerlar:{"standart":180000},unit:"dona"},
+  {id:73,cat:"ramka",name:"Devorga ramka MODEL-02",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_02.jpg",razmerlar:{"standart":250000},unit:"dona"},
+  {id:74,cat:"ramka",name:"Devorga ramka MODEL-03",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_03.jpg",razmerlar:{"standart":240000},unit:"dona"},
+  {id:75,cat:"ramka",name:"Devorga ramka MODEL-04",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_04.jpg",razmerlar:{"standart":190000},unit:"dona"},
+  {id:76,cat:"ramka",name:"Devorga ramka MODEL-05",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_05.jpg",razmerlar:{"standart":290000},unit:"dona"},
+  {id:77,cat:"ramka",name:"Devorga ramka MODEL-06",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_06.jpg",razmerlar:{"standart":220000},unit:"dona"},
+  {id:78,cat:"ramka",name:"Devorga ramka MODEL-07",img:"https://muzaffar57.github.io/-penodecor-katalog/ramka_07.jpg",razmerlar:{"standart":250000},unit:"dona"},
+  {id:79,cat:"kapitel",name:"Kapitel",img:"https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg",razmerlar:{"25sm":14000,"30sm":16000,"35sm":18000,"40sm":20000,"45sm":22000,"50sm":24000},unit:"dona"},
+  {id:80,cat:"baza",name:"Baza",img:"https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg",razmerlar:{"25sm":12000,"30sm":14000,"35sm":16000,"40sm":18000,"45sm":20000,"50sm":22000},unit:"dona"}
+];
+const catNames={all:"Barcha mahsulotlar",karniz:"Karnizlar",belbog:"Belbog' karnizlar",ustun:"Ustunlar",rom:"Rom bezaklari",ramka:"Devorga ramkalar",kapitel:"Kapitel",baza:"Baza"};
+let savat=[];
+let selectedRazmer={};
+let currentCat='all';
+
+function fmt(n){return n.toLocaleString('ru-RU')+" so'm";}
+
+function getFirstRazmer(p){return Object.keys(p.razmerlar)[0];}
+function getPrice(p){const r=selectedRazmer[p.id]||getFirstRazmer(p);return p.razmerlar[r]||0;}
+
+function renderProducts(cat){
+  const filtered=cat==='all'?products:products.filter(p=>p.cat===cat);
+  const container=document.getElementById('productsContainer');
+  container.innerHTML='<div class="section-title">'+catNames[cat]+'</div>';
+  const grid=document.createElement('div');
+  grid.className='products';
+  filtered.forEach((p,i)=>{
+    if(!selectedRazmer[p.id])selectedRazmer[p.id]=getFirstRazmer(p);
+    const inCart=savat.find(s=>s.id===p.id);
+    const razmerlar=Object.keys(p.razmerlar);
+    const razmerBtns=razmerlar.map(r=>`<button class="razmer-btn ${selectedRazmer[p.id]===r?'active':''}" onclick="selectRazmer(${p.id},'${r}')">${r}</button>`).join('');
+    const narx=getPrice(p);
+    grid.innerHTML+=`<div class="card" style="animation-delay:${Math.min(i*0.03,0.4)}s" id="card_${p.id}">
+      <div class="card-top">
+        <img class="card-img" src="${p.img}" alt="${p.name}" onclick="openImg('${p.img}')" onerror="this.outerHTML='<div class=\\'card-img-err\\' onclick=\\'openImg(\\"${p.img}\\")\\'>${p.cat==='karniz'?'📐':p.cat==='rom'?'🪟':p.cat==='ustun'?'🏛️':'📦'}</div>'">
+        <div class="card-info">
+          <div class="card-name">${p.name}</div>
+          <div class="razmer-row">${razmerBtns}</div>
+          <div class="card-price" id="price_${p.id}">${fmt(narx)} <span class="card-unit">/${p.unit}</span></div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <input class="qty-input" id="qty_${p.id}" type="number" min="0.5" step="0.5" placeholder="Necha ${p.unit}?" value="${inCart?inCart.qty:''}">
+        <button class="add-btn ${inCart?'added':''}" id="btn_${p.id}" onclick="addToCart(${p.id})">${inCart?'✓ Savatda':'+ Qo\'shish'}</button>
+      </div>
+    </div>`;
+  });
+  container.appendChild(grid);
+}
+
+function selectRazmer(id,razmer){
+  selectedRazmer[id]=razmer;
+  const p=products.find(x=>x.id===id);
+  const narx=p.razmerlar[razmer]||0;
+  document.getElementById('price_'+id).innerHTML=fmt(narx)+' <span class="card-unit">/'+p.unit+'</span>';
+  // Razmer tugmalarini yangilash
+  const card=document.getElementById('card_'+id);
+  card.querySelectorAll('.razmer-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.textContent===razmer);
+  });
+  // Savatdagi mahsulotni yangilash
+  const ex=savat.findIndex(s=>s.id===id);
+  if(ex>=0){
+    const qty=savat[ex].qty;
+    savat[ex].razmer=razmer;savat[ex].price=narx;savat[ex].jami=qty*narx;
+    updateUI();
+  }
+}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  const qty=parseFloat(document.getElementById('qty_'+id).value);
+  if(!qty||qty<=0){
+    const inp=document.getElementById('qty_'+id);
+    inp.style.borderColor='#C0392B';inp.focus();
+    setTimeout(()=>inp.style.borderColor='',1200);return;
+  }
+  const razmer=selectedRazmer[id]||getFirstRazmer(p);
+  const narx=p.razmerlar[razmer]||0;
+  const ex=savat.findIndex(s=>s.id===id);
+  if(ex>=0){savat[ex]={id,name:p.name,razmer,unit:p.unit,price:narx,qty,jami:qty*narx};}
+  else{savat.push({id,name:p.name,razmer,unit:p.unit,price:narx,qty,jami:qty*narx});}
+  const btn=document.getElementById('btn_'+id);
+  btn.textContent='✓ Savatda';btn.classList.add('added');
+  updateUI();
+}
+
+function removeFromCart(id){
+  savat=savat.filter(s=>s.id!==id);
+  updateUI();renderCartItems();
+  const btn=document.getElementById('btn_'+id);
+  if(btn){btn.textContent="+ Qo'shish";btn.classList.remove('added');}
+}
+
+function updateUI(){
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const count=savat.length;
+  const badge=document.getElementById('cartBadge');
+  badge.textContent='🛒 '+count;
+  badge.classList.toggle('show',count>0);
+  const fab=document.getElementById('cartFab');
+  fab.classList.toggle('show',count>0);
+  document.getElementById('fabText').textContent=count+' ta — '+fmt(total);
+  if(count>0){tg.MainButton.setText('✅ Buyurtmani tasdiqlash — '+fmt(total));tg.MainButton.show();}
+  else{tg.MainButton.hide();}
+  renderCartItems();
+}
+
+function renderCartItems(){
+  const c=document.getElementById('cartItems');
+  const t=document.getElementById('cartTotal');
+  if(!savat.length){c.innerHTML='<p style="text-align:center;color:#8E8E93;padding:20px 0;font-size:13px">Savat bo\'sh</p>';t.style.display='none';return;}
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  c.innerHTML=savat.map(item=>`<div class="cart-item">
+    <div style="flex:1"><div class="cart-item-name">${item.name}</div><div class="cart-item-detail">📏 ${item.razmer} • ${item.qty} ${item.unit} × ${fmt(item.price)}</div></div>
+    <div class="cart-item-price">${fmt(item.jami)}</div>
+    <button class="cart-item-del" onclick="removeFromCart(${item.id})">✕</button>
+  </div>`).join('');
+  document.getElementById('totalPrice').textContent=fmt(total);
+  t.style.display='flex';
+}
+
+function openImg(src){
+  document.getElementById('imgModal').src=src;
+  document.getElementById('imgOverlay').classList.add('show');
+}
+function closeImg(){document.getElementById('imgOverlay').classList.remove('show');}
+function filterCat(cat,btn){
+  currentCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+function openCart(){document.getElementById('cartPanel').classList.add('open');document.getElementById('overlay').classList.add('show');}
+function closeCart(){document.getElementById('cartPanel').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+
+tg.MainButton.onClick(()=>{
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const data={savat:savat.map(i=>({mahsulot:i.name+" ("+i.razmer+")",miqdor:i.qty+" "+i.unit,birlik_narx:i.price,jami:i.jami})),jami_summa:total};
+  tg.sendData(JSON.stringify(data));
+});
+
+renderProducts('all');
+tg.ready();
+</script>
+</body>
+</html>
