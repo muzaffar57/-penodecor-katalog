@@ -708,19 +708,33 @@ function toggleOlcham(tur) {
     btnK.style.background = 'var(--dark)'; btnK.style.color = '#fff'; btnK.style.borderColor = 'var(--dark)';
     btnKi.style.background = '#fff'; btnKi.style.color = 'var(--muted)'; btnKi.style.borderColor = 'var(--border)';
     panel.innerHTML = `
-      <b style="color:var(--dark)">📐 Katta komplekt o'lchamlari:</b><br>
-      🔹 Karniz (tepa) — <b>18 sm</b><br>
-      🔹 Padakolnik (taga) — <b>17 sm</b><br>
-      🔹 Nalichnik (yon) — <b>15 sm</b>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <img src="${BASE}/rom_katta.jpg" onclick="openImg('${BASE}/rom_katta.jpg')"
+          style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
+          onerror="this.style.display='none'">
+        <div style="font-size:12px;line-height:2">
+          <b style="color:var(--dark)">📐 Katta komplekt:</b><br>
+          🔹 Karniz (tepa) — <b>18 sm</b><br>
+          🔹 Padakolnik (taga) — <b>17 sm</b><br>
+          🔹 Nalichnik (yon) — <b>15 sm</b>
+        </div>
+      </div>
     `;
   } else {
     btnKi.style.background = 'var(--dark)'; btnKi.style.color = '#fff'; btnKi.style.borderColor = 'var(--dark)';
     btnK.style.background = '#fff'; btnK.style.color = 'var(--gold2)'; btnK.style.borderColor = 'var(--gold)';
     panel.innerHTML = `
-      <b style="color:var(--dark)">📐 Kichik komplekt o'lchamlari:</b><br>
-      🔹 Karniz (tepa) — <b>15 sm</b><br>
-      🔹 Padakolnik (taga) — <b>14 sm</b><br>
-      🔹 Nalichnik (yon) — <b>12 sm</b>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <img src="${BASE}/rom_kichik.jpg" onclick="openImg('${BASE}/rom_kichik.jpg')"
+          style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
+          onerror="this.style.display='none'">
+        <div style="font-size:12px;line-height:2">
+          <b style="color:var(--dark)">📐 Kichik komplekt:</b><br>
+          🔹 Karniz (tepa) — <b>15 sm</b><br>
+          🔹 Padakolnik (taga) — <b>14 sm</b><br>
+          🔹 Nalichnik (yon) — <b>12 sm</b>
+        </div>
+      </div>
     `;
   }
   panel.style.display = 'block';
