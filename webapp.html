@@ -503,14 +503,18 @@ function renderRom(c) {
   <!-- Form qismi -->
   <div id="rom-form-wrap" style="display:none;padding:0 11px">
     <div class="sp-card" style="margin:0">
-      <div class="sp-title" id="rom-guruh-label">\ud83e\ude9f Rom bezagi hisoblash</div>
+      <div class="sp-title" id="rom-guruh-label">🪟 Rom bezagi hisoblash</div>
 
-      <!-- Tanlangan model rasmi -->
-      <div style="text-align:center;margin-bottom:12px">
-        <img id="rom-main-img" src=""
-          style="height:150px;max-width:100%;object-fit:contain;background:#f8f9fa;padding:8px;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)"
+      <!-- TEPA: Kichik eskiz + yo'riqnoma -->
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;background:#F8F5EF;border-radius:10px;padding:10px">
+        <img id="rom-chizma-img" src=""
+          style="width:90px;height:90px;object-fit:contain;border-radius:8px;cursor:pointer;flex-shrink:0;box-shadow:var(--shadow);background:#fff"
           onclick="openImg(this.src)" onerror="this.style.display='none'">
-        <div id="rom-model-label" style="font-size:12px;color:var(--gold2);font-weight:600;margin-top:6px"></div>
+        <div style="font-size:11px;color:var(--gold2);line-height:1.7">
+          👆 <b>Eskiz ustiga bosing</b> va detallar nomlari bilan tanishing.<br>
+          Modelingizda mavjud detallarning sonini pastdagi buyurtma paneliga kiriting.<br>
+          Kerak bo'lmagan detal uchun <b>0</b> yozing, kerakli bo'lsa miqdorini ko'rsating.
+        </div>
       </div>
 
       <div class="fl-group" style="margin-top:4px">
@@ -521,11 +525,12 @@ function renderRom(c) {
         </select>
       </div>
 
-      <!-- Chizma rasmi -->
+      <!-- PASTDA: Tanlangan model rasmi katta -->
       <div style="text-align:center;margin:10px 0">
-        <img id="rom-chizma-img" src="${BASE}/rom_katta.jpg"
-          style="max-width:100%;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)"
+        <img id="rom-main-img" src=""
+          style="max-width:100%;max-height:220px;object-fit:contain;background:#f8f9fa;padding:8px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
           onclick="openImg(this.src)" onerror="this.style.display='none'">
+        <div id="rom-model-label" style="font-size:12px;color:var(--gold2);font-weight:600;margin-top:6px"></div>
       </div>
 
       <div style="background:#FFF8E1;border-left:4px solid #F39C12;border-radius:0 8px 8px 0;padding:10px 12px;margin:10px 0;font-size:11px;color:#856404;line-height:1.7">
@@ -613,20 +618,18 @@ function selectRomModel(num) {
     if(el) el.style.border=n===num?'2px solid var(--gold)':'2px solid var(--border)';
   });
 
-  // Model rasmi va label
+  // Model rasmi (katta, pastda)
   const img=document.getElementById('rom-main-img');
   if(img){ img.src=`${BASE}/${num}.jpg`; img.style.display='block'; }
   const lbl=document.getElementById('rom-model-label');
-  if(lbl) lbl.textContent=`Model-${num} tanlandi`;
+  if(lbl) lbl.textContent=`✓ Model-${num} tanlandi`;
+
+  // Eskiz (kichik, tepada) — darhol ko'rsin
+  updateRomChizma();
 
   // Qo'shimcha inputlar
   const ramkaWrap=document.getElementById('rom-ramka-wrap');
-  const kalvakWrap=document.getElementById('rom-kalvak-wrap');
   if(ramkaWrap) ramkaWrap.style.display=(num==='04'||num==='15')?'block':'none';
-  if(kalvakWrap) kalvakWrap.style.display=(num==='15')?'block':'none';
-
-  // Chizma
-  updateRomChizma();
 
   // Formi ko'rsat
   document.getElementById('rom-form-wrap').style.display='block';
