@@ -49,9 +49,9 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;animation:up 0.28s ease both}
 @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .ctop{display:flex}
-.cimg{width:106px;height:106px;object-fit:cover;flex-shrink:0;background:var(--bg);cursor:pointer;transition:opacity 0.15s}
+.cimg{width:110px;height:110px;object-fit:contain;flex-shrink:0;background:#F0F4F8;padding:6px;cursor:pointer;transition:opacity 0.15s}
 .cimg:active{opacity:0.8}
-.cimg-ph{width:106px;height:106px;flex-shrink:0;background:linear-gradient(135deg,#EAE2D4,#D6CAB5);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer}
+.cimg-ph{width:110px;height:110px;flex-shrink:0;background:linear-gradient(135deg,#EAE2D4,#D6CAB5);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer}
 .cinfo{flex:1;padding:10px 11px 8px;display:flex;flex-direction:column;gap:4px}
 .cname{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;line-height:1.3;color:var(--dark)}
 
@@ -362,7 +362,7 @@ function renderKarniz(c) {
     g.innerHTML += `<div class="card" id="kc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="${BASE}/Karniz_${num}.jpg" alt="" onclick="openImg('${BASE}/Karniz_${num}.jpg')"
-          onerror="this.outerHTML='<div class=\\'cimg-ph\\' onclick=\\'openImg(\\"${BASE}/Karniz_${num}.jpg\\")\\'>📐</div>'">
+          onerror="this.style.display='none'">
         <div class="cinfo">
           <div class="cname">Karniz MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -414,7 +414,7 @@ function renderBelbog(c) {
     g.innerHTML += `<div class="card" id="bc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="${BASE}/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('${BASE}/Belbog_karniz_${num}.jpg')"
-          onerror="this.outerHTML='<div class=\\'cimg-ph\\'>🎀</div>'">
+          onerror="this.style.display='none'">
         <div class="cinfo">
           <div class="cname">Belbog MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -723,7 +723,7 @@ function renderRamka(c) {
     g.innerHTML += `<div class="card" style="animation-delay:${Math.min(i*0.05,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="${BASE}/ramka_${num}.jpg" alt="" onclick="openImg('${BASE}/ramka_${num}.jpg')"
-          onerror="this.outerHTML='<div class=\\'cimg-ph\\'>🔲</div>'">
+          onerror="this.style.display='none'">
         <div class="cinfo">
           <div class="cname">Devorga ramka MODEL-${num}</div>
           <div class="price-row" style="margin-top:12px">
