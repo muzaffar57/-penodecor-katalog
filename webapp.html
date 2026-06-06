@@ -451,6 +451,29 @@ function addBelbog(num) {
 }
 
 // ===== ROM BEZAKLARI =====
+// Har model uchun mavjud detallar
+const ROM_DETALLAR = {
+  '01': {nalichnik:true,  karniz:false, padakolnik:false, korona:true,  kalvak:true,  ramka:false},
+  '02': {nalichnik:true,  karniz:false, padakolnik:false, korona:false, kalvak:false, ramka:false},
+  '03': {nalichnik:true,  karniz:false, padakolnik:true,  korona:false, kalvak:false, ramka:false},
+  '04': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:true},
+  '05': {nalichnik:true,  karniz:true,  padakolnik:false, korona:false, kalvak:false, ramka:false},
+  '06': {nalichnik:true,  karniz:true,  padakolnik:false, korona:true,  kalvak:false, ramka:true},
+  '07': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:false},
+  '08': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:false},
+  '09': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '10': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:false},
+  '11': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '12': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:false},
+  '13': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '14': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '15': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:true},
+  '16': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:true,  kalvak:true,  ramka:false},
+  '17': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '18': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+  '19': {nalichnik:true,  karniz:true,  padakolnik:true,  korona:false, kalvak:true,  ramka:false},
+};
+
 const ROM_GURUHLAR = {
   'ekonom':  ['01','02','03'],
   'standart':['04','05','06','07','08','09','11','16','17','18'],
@@ -618,18 +641,33 @@ function selectRomModel(num) {
     if(el) el.style.border=n===num?'2px solid var(--gold)':'2px solid var(--border)';
   });
 
-  // Model rasmi (katta, pastda)
+  // Model rasmi
   const img=document.getElementById('rom-main-img');
   if(img){ img.src=`${BASE}/${num}.jpg`; img.style.display='block'; }
   const lbl=document.getElementById('rom-model-label');
   if(lbl) lbl.textContent=`✓ Model-${num} tanlandi`;
 
-  // Eskiz (kichik, tepada) — darhol ko'rsin
+  // Eskiz
   updateRomChizma();
 
-  // Qo'shimcha inputlar
-  const ramkaWrap=document.getElementById('rom-ramka-wrap');
-  if(ramkaWrap) ramkaWrap.style.display=(num==='04'||num==='15')?'block':'none';
+  // Detallarni model bo'yicha ko'rsatish/yashirish
+  const d = ROM_DETALLAR[num] || {nalichnik:true,karniz:true,padakolnik:true,korona:true,kalvak:true,ramka:false};
+  const show = (id, visible) => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = visible ? 'block' : 'none';
+  };
+  show('rom-nalichnik-wrap', d.nalichnik);
+  show('rom-karniz-wrap',    d.karniz);
+  show('rom-padakol-wrap',   d.padakolnik);
+  show('rom-korona-wrap',    d.korona);
+  show('rom-kalvak-wrap',    d.kalvak);
+  show('rom-ramka-wrap',     d.ramka);
+
+  // Inputlarni tozalash
+  ['rom-nalichnik','rom-karniz','rom-padakolnik','rom-korona','rom-kalvak','rom-ramka'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
 
   // Formi ko'rsat
   document.getElementById('rom-form-wrap').style.display='block';
@@ -655,64 +693,76 @@ function updateRomChizma() {
 }
 
 function getRomNarx() {
-  const guruh=romGuruh(romModel||'01');
-  const G=guruh.charAt(0).toUpperCase()+guruh.slice(1);
-  const O=romOlcham.charAt(0).toUpperCase()+romOlcham.slice(1);
-  const defaults={
-    ekonom:{katta:{metr:30000,dona:35000},kichik:{metr:22000,dona:25000}},
-    standart:{katta:{metr:40000,dona:45000},kichik:{metr:30000,dona:35000}},
-    premium:{katta:{metr:55000,dona:60000},kichik:{metr:42000,dona:48000}}
-  };
-  const metrNarx=sheetsNarx[`Rom_${G}_${O}_metr`]||defaults[guruh][romOlcham].metr;
-  const donaNarx=sheetsNarx[`Rom_${G}_${O}_dona`]||defaults[guruh][romOlcham].dona;
-  return {metrNarx,donaNarx};
+  const foiz = (sheetsNarx['Rom_narx_foiz'] || 100) / 100;
+  const O = romOlcham.charAt(0).toUpperCase() + romOlcham.slice(1);
+  const num = romModel || '01';
+  const karnizNarx  = (sheetsNarx[`Rom_${num}_${O}_Karniz`]    || 30000) * foiz;
+  const padakolNarx = (sheetsNarx[`Rom_${num}_${O}_Padakolnik`] || 25000) * foiz;
+  const nalichNarx  = (sheetsNarx[`Rom_${num}_${O}_Nalichnik`]  || 25000) * foiz;
+  const koronaNarx  = (sheetsNarx[`Rom_${num}_${O}_Korona`]     || 45000) * foiz;
+  const kalvakNarx  = (sheetsNarx[`Rom_${num}_${O}_Kalvak`]     || 45000) * foiz;
+  return {karnizNarx, padakolNarx, nalichNarx, koronaNarx, kalvakNarx};
 }
 
 function calcRom() {
-  const el=document.getElementById('rom-res');
+  const el = document.getElementById('rom-res');
   if(!el) return;
-  const nalichnik=parseFloat(document.getElementById('rom-nalichnik')?.value)||0;
-  const karniz=parseFloat(document.getElementById('rom-karniz')?.value)||0;
-  const padakolnik=parseFloat(document.getElementById('rom-padakolnik')?.value)||0;
-  const ramka=parseFloat(document.getElementById('rom-ramka')?.value)||0;
-  const korona=parseFloat(document.getElementById('rom-korona')?.value)||0;
-  const kalvak=parseFloat(document.getElementById('rom-kalvak')?.value)||0;
+  const nalichnik  = parseFloat(document.getElementById('rom-nalichnik')?.value)  || 0;
+  const karniz     = parseFloat(document.getElementById('rom-karniz')?.value)     || 0;
+  const padakolnik = parseFloat(document.getElementById('rom-padakolnik')?.value) || 0;
+  const ramka      = parseFloat(document.getElementById('rom-ramka')?.value)      || 0;
+  const korona     = parseFloat(document.getElementById('rom-korona')?.value)     || 0;
+  const kalvak     = parseFloat(document.getElementById('rom-kalvak')?.value)     || 0;
   if(!nalichnik&&!karniz&&!padakolnik){el.textContent="O'lchamlarni kiriting";return;}
-  const {metrNarx,donaNarx}=getRomNarx();
-  const jami_metr_raw=nalichnik+karniz+padakolnik+ramka;
-  const jami_metr=Math.ceil(jami_metr_raw/2)*2;
-  const metr_sum=jami_metr*metrNarx;
-  const korona_sum=korona*donaNarx;
-  const kalvak_sum=kalvak*donaNarx;
-  const jami=metr_sum+korona_sum+kalvak_sum;
-  el.innerHTML=`<b>Model-${romModel} (${romOlcham==='katta'?'Katta':'Kichik'} komplekt)</b><br>
-    \ud83d\udccf Metraj: ${jami_metr_raw.toFixed(1)}m \u2192 yaxlitlangan: <b>${jami_metr}m</b> \u00d7 ${fmt(metrNarx)} = ${fmt(metr_sum)}<br>
-    ${korona>0?`\ud83d\udc51 Korona: ${korona} dona \u00d7 ${fmt(donaNarx)} = ${fmt(korona_sum)}<br>`:''}
-    ${kalvak>0?`\ud83d\udd29 Kalvak: ${kalvak} dona \u00d7 ${fmt(donaNarx)} = ${fmt(kalvak_sum)}<br>`:''}
-    \ud83d\udcb0 <b>Jami: ${fmt(jami)}</b>`;
+  const {karnizNarx,padakolNarx,nalichNarx,koronaNarx,kalvakNarx} = getRomNarx();
+  const nalich_metr  = Math.ceil(nalichnik/2)*2;
+  const karniz_metr  = Math.ceil(karniz/2)*2;
+  const padakol_metr = Math.ceil(padakolnik/2)*2;
+  const ramka_metr   = Math.ceil(ramka/2)*2;
+  const nalich_sum  = nalich_metr  * nalichNarx;
+  const karniz_sum  = karniz_metr  * karnizNarx;
+  const padakol_sum = padakol_metr * padakolNarx;
+  const ramka_sum   = ramka_metr   * karnizNarx;
+  const korona_sum  = korona * koronaNarx;
+  const kalvak_sum  = kalvak * kalvakNarx;
+  const jami = nalich_sum + karniz_sum + padakol_sum + ramka_sum + korona_sum + kalvak_sum;
+  const foizVal = sheetsNarx['Rom_narx_foiz'] || 100;
+  const chegirma = foizVal < 100 ? ` <span style="color:var(--green);font-size:11px">-${100-foizVal}% chegirma</span>` : '';
+  let html = `<b>Model-${romModel} (${romOlcham==='katta'?'Katta':'Kichik'} komplekt)</b>${chegirma}<br>`;
+  if(nalichnik>0) html += `📏 Nalichnik: ${nalich_metr}m x ${fmt(nalichNarx)} = ${fmt(nalich_sum)}<br>`;
+  if(karniz>0)    html += `📏 Karniz: ${karniz_metr}m x ${fmt(karnizNarx)} = ${fmt(karniz_sum)}<br>`;
+  if(padakolnik>0)html += `📏 Padakolnik: ${padakol_metr}m x ${fmt(padakolNarx)} = ${fmt(padakol_sum)}<br>`;
+  if(ramka>0)     html += `📏 Ramka: ${ramka_metr}m x ${fmt(karnizNarx)} = ${fmt(ramka_sum)}<br>`;
+  if(korona>0)    html += `👑 Korona: ${korona} dona x ${fmt(koronaNarx)} = ${fmt(korona_sum)}<br>`;
+  if(kalvak>0)    html += `🔩 Kalvak: ${kalvak} dona x ${fmt(kalvakNarx)} = ${fmt(kalvak_sum)}<br>`;
+  html += `💰 <b>Jami: ${fmt(jami)}</b>`;
+  el.innerHTML = html;
 }
 
 function addRom() {
   if(!romModel) return;
-  const nalichnik=parseFloat(document.getElementById('rom-nalichnik')?.value)||0;
-  const karniz=parseFloat(document.getElementById('rom-karniz')?.value)||0;
-  const padakolnik=parseFloat(document.getElementById('rom-padakolnik')?.value)||0;
-  const ramka=parseFloat(document.getElementById('rom-ramka')?.value)||0;
-  const korona=parseFloat(document.getElementById('rom-korona')?.value)||0;
-  const kalvak=parseFloat(document.getElementById('rom-kalvak')?.value)||0;
+  const nalichnik  = parseFloat(document.getElementById('rom-nalichnik')?.value)  || 0;
+  const karniz     = parseFloat(document.getElementById('rom-karniz')?.value)     || 0;
+  const padakolnik = parseFloat(document.getElementById('rom-padakolnik')?.value) || 0;
+  const ramka      = parseFloat(document.getElementById('rom-ramka')?.value)      || 0;
+  const korona     = parseFloat(document.getElementById('rom-korona')?.value)     || 0;
+  const kalvak     = parseFloat(document.getElementById('rom-kalvak')?.value)     || 0;
   if(!nalichnik&&!karniz&&!padakolnik) return;
-  const {metrNarx,donaNarx}=getRomNarx();
-  const jami_metr_raw=nalichnik+karniz+padakolnik+ramka;
-  const jami_metr=Math.ceil(jami_metr_raw/2)*2;
-  const korona_sum=korona*donaNarx;
-  const kalvak_sum=kalvak*donaNarx;
-  const jami=(jami_metr*metrNarx)+korona_sum+kalvak_sum;
-  const olchamNom=romOlcham==='katta'?'Katta komplekt':'Kichik komplekt';
-  const nom=`Rom bezagi Model-${romModel} (${olchamNom})`;
-  const razmer=`Xomashyo: ${jami_metr}m (${jami_metr_raw.toFixed(1)}m\u2192yaxl.) | Korona: ${korona} dona | Kalvak: ${kalvak} dona`;
-  upsertSavat('rom_'+Date.now(),nom,razmer,'set',jami,1,'rom');
+  const {karnizNarx,padakolNarx,nalichNarx,koronaNarx,kalvakNarx} = getRomNarx();
+  const nalich_metr  = Math.ceil(nalichnik/2)*2;
+  const karniz_metr  = Math.ceil(karniz/2)*2;
+  const padakol_metr = Math.ceil(padakolnik/2)*2;
+  const ramka_metr   = Math.ceil(ramka/2)*2;
+  const jami = (nalich_metr*nalichNarx)+(karniz_metr*karnizNarx)+
+               (padakol_metr*padakolNarx)+(ramka_metr*karnizNarx)+
+               (korona*koronaNarx)+(kalvak*kalvakNarx);
+  const olchamNom = romOlcham==='katta'?'Katta komplekt':'Kichik komplekt';
+  const nom = `Rom bezagi Model-${romModel} (${olchamNom})`;
+  const razmer = `Nalichnik:${nalich_metr}m | Karniz:${karniz_metr}m | Padakolnik:${padakol_metr}m${ramka>0?` | Ramka:${ramka_metr}m`:''} | Korona:${korona} | Kalvak:${kalvak}`;
+  upsertSavat('rom_'+Date.now(), nom, razmer, 'set', jami, 1, 'rom');
   setBtnAdded('rom-add');
 }
+
 
 
 
