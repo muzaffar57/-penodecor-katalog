@@ -1626,16 +1626,19 @@ function buyurtmaBerish() {
   document.getElementById('buyurtma-tel').value='';
 }
 function pdfOlish() {
-  // Savat ma'lumotlarini botga yuborish — faqat buyurtma berishda yopilsin
-  const total=savat.reduce((s,i)=>s+i.jami,0);
-  const data={
-    amal:'pdf_sorovi',
-    savat:savat.map(i=>({mahsulot:i.name,razmer:i.razmer,miqdor:i.qty+' '+i.unit,birlik_narx:i.price,jami:i.jami,qoplama:i.qoplama_turi||''})),
-    jami_summa:Math.round(total)
+  const total = savat.reduce((s,i)=>s+i.jami, 0);
+  if(!savat.length){ alert("Savat bo'sh!"); return; }
+  const data = {
+    amal: 'pdf_sorovi',
+    savat: savat.map(i=>({
+      mahsulot: i.name, razmer: i.razmer,
+      miqdor: i.qty+' '+i.unit,
+      birlik_narx: i.price, jami: i.jami,
+      qoplama: i.qoplama_turi||''
+    })),
+    jami_summa: Math.round(total)
   };
-  // PDF ni bot orqali olish uchun WebApp ni yopib yuborish kerak
-  // Foydalanuvchiga eslatma ko'rsatamiz
-  alert('PDF hisobni olish uchun \"Buyurtma berish\" tugmasini bosing va ma\'lumotlarni kiriting. Bot sizga PDF yuboradi!');
+  tg.sendData(JSON.stringify(data));
 }
 function buyurtmaYuborish() {
   const ism=document.getElementById('buyurtma-ism').value.trim();
