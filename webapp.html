@@ -8,8 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F6F4F0;--dark:#1A1A1E;--gold:#C9A55A;--gold2:#8B6914;
+  --bg:#0D1B2A;--dark:#1A1A1E;--gold:#C9A55A;--gold2:#8B6914;
   --card:#FFF;--text:#1A1A1E;--muted:#8E8E93;--border:#E5DFD3;
+  --shadow:0 2px 8px rgba(0,0,0,0.08);--green:#27AE60;--red:#E74C3C;
   --green:#2E7D52;--red:#C0392B;--shadow:0 2px 18px rgba(0,0,0,0.07);
   --premium:#4A3728;
 }
@@ -77,7 +78,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 /* CARD BOTTOM */
 .cbot{padding:7px 11px 11px;border-top:1px solid var(--border);display:flex;align-items:center;gap:5px}
-.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 6px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s;text-align:center}
+.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 6px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color 0.2s;text-align:center}
 .stepper{display:flex;align-items:center;gap:4px;flex:1}
 .step-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:18px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;line-height:1}
 .step-btn:active{background:var(--dark);color:#fff}
@@ -119,10 +120,10 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 /* SAVAT */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,0.42);z-index:190;display:none;backdrop-filter:blur(2px)}
-.home-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;animation:up 0.28s ease both;border:1.5px solid var(--border)}
+.home-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;animation:up 0.28s ease both;border:1.5px solid var(--border)}
 .home-card:active{transform:scale(0.96);box-shadow:0 8px 28px rgba(0,0,0,0.16)}
 .home-card img{width:100%;height:140px;object-fit:cover;background:#F0F4F8;display:block}
-.home-card-name{padding:10px 12px;font-size:12px;font-weight:700;color:var(--dark);line-height:1.4;border-top:3px solid var(--gold);background:linear-gradient(135deg,#fff,#FAF6EE)}
+.home-card-name{padding:10px 12px;font-size:12px;font-weight:700;color:var(--dark);line-height:1.4;border-top:3px solid var(--gold);background:linear-gradient(135deg,#1E1E1E,#252520)}
 .ov.show{display:block}
 .cpanel{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,0.14);z-index:200;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:76vh;overflow-y:auto}
 .cpanel.open{transform:translateY(0)}
@@ -189,7 +190,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
       <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:4px">PenoDecorPro</div>
       <div style="font-size:12px;color:var(--gold);margin-bottom:6px">Fasad bezaklari — Professional sifat</div>
       <div style="font-size:11px;color:#BDC3C7;line-height:1.6">Quyidagi bo'limlardan birini tanlang va mahsulot narxini hisoblang</div>
-      <div style="margin-top:10px;background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.4);border-radius:8px;padding:8px 10px;font-size:11px;color:#E74C3C;line-height:1.6;border-left:3px solid #E74C3C">
+      <div style="margin-top:10px;background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.5);border-radius:8px;padding:8px 10px;font-size:11px;color:#E74C3C;line-height:1.6;border-left:3px solid #E74C3C">
         ⚠️ <b>Diqqat!</b> Har bir yangi buyurtma uchun avval savatchadagi mahsulotlarni tozalab oling — aks holda avvalgi buyurtma ma'lumotlari yangi buyurtmaga qo'shilib ketishi mumkin.
     </div>
   </div>
@@ -967,7 +968,7 @@ function calcRom() {
   const foizVal = sheetsNarx['Rom_narx_foiz'] || 100;
 
   const row = (nom, miqdor, birlik, sum) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
       <div>
         <div style="font-size:13px;font-weight:500;color:var(--dark)">${nom}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">${miqdor} x ${fmt(birlik)}</div>
@@ -1266,13 +1267,13 @@ function calcUstun() {
         <div style="color:var(--gold);font-size:11px;font-weight:600;text-align:right;max-width:55%">${qopNom}</div>
       </div>
       <div style="padding:4px 14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
           <div>
             <div style="font-size:13px;font-weight:500;color:var(--dark)">📐 O'lcham</div>
             <div style="font-size:11px;color:var(--muted);margin-top:1px">Balandligi ${h}m × ⌀${d}sm</div>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
           <div>
             <div style="font-size:13px;font-weight:500;color:var(--dark)">💡 1 metr narxi</div>
           </div>
