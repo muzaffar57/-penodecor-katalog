@@ -30,14 +30,15 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .sheets-status.err{color:var(--red)}
 
 /* SVITCH */
-.sw-wrap{margin:10px 13px 0;background:var(--dark);border-radius:14px;padding:4px;display:flex;gap:2px;position:sticky;top:60px;z-index:49;box-shadow:0 4px 16px rgba(0,0,0,0.18)}
+.sticky-nav{position:sticky;top:56px;z-index:49;background:var(--bg);box-shadow:0 2px 10px rgba(0,0,0,0.1);padding-bottom:4px}
+.sw-wrap{margin:8px 13px 0;background:var(--dark);border-radius:14px;padding:4px;display:flex;gap:2px}
 .sw-btn{flex:1;padding:10px 6px;border:none;border-radius:10px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.25s;background:transparent;color:#999;line-height:1.3}
 .sw-btn.active{background:var(--gold);color:var(--dark)}
-.sw-note{text-align:center;font-size:11px;color:var(--muted);margin:5px 13px 2px}
+.sw-note{text-align:center;font-size:11px;color:var(--muted);margin:4px 13px 2px}
 
 /* KATEGORIYA */
-.cats{display:flex;gap:5px;padding:8px 12px 6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:104px;z-index:48;background:var(--bg);box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.25s}
-.cats.hidden{opacity:0;pointer-events:none;transform:translateY(-8px);max-height:0;padding:0;overflow:hidden}
+.cats{display:flex;gap:5px;padding:6px 12px 4px;overflow-x:auto;scrollbar-width:none;transition:all 0.25s}
+.cats.hidden{opacity:0;pointer-events:none;max-height:0;padding:0;overflow:hidden}
 .cats::-webkit-scrollbar{display:none}
 .cat{flex-shrink:0;padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s}
 .cat.active{background:var(--dark);border-color:var(--dark);color:#fff}
@@ -155,13 +156,13 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 <div class="sheets-status" id="sheets-status" style="display:none"></div>
 
-<div class="sw-wrap">
-  <button class="sw-btn active" id="sw-q" onclick="setQoplama(true)">🟢 Qoplamali (Premium)</button>
-  <button class="sw-btn" id="sw-nq" onclick="setQoplama(false)">⚪ Qoplamasiz (−50%)</button>
-</div>
-<div class="sw-note" id="sw-note">Qoplama bilan narxlar ko'rsatilmoqda</div>
-
-<div class="cats hidden">
+<div class="sticky-nav" id="sticky-nav">
+  <div class="sw-wrap" id="sw-wrap-el">
+    <button class="sw-btn active" id="sw-q" onclick="setQoplama(true)">🟢 Qoplamali (Premium)</button>
+    <button class="sw-btn" id="sw-nq" onclick="setQoplama(false)">⚪ Qoplamasiz (−50%)</button>
+  </div>
+  <div class="sw-note" id="sw-note">Qoplama bilan narxlar ko'rsatilmoqda</div>
+  <div class="cats hidden" id="cats-el">
   <button class="cat active" id="cat-home" onclick="showHome()">🏠 Katalog</button>
   <button class="cat" onclick="filterCat('rom',this)">🪟 Deraza bezaklari</button>
   <button class="cat" onclick="filterCat('karniz',this)">📐 Shift karnizlari</button>
@@ -172,7 +173,8 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
   <button class="cat" onclick="filterCat('kalvak',this)">🔩 Qavslar</button>
   <button class="cat" onclick="filterCat('barelyef',this)">🌸 O'ymakor gullar</button>
   <button class="cat" onclick="filterCat('ramka',this)">🔲 Ramkalar</button>
-</div>
+  </div><!-- cats end -->
+</div><!-- sticky-nav end -->
 
 <!-- BOSH SAHIFA KATALOG -->
 <div id="homeCatalog" style="display:block">
@@ -1670,10 +1672,10 @@ function showHome() {
   document.getElementById('homeCatalog').style.display='block';
   document.getElementById('mainContent').style.display='none';
   // Menyu yashirish
-  document.querySelector('.cats').classList.add('hidden');
+  document.getElementById('cats-el').classList.add('hidden');
   // Svitch ko'rsatish
-  const swWrap=document.querySelector('.sw-wrap');
-  const swNote=document.querySelector('.sw-note');
+  const swWrap=document.getElementById('sw-wrap-el');
+  const swNote=document.getElementById('sw-note');
   if(swWrap) swWrap.style.display='flex';
   if(swNote) swNote.style.display='block';
 }
@@ -1693,11 +1695,11 @@ function filterCatHome(cat) {
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
   // Menyu ko'rsatish
-  document.querySelector('.cats').classList.remove('hidden');
+  document.getElementById('cats-el').classList.remove('hidden');
   renderContent(cat);
   // Svitch ko'rsatish/yashirish
-  const swWrap=document.querySelector('.sw-wrap');
-  const swNote=document.querySelector('.sw-note');
+  const swWrap=document.getElementById('sw-wrap-el');
+  const swNote=document.getElementById('sw-note');
   if(cat==='ustun'){
     if(swWrap) swWrap.style.display='none';
     if(swNote) swNote.style.display='none';
@@ -1711,14 +1713,14 @@ function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   // Menyu ko'rsatish
-  document.querySelector('.cats').classList.remove('hidden');
+  document.getElementById('cats-el').classList.remove('hidden');
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
   // Yumaloq ustun bo'limida global svitch yashiriladi
-  const swWrap = document.querySelector('.sw-wrap');
-  const swNote = document.querySelector('.sw-note');
+  const swWrap = document.getElementById('sw-wrap-el');
+  const swNote = document.getElementById('sw-note');
   if(cat==='ustun'){
     if(swWrap) swWrap.style.display='none';
     if(swNote) swNote.style.display='none';
