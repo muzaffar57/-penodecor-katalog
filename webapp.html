@@ -555,7 +555,7 @@ function addKarniz(num) {
   const qty = parseFloat(document.getElementById('kq_'+num).value);
   if(!qty||qty<=0){shakeInp('kq_'+num);return;}
   const r = selRazmer['k'+num];
-  const kQid='k'+num+(qoplamali?'_q':'_nq');
+  const kQid='k'+num+'_'+r+(qoplamali?'_q':'_nq');
   upsertSavat(kQid,'Karniz MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
   setBtnAdded('kb_'+num);
 }
@@ -608,7 +608,7 @@ function addBelbog(num) {
   const qty = parseFloat(document.getElementById('bq_'+num).value);
   if(!qty||qty<=0){shakeInp('bq_'+num);return;}
   const r = selRazmer['b'+num];
-  const bQid='b'+num+(qoplamali?'_q':'_nq');
+  const bQid='b'+num+'_'+r+(qoplamali?'_q':'_nq');
   upsertSavat(bQid,'Belbog MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
   setBtnAdded('bb_'+num);
 }
