@@ -1046,19 +1046,56 @@ function calcUstun() {
   const h = parseFloat(document.getElementById('u-h').value)||0;
   const d = parseFloat(document.getElementById('u-d').value)||0;
   const el = document.getElementById('u-res');
-  if(!h||!d){el.textContent='Balandlik va diametrni kiriting';return;}
-  let narx;
-  if(ustunQ==='ekonom'){
-    const baza = sheetsNarx['Yumaloq ustun oq baza']||53000;
-    const ustama = sheetsNarx['Yumaloq ustun oq ustama']||3200;
-    narx = (baza + Math.max(d-20,0)*ustama)*h;
-    el.textContent = `Qoplamasiz (Ekonom): ${fmt(narx)}`;
-  } else {
-    const baza = sheetsNarx['Yumaloq ustun baza']||75000;
-    const ustama = sheetsNarx['Yumaloq ustun ustama']||23000;
-    narx = (baza + Math.max(d-20,0)*ustama)*h;
-    el.textContent = `Qoplamali (Premium 180°): ${fmt(narx)}`;
+  if(!h||!d){
+    el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px">Balandlik va diametrni kiriting</div>';
+    return;
   }
+  let narx, baza1m, ustama1sm, qopNom, ustamaNarx;
+  if(ustunQ==='ekonom'){
+    baza1m   = sheetsNarx['Yumaloq ustun oq baza']||53000;
+    ustama1sm= sheetsNarx['Yumaloq ustun oq ustama']||3200;
+    qopNom   = 'Qoplamasiz (4 qismli yoy, ekonom)';
+    ustamaNarx = Math.max(d-20,0)*ustama1sm;
+    narx = (baza1m + ustamaNarx)*h;
+  } else {
+    baza1m   = sheetsNarx['Yumaloq ustun baza']||75000;
+    ustama1sm= sheetsNarx['Yumaloq ustun ustama']||23000;
+    qopNom   = 'Qoplamali (180° qolipli kesim, premium)';
+    ustamaNarx = Math.max(d-20,0)*ustama1sm;
+    narx = (baza1m + ustamaNarx)*h;
+  }
+  const metrNarx = baza1m + ustamaNarx;
+
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:12px;border:1.5px solid var(--border);overflow:hidden;margin-top:8px">
+      <div style="background:var(--dark);padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+        <div style="color:#fff;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700">🏛️ Yumaloq ustun</div>
+        <div style="color:var(--gold);font-size:11px;font-weight:600;text-align:right;max-width:55%">${qopNom}</div>
+      </div>
+      <div style="padding:4px 14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--dark)">📐 O'lcham</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">Balandligi ${h}m × ⌀${d}sm</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--dark)">💡 1 metr narxi</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">Baza ${fmt(baza1m)}${d>20?` + ⌀ustama ${fmt(ustamaNarx)}`:''}  </div>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--gold2);white-space:nowrap;margin-left:10px">${fmt(metrNarx)}/m</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0">
+          <div style="font-size:13px;font-weight:500;color:var(--dark)">📏 Jami uzunlik</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gold2)">${h} metr</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F8F5EF;border-top:2px solid var(--dark)">
+        <div style="font-size:14px;font-weight:700;color:var(--dark)">Jami summa:</div>
+        <div style="font-size:17px;font-weight:800;color:var(--gold2)">${fmt(narx)}</div>
+      </div>
+    </div>`;
 }
 function addUstun() {
   const h = parseFloat(document.getElementById('u-h').value)||0;
@@ -1499,7 +1536,18 @@ function openCart(){document.getElementById('cpanel').classList.add('open');docu
 function closeCart(){document.getElementById('cpanel').classList.remove('open');document.getElementById('ov').classList.remove('show');}
 function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderContent(cat);
+  btn.classList.add('active');
+  // Yumaloq ustun bo'limida global svitch yashiriladi
+  const swWrap = document.querySelector('.sw-wrap');
+  const swNote = document.querySelector('.sw-note');
+  if(cat==='ustun'){
+    if(swWrap) swWrap.style.display='none';
+    if(swNote) swNote.style.display='none';
+  } else {
+    if(swWrap) swWrap.style.display='flex';
+    if(swNote) swNote.style.display='block';
+  }
+  renderContent(cat);
 }
 
 // Telegram Main Button
