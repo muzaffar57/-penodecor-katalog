@@ -10,6 +10,7 @@
 :root{
   --bg:#F6F4F0;--dark:#1A1A1E;--gold:#C9A55A;--gold2:#8B6914;
   --card:#FFF;--text:#1A1A1E;--muted:#8E8E93;--border:#E5DFD3;
+  --shadow:0 2px 8px rgba(0,0,0,0.08);--green:#27AE60;--red:#E74C3C;
   --green:#2E7D52;--red:#C0392B;--shadow:0 2px 18px rgba(0,0,0,0.07);
   --premium:#4A3728;
 }
@@ -17,11 +18,11 @@
 body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);padding-bottom:140px}
 
 /* HEADER */
-.hdr{background:var(--dark);padding:13px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.hdr{background:#1A252F;padding:13px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
 .hlogo{height:36px;border-radius:6px;object-fit:contain}
 .hinfo h1{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.2}
 .hinfo p{font-size:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
-.hbadge{margin-left:auto;background:var(--gold);color:var(--dark);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;display:none;cursor:pointer}
+.hbadge{background:var(--gold);color:var(--dark);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;display:none;cursor:pointer}
 .hbadge.show{display:block}
 
 /* SHEETS STATUS */
@@ -30,13 +31,16 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .sheets-status.err{color:var(--red)}
 
 /* SVITCH */
-.sw-wrap{margin:10px 13px 0;background:var(--dark);border-radius:14px;padding:4px;display:flex;gap:2px;position:sticky;top:60px;z-index:49;box-shadow:0 4px 16px rgba(0,0,0,0.18)}
+#mainContent{display:block;min-height:300px;height:auto!important;overflow:visible}
+.sticky-nav{position:sticky;top:56px;z-index:49;background:var(--bg);box-shadow:0 2px 10px rgba(0,0,0,0.1);padding-bottom:4px}
+.sw-wrap{margin:8px 13px 0;background:var(--dark);border-radius:14px;padding:4px;display:flex;gap:2px}
 .sw-btn{flex:1;padding:10px 6px;border:none;border-radius:10px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.25s;background:transparent;color:#999;line-height:1.3}
 .sw-btn.active{background:var(--gold);color:var(--dark)}
-.sw-note{text-align:center;font-size:11px;color:var(--muted);margin:5px 13px 2px}
+.sw-note{text-align:center;font-size:11px;color:var(--muted);margin:4px 13px 2px}
 
 /* KATEGORIYA */
-.cats{display:flex;gap:5px;padding:10px 12px 4px;overflow-x:auto;scrollbar-width:none}
+.cats{display:flex;gap:5px;padding:6px 12px 4px;overflow-x:auto;scrollbar-width:none;transition:all 0.25s}
+.cats.hidden{opacity:0;pointer-events:none;max-height:0;padding:0;overflow:hidden}
 .cats::-webkit-scrollbar{display:none}
 .cat{flex-shrink:0;padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s}
 .cat.active{background:var(--dark);border-color:var(--dark);color:#fff}
@@ -75,7 +79,12 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 /* CARD BOTTOM */
 .cbot{padding:7px 11px 11px;border-top:1px solid var(--border);display:flex;align-items:center;gap:5px}
-.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 9px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s}
+.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 6px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color 0.2s;text-align:center}
+.stepper{display:flex;align-items:center;gap:4px;flex:1}
+.step-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:18px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;line-height:1}
+.step-btn:active{background:var(--dark);color:#fff}
+.kbd-close{position:fixed;bottom:0;left:0;right:0;padding:10px 14px;background:var(--dark);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;z-index:400;display:none}
+.kbd-close.show{display:block}
 .qinp:focus{border-color:var(--gold)}
 .qinp::placeholder{color:var(--muted);font-size:11px}
 .abtn{height:36px;padding:0 12px;background:var(--dark);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}
@@ -112,6 +121,10 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 /* SAVAT */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,0.42);z-index:190;display:none;backdrop-filter:blur(2px)}
+.home-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;animation:up 0.28s ease both;border:1.5px solid var(--border)}
+.home-card:active{transform:scale(0.96);box-shadow:0 8px 28px rgba(0,0,0,0.16)}
+.home-card img{width:100%;height:140px;object-fit:cover;background:#F0F4F8;display:block}
+.home-card-name{padding:10px 12px;font-size:12px;font-weight:700;color:#1A1A1E;line-height:1.4;border-top:3px solid var(--gold);background:linear-gradient(135deg,#fff,#FAF6EE)}
 .ov.show{display:block}
 .cpanel{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,0.14);z-index:200;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:76vh;overflow-y:auto}
 .cpanel.open{transform:translateY(0)}
@@ -135,41 +148,115 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 <body>
 
 <div class="hdr">
-  <img class="hlogo" src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" onerror="this.style.display='none'" alt="">
+  <img class="hlogo" src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" onerror="this.style.opacity='0'" alt="">
   <div class="hinfo">
     <h1>PenoDecorPro</h1>
     <p>Fasad bezaklari</p>
   </div>
-  <div class="hbadge" id="hbadge" onclick="openCart()">🛒 0</div>
+  <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+    <div class="hbadge" id="hbadge" onclick="openCart()">🛒 0</div>
+    <a onclick="tg.openLink('tel:+998979995757')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 97 999 57 57</a>
+    <a onclick="tg.openLink('tel:+998906232272')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 90 623 22 72</a>
+    <a onclick="tg.openLink('tel:+998976991919')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 97 699 19 19</a>
+  </div>
 </div>
 
 <div class="sheets-status" id="sheets-status" style="display:none"></div>
 
-<div class="sw-wrap">
-  <button class="sw-btn active" id="sw-q" onclick="setQoplama(true)">🟢 Qoplamali (Premium)</button>
-  <button class="sw-btn" id="sw-nq" onclick="setQoplama(false)">⚪ Qoplamasiz (−50%)</button>
-</div>
-<div class="sw-note" id="sw-note">Qoplama bilan narxlar ko'rsatilmoqda</div>
+<div class="sticky-nav" id="sticky-nav">
+  <div class="sw-wrap" id="sw-wrap-el">
+    <button class="sw-btn active" id="sw-q" onclick="setQoplama(true)">🟢 Qoplamali (Premium)</button>
+    <button class="sw-btn" id="sw-nq" onclick="setQoplama(false)">⚪ Qoplamasiz (−50%)</button>
+  </div>
+  <div class="sw-note" id="sw-note">Qoplama bilan narxlar ko'rsatilmoqda</div>
+  <div class="cats hidden" id="cats-el">
+  <button class="cat active" id="cat-home" onclick="showHome()">🏠 Katalog</button>
+  <button class="cat" onclick="filterCat('rom',this)">🪟 Deraza bezaklari</button>
+  <button class="cat" onclick="filterCat('karniz',this)">📐 Shift karnizlari</button>
+  <button class="cat" onclick="filterCat('belbog',this)">🎀 Ichki karnizlar</button>
+  <button class="cat" onclick="filterCat('plyastr',this)">🏛️ Plyastr ustunlar</button>
+  <button class="cat" onclick="filterCat('ustun',this)">🏛️ Rim ustunlari</button>
+  <button class="cat" onclick="filterCat('kapitel',this)">🏛️ Kapitel/Baza</button>
+  <button class="cat" onclick="filterCat('kalvak',this)">🔩 Qavslar</button>
+  <button class="cat" onclick="filterCat('barelyef',this)">🌸 O'ymakor gullar</button>
+  <button class="cat" onclick="filterCat('ramka',this)">🔲 Ramkalar</button>
+  </div><!-- cats end -->
+</div><!-- sticky-nav end -->
 
-<div class="cats">
-  <button class="cat active" onclick="filterCat('all',this)">Hammasi</button>
-  <button class="cat" onclick="filterCat('karniz',this)">Karnizlar</button>
-  <button class="cat" onclick="filterCat('belbog',this)">Belbog'</button>
-  <button class="cat" onclick="filterCat('rom',this)">Rom bezak</button>
-  <button class="cat" onclick="filterCat('ramka',this)">Ramkalar</button>
-  <button class="cat" onclick="filterCat('ustun',this)">Yumaloq ustun</button>
-  <button class="cat" onclick="filterCat('plyastr',this)">Plyastr ustun</button>
-  <button class="cat" onclick="filterCat('kapitel',this)">Kapitel/Baza</button>
-  <button class="cat" onclick="filterCat('kalvak',this)">Kalvak</button>
-  <button class="cat" onclick="filterCat('barelyef',this)">Barelyef</button>
+<!-- BOSH SAHIFA KATALOG -->
+<div id="homeCatalog" style="display:block">
+  <!-- Salomlashuv -->
+  <div style="padding:14px 14px 8px">
+    <div style="background:linear-gradient(135deg,var(--dark),#2C3E50);border-radius:14px;padding:16px;color:#fff">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:4px">PenoDecorPro</div>
+      <div style="font-size:12px;color:var(--gold);margin-bottom:6px">Fasad bezaklari — Professional sifat</div>
+      <div style="font-size:11px;color:#BDC3C7;line-height:1.6">Quyidagi bo'limlardan birini tanlang va mahsulot narxini hisoblang</div>
+      <div style="margin-top:10px;background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.5);border-radius:8px;padding:8px 10px;font-size:11px;color:#E74C3C;line-height:1.6;border-left:3px solid #E74C3C">
+        ⚠️ <b>Diqqat!</b> Har bir yangi buyurtma uchun avval savatchadagi mahsulotlarni tozalab oling — aks holda avvalgi buyurtma ma'lumotlari yangi buyurtmaga qo'shilib ketishi mumkin.
+    </div>
+  </div>
+  <!-- Kartochkalar -->
+  <div style="padding:0 12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="home-card" onclick="filterCatHome('rom')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_rom.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🪟 Deraza va eshik bezaklari</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('karniz')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_karniz.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">📐 Shift karnizlari</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('belbog')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_belbog.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🎀 Ichki qavat karnizlari</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('plyastr')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_plyastr.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🏛️ Plyastr ustunlar</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('ustun')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_ustun.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🏛️ Rim uslubidagi ustunlar</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('kapitel')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_kapitel.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🏛️ Kapitel va Bazalar</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('kalvak')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_kalvak.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🔩 Qavslar (Kronshteyn)</div>
+    </div>
+    <div class="home-card" onclick="filterCatHome('barelyef')">
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/cat_barelyef.jpg"
+        style="width:100%;height:140px;object-fit:cover;background:#E8E0D0;display:block"
+        onerror="this.style.background='#E8E0D0';this.src=''">
+      <div class="home-card-name">🌸 O'ymakor gullar</div>
+    </div>
+  </div>
 </div>
 
-<div id="mainContent"></div>
+<div id="mainContent" style="display:block;min-height:300px;position:relative;z-index:1;overflow:visible"></div>
 
 <div class="img-ov" id="imgOv" onclick="closeImg()">
   <button class="img-x">✕</button>
   <img class="img-big" id="imgBig" src="" alt="">
 </div>
+
+<!-- Klaviatura yopish tugmasi (iPhone uchun) -->
+<button class="kbd-close" id="kbdClose" onclick="closeKeyboard()">⌨️ Klaviaturani yopish ✓</button>
 
 <div class="ov" id="ov" onclick="closeCart()"></div>
 <div class="cpanel" id="cpanel">
@@ -336,6 +423,62 @@ async function loadSheetsNarx() {
 // ===== HOLAT =====
 let qoplamali = true;
 let savat = [];
+
+function savatSaqla() {
+  try {
+    const data = JSON.stringify(savat);
+    // sessionStorage zaxira
+    try { sessionStorage.setItem('penodecor_cart', data); } catch(e){}
+    // CloudStorage
+    if(tg.CloudStorage) {
+      tg.CloudStorage.setItem('penodecor_cart', data);
+    }
+  } catch(e) { console.log('Saqlash xato:', e); }
+}
+
+function savatYukla(callback) {
+  // sessionStorage dan yuklab ko'ramiz
+  try {
+    const ssData = sessionStorage.getItem('penodecor_cart');
+    if(ssData) {
+      const loaded = JSON.parse(ssData);
+      if(Array.isArray(loaded) && loaded.length > 0) {
+        savat = loaded;
+        updateUI();
+        console.log('sessionStorage dan yuklandi:', savat.length, 'ta');
+      }
+    }
+  } catch(e){}
+
+  // CloudStorage dan ham yuklab ko'ramiz
+  try {
+    if(tg.CloudStorage) {
+      tg.CloudStorage.getItem('penodecor_cart', (err, val) => {
+        if(!err && val) {
+          try {
+            const loaded = JSON.parse(val);
+            if(Array.isArray(loaded) && loaded.length > savat.length) {
+              savat = loaded;
+              updateUI();
+            }
+          } catch(e){}
+        }
+        if(callback) callback();
+      });
+    } else {
+      if(callback) callback();
+    }
+  } catch(e) {
+    if(callback) callback();
+  }
+}
+
+function savatTozala() {
+  savat = [];
+  try { if(tg.CloudStorage) tg.CloudStorage.removeItem('penodecor_cart'); } catch(e){}
+  try { sessionStorage.removeItem('penodecor_cart'); } catch(e){}
+  updateUI();
+}
 let selRazmer = {};
 let selRom = {};
 let currentCat = 'all';
@@ -363,17 +506,23 @@ function setQoplama(val) {
 function renderContent(cat) {
   currentCat = cat;
   const c = document.getElementById('mainContent');
+  c.style.display = 'block';
+  c.style.visibility = 'visible';
   c.innerHTML = '';
   if(cat==='all'||cat==='karniz') renderKarniz(c);
   if(cat==='all'||cat==='belbog') renderBelbog(c);
   if(cat==='all'||cat==='rom') renderRom(c);
   if(cat==='all'||cat==='ramka') renderRamka(c);
   if(cat==='all'||cat==='plyastr') renderPlyastr(c);
-  // Nostandart bo'limlar faqat o'z tugmalari bosilganda chiqsin
   if(cat==='ustun') renderUstun(c);
   if(cat==='kapitel') renderKapitel(c);
   if(cat==='kalvak') renderKalvak(c);
   if(cat==='barelyef') renderBarelyef(c);
+  // Debug
+  const r = c.getBoundingClientRect();
+  console.log('mainContent:', cat, 'len:', c.innerHTML.length, 'display:', getComputedStyle(c).display, 'height:', r.height, 'top:', r.top);
+  const home = document.getElementById('homeCatalog');
+  console.log('homeCatalog display:', getComputedStyle(home).display);
 }
 
 // ===== KARNIZ =====
@@ -385,14 +534,14 @@ function renderKarniz(c) {
     const r = selRazmer['k'+num];
     const narxAsl = razmlar[r];
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='k'+num);
+    const kQid='k'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===kQid || s.id==='k'+num+'_q' || s.id==='k'+num+'_nq');
     const rBtns = Object.keys(razmlar).map(rz =>
       `<button class="rbtn ${r===rz?'active':''}" onclick="setKarnizR('${num}','${rz}')">${rz}</button>`
     ).join('');
     g.innerHTML += `<div class="card" id="kc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="${BASE}/Karniz_${num}.jpg" alt="" onclick="openImg('${BASE}/Karniz_${num}.jpg')"
-          onerror="this.style.display='none'">
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
+          onerror="this.style.background='#E8E4DC'">
         <div class="cinfo">
           <div class="cname">Karniz MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -404,8 +553,10 @@ function renderKarniz(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="kq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="kb_${num}" onclick="addKarniz('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('kq_${num}',-1,1)">−</button>
+        <input class="qinp" id="kq_${num}" type="number" min="0" step="0.5" placeholder="metr" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('kq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="kb_${num}" onclick="addKarniz('${num}')">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -417,14 +568,15 @@ function setKarnizR(num, rz) {
   const narx = applyQ(narxAsl);
   document.getElementById('kc_'+num).querySelectorAll('.rbtn').forEach(b=>b.classList.toggle('active',b.textContent===rz));
   document.getElementById('kpr_'+num).innerHTML=`<span class="pmain">${fmt(narx)}</span>${!qoplamali?`<span class="pold">${fmt(narxAsl)}</span>`:''}<span class="punit">/metr</span>`;
-  const ex=savat.findIndex(s=>s.id==='k'+num);
+  const ex=savat.findIndex(s=>s.id==='k'+num+'_q' || s.id==='k'+num+'_nq');
   if(ex>=0){savat[ex].razmer=rz;savat[ex].price=narx;savat[ex].jami=savat[ex].qty*narx;updateUI();}
 }
 function addKarniz(num) {
   const qty = parseFloat(document.getElementById('kq_'+num).value);
   if(!qty||qty<=0){shakeInp('kq_'+num);return;}
   const r = selRazmer['k'+num];
-  upsertSavat('k'+num,'Karniz MODEL-'+num,r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
+  const kQid='k'+num+'_'+r+(qoplamali?'_q':'_nq');
+  upsertSavat(kQid,'Karniz MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
   setBtnAdded('kb_'+num);
 }
 
@@ -437,14 +589,14 @@ function renderBelbog(c) {
     const r = selRazmer['b'+num];
     const narxAsl = razmlar[r];
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='b'+num);
+    const bQid='b'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===bQid || s.id==='b'+num+'_q' || s.id==='b'+num+'_nq');
     const rBtns = Object.keys(razmlar).map(rz =>
       `<button class="rbtn ${r===rz?'active':''}" onclick="setBelbogR('${num}','${rz}')">${rz}</button>`
     ).join('');
     g.innerHTML += `<div class="card" id="bc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="${BASE}/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('${BASE}/Belbog_karniz_${num}.jpg')"
-          onerror="this.style.display='none'">
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg')"
+          onerror="this.style.background='#E8E4DC'">
         <div class="cinfo">
           <div class="cname">Belbog MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -456,8 +608,10 @@ function renderBelbog(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="bq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="bb_${num}" onclick="addBelbog('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('bq_${num}',-1,1)">−</button>
+        <input class="qinp" id="bq_${num}" type="number" min="0" step="0.5" placeholder="metr" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('bq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="bb_${num}" onclick="addBelbog('${num}')">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -476,7 +630,8 @@ function addBelbog(num) {
   const qty = parseFloat(document.getElementById('bq_'+num).value);
   if(!qty||qty<=0){shakeInp('bq_'+num);return;}
   const r = selRazmer['b'+num];
-  upsertSavat('b'+num,"Belbog MODEL-"+num,r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
+  const bQid='b'+num+'_'+r+(qoplamali?'_q':'_nq');
+  upsertSavat(bQid,'Belbog MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
   setBtnAdded('bb_'+num);
 }
 
@@ -528,21 +683,21 @@ function renderRom(c) {
   c.innerHTML += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 11px 10px">
     <div onclick="openRomGuruh('ekonom')" id="rom-blok-ekonom"
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
-      <img src="${BASE}/01.jpg"
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/01.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
         onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Ekonom</div>
     </div>
     <div onclick="openRomGuruh('standart')" id="rom-blok-standart"
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
-      <img src="${BASE}/04.jpg"
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/04.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
         onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Standart</div>
     </div>
     <div onclick="openRomGuruh('premium')" id="rom-blok-premium"
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
-      <img src="${BASE}/15.jpg"
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/15.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
         onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Premium</div>
@@ -564,7 +719,7 @@ function renderRom(c) {
       <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;background:#F8F5EF;border-radius:10px;padding:10px">
         <img id="rom-chizma-img" src=""
           style="width:90px;height:90px;object-fit:contain;border-radius:8px;cursor:pointer;flex-shrink:0;box-shadow:var(--shadow);background:#fff"
-          onclick="openImg(this.src)" onerror="this.style.display='none'">
+          onclick="openImg(this.src)" onerror="this.style.opacity='0'">
         <div style="font-size:11px;color:var(--gold2);line-height:1.7">
           👆 <b>Eskiz ustiga bosing</b> va detallar nomlarini ko'rib chiqing.<br>
           Pastdagi buyurtma panelidagi input maydonlari faqat <b>siz tanlagan modelda mavjud detallar</b> uchun ko'rsatiladi.<br>
@@ -598,7 +753,7 @@ function renderRom(c) {
       <div style="text-align:center;margin:10px 0">
         <img id="rom-main-img" src=""
           style="width:100%;min-height:350px;max-height:450px;object-fit:contain;background:#f8f9fa;padding:8px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-          onclick="openImg(this.src)" onerror="this.style.display='none'">
+          onclick="openImg(this.src)" onerror="this.style.opacity='0'">
         <div id="rom-model-label" style="font-size:12px;color:var(--gold2);font-weight:600;margin-top:6px"></div>
       </div>
 
@@ -661,7 +816,7 @@ function openRomGuruh(guruh) {
     grid.innerHTML=modList.map(n=>`
       <div onclick="selectRomModel('${n}')" id="rom-gal-${n}"
         style="border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid var(--border);transition:all 0.2s;background:#fff">
-        <img src="${BASE}/${n}.jpg"
+        <img src="https://muzaffar57.github.io/-penodecor-katalog/${n}.jpg"
           style="width:100%;height:90px;object-fit:contain;background:#f8f9fa;padding:4px;display:block"
           onerror="this.src='';this.style.background='#E8E0D0'">
         <div style="text-align:center;padding:4px;font-size:10px;font-weight:600;color:var(--muted)">
@@ -685,7 +840,7 @@ function selectRomModel(num) {
     if(el) el.style.border=n===num?'2px solid var(--gold)':'2px solid var(--border)';
   });
   const img=document.getElementById('rom-main-img');
-  if(img){ img.src=`${BASE}/${num}.jpg`; img.style.display='block'; }
+  if(img){ img.src=`https://muzaffar57.github.io/-penodecor-katalog/${num}.jpg`; img.style.display='block'; }
   const lbl=document.getElementById('rom-model-label');
   if(lbl) lbl.textContent=`\u2713 Model-${num} tanlandi`;
   updateRomChizma();
@@ -739,9 +894,9 @@ function toggleOlcham(tur) {
     btnKi.style.background = '#fff'; btnKi.style.color = 'var(--muted)'; btnKi.style.borderColor = 'var(--border)';
     panel.innerHTML = `
       <div style="display:flex;gap:10px;align-items:flex-start">
-        <img src="${BASE}/rom_katta.jpg" onclick="openImg('${BASE}/rom_katta.jpg')"
+        <img src="https://muzaffar57.github.io/-penodecor-katalog/rom_katta.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/rom_katta.jpg')"
           style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
-          onerror="this.style.display='none'">
+          onerror="this.style.opacity='0'">
         <div style="font-size:12px;line-height:2">
           <b style="color:var(--dark)">📐 Katta komplekt:</b><br>
           🔹 Karniz (tepa) — <b>18 sm</b><br>
@@ -755,9 +910,9 @@ function toggleOlcham(tur) {
     btnK.style.background = '#fff'; btnK.style.color = 'var(--gold2)'; btnK.style.borderColor = 'var(--gold)';
     panel.innerHTML = `
       <div style="display:flex;gap:10px;align-items:flex-start">
-        <img src="${BASE}/rom_kichik.jpg" onclick="openImg('${BASE}/rom_kichik.jpg')"
+        <img src="https://muzaffar57.github.io/-penodecor-katalog/rom_kichik.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/rom_kichik.jpg')"
           style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
-          onerror="this.style.display='none'">
+          onerror="this.style.opacity='0'">
         <div style="font-size:12px;line-height:2">
           <b style="color:var(--dark)">📐 Kichik komplekt:</b><br>
           🔹 Karniz (tepa) — <b>15 sm</b><br>
@@ -774,23 +929,25 @@ function updateRomChizma() {
   const chizma=document.getElementById('rom-chizma-img');
   if(!chizma) return;
   chizma.src=romOlcham==='katta'
-    ?`${BASE}/rom_katta.jpg`
-    :`${BASE}/rom_kichik.jpg`;
+    ?`https://muzaffar57.github.io/-penodecor-katalog/rom_katta.jpg`
+    :`https://muzaffar57.github.io/-penodecor-katalog/rom_kichik.jpg`;
   chizma.style.display='block';
 }
 
 function getRomNarx() {
   const foiz = (sheetsNarx['Rom_narx_foiz'] || 100) / 100;
-  const qoplamaKoef = qoplamali ? 1 : 0.5;
-  const O = romOlcham.charAt(0).toUpperCase() + romOlcham.slice(1);
-  const num = romModel || '01';
-  const karnizNarx   = (sheetsNarx[`Rom_${num}_${O}_Karniz`]    || 30000) * foiz * qoplamaKoef;
-  const padakolNarx  = (sheetsNarx[`Rom_${num}_${O}_Padakolnik`] || 25000) * foiz * qoplamaKoef;
-  const nalichNarx   = (sheetsNarx[`Rom_${num}_${O}_Nalichnik`]  || 25000) * foiz * qoplamaKoef;
-  const koronaNarx   = (sheetsNarx[`Rom_${num}_${O}_Korona`]     || 45000) * foiz * qoplamaKoef;
-  const kalvakNarx   = (sheetsNarx[`Rom_${num}_${O}_Kalvak`]     || 45000) * foiz * qoplamaKoef;
-  const ramkaNarx    = (sheetsNarx[`Rom_${num}_${O}_Ramka`]      || 30000) * foiz * qoplamaKoef;
-  return {karnizNarx, padakolNarx, nalichNarx, koronaNarx, kalvakNarx, ramkaNarx};
+  const O = romOlcham === 'katta' ? 'Katta' : 'Kichik';
+  const num = (romModel || '01').padStart(2,'0');
+  // Kalit format: Rom_01_Katta_Nalichnik
+  const get = (detal, def) => (sheetsNarx[`Rom_${num}_${O}_${detal}`] || def) * foiz;
+  return {
+    nalichNarx  : get('Nalichnik',  25000),
+    karnizNarx  : get('Karniz',     30000),
+    padakolNarx : get('Padakolnik', 25000),
+    koronaNarx  : get('Korona',     45000),
+    kalvakNarx  : get('Kalvak',     45000),
+    ramkaNarx   : get('Ramka',      30000),
+  };
 }
 
 function calcRom() {
@@ -818,7 +975,7 @@ function calcRom() {
   const foizVal = sheetsNarx['Rom_narx_foiz'] || 100;
 
   const row = (nom, miqdor, birlik, sum) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
       <div>
         <div style="font-size:13px;font-weight:500;color:var(--dark)">${nom}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">${miqdor} x ${fmt(birlik)}</div>
@@ -881,11 +1038,11 @@ function renderRamka(c) {
   const g = document.createElement('div'); g.className = 'products';
   Object.entries(RAMKA).forEach(([num, narxAsl], i) => {
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='rm'+num);
+    const rmQid='rm'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===rmQid || s.id==='rm'+num+'_q' || s.id==='rm'+num+'_nq');
     g.innerHTML += `<div class="card" style="animation-delay:${Math.min(i*0.05,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="${BASE}/ramka_${num}.jpg" alt="" onclick="openImg('${BASE}/ramka_${num}.jpg')"
-          onerror="this.style.display='none'">
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg')"
+          onerror="this.style.opacity='0'">
         <div class="cinfo">
           <div class="cname">Devorga ramka MODEL-${num}</div>
           <div class="price-row" style="margin-top:12px">
@@ -896,8 +1053,10 @@ function renderRamka(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="rmq_${num}" type="number" min="1" step="1" placeholder="Necha dona?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="rmb_${num}" onclick="addRamka('${num}',${narxAsl})">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('rmq_${num}',-1,1)">−</button>
+        <input class="qinp" id="rmq_${num}" type="number" min="0" step="1" placeholder="dona" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('rmq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="rmb_${num}" onclick="addRamka('${num}',${narxAsl})">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -906,7 +1065,8 @@ function renderRamka(c) {
 function addRamka(num, narxAsl) {
   const qty = parseFloat(document.getElementById('rmq_'+num).value);
   if(!qty||qty<=0){shakeInp('rmq_'+num);return;}
-  upsertSavat('rm'+num,'Devorga ramka MODEL-'+num,'standart','dona',applyQ(narxAsl),qty,'ramka');
+  const rmQid='rm'+num+(qoplamali?'_q':'_nq');
+  upsertSavat(rmQid,'Devorga ramka MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),'standart','dona',applyQ(narxAsl),qty,'ramka');
   setBtnAdded('rmb_'+num);
 }
 
@@ -953,8 +1113,8 @@ function renderPlyastr(c) {
 
     g.innerHTML += `<div class="card" id="pc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="${BASE}/ustun_${num}.jpg" alt="" onclick="openImg('${BASE}/ustun_${num}.jpg')"
-          onerror="this.outerHTML='<div class=\\'cimg-ph\\'>🏛️</div>'">
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/ustun_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/ustun_${num}.jpg')"
+          onerror="this.style.background='#E8E4DC'">
         <div class="cinfo">
           <div class="cname">Plyastr ustun MODEL-${num}</div>
           <div style="display:flex;gap:6px;margin-top:6px">
@@ -974,9 +1134,31 @@ function renderPlyastr(c) {
           </div>
         </div>
       </div>
-      <div class="cbot">
-        <input class="qinp" id="pq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="pb_${num}" onclick="addPlyastr('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+      <div class="cbot" style="flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:4px;width:100%">
+          <button class="step-btn" onclick="stepInp('pq_${num}',-1,1)">−</button>
+          <input class="qinp" id="pq_${num}" type="number" min="0" step="1" placeholder="metr" value="${inCart?inCart.qty:''}">
+          <button class="step-btn" onclick="stepInp('pq_${num}',1,1)">+</button>
+          <button class="abtn ${inCart?'added':''}" id="pb_${num}" onclick="addPlyastr('${num}')">${inCart?"✓":"Qo'sh"}</button>
+        </div>
+        <div style="display:flex;gap:6px;width:100%">
+          <div style="flex:1">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Kapitel (TA)</div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <button class="step-btn" style="width:28px;height:28px;font-size:14px" onclick="stepInp('pk_${num}',-1,1)">−</button>
+              <input class="qinp" id="pk_${num}" type="number" min="0" step="1" placeholder="0" style="height:28px;font-size:12px" oninput="">
+              <button class="step-btn" style="width:28px;height:28px;font-size:14px" onclick="stepInp('pk_${num}',1,1)">+</button>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Baza (TA)</div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <button class="step-btn" style="width:28px;height:28px;font-size:14px" onclick="stepInp('pb2_${num}',-1,1)">−</button>
+              <input class="qinp" id="pb2_${num}" type="number" min="0" step="1" placeholder="0" style="height:28px;font-size:12px" oninput="">
+              <button class="step-btn" style="width:28px;height:28px;font-size:14px" onclick="stepInp('pb2_${num}',1,1)">+</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>`;
   }
@@ -1006,6 +1188,7 @@ function setPlyastrQ(num, q) {
   if(ex>=0){savat[ex].razmer=en+'x'+q+'sm';savat[ex].price=narx;savat[ex].jami=savat[ex].qty*narx;updateUI();}
 }
 function addPlyastr(num) {
+  if(document.activeElement) document.activeElement.blur();
   const id = 'pu'+num;
   const qty = parseFloat(document.getElementById('pq_'+num).value);
   if(!qty||qty<=0){shakeInp('pq_'+num);return;}
@@ -1014,7 +1197,25 @@ function addPlyastr(num) {
   const narxAsl = getPlyastrNarx(en, q);
   const narx = applyQ(narxAsl);
   const razmer = en+'x'+q+'sm';
-  upsertSavat(id,'To\'rtburchak ustun MODEL-'+num,razmer,'metr',narx,qty,'plyastr');
+  const puQid='pu'+num+'_'+en+'_'+q+(qoplamali?'_q':'_nq');
+  upsertSavat(puQid,'To\'rtburchak ustun MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),razmer,'metr',narx,qty,'plyastr');
+
+  // Kapitel qo'shish
+  const kapQty = parseFloat(document.getElementById('pk_'+num)?.value)||0;
+  if(kapQty > 0) {
+    const kapNarx = sheetsNarx['Kapitel_'+en] || sheetsNarx['Kapitel_30sm'] || 16000;
+    const kapId = 'kapitel_plyastr_'+num+'_'+en;
+    upsertSavat(kapId, 'Kapitel (Ustun '+en+') MODEL-'+num, en+' diametr', 'dona', kapNarx, kapQty, 'kapitel');
+  }
+
+  // Baza qo'shish
+  const bazaQty = parseFloat(document.getElementById('pb2_'+num)?.value)||0;
+  if(bazaQty > 0) {
+    const bazaNarx = sheetsNarx['Baza_'+en] || sheetsNarx['Baza_30sm'] || 14000;
+    const bazaId = 'baza_plyastr_'+num+'_'+en;
+    upsertSavat(bazaId, 'Baza (Ustun '+en+') MODEL-'+num, en+' diametr', 'dona', bazaNarx, bazaQty, 'baza');
+  }
+
   setBtnAdded('pb_'+num);
 }
 function renderUstun(c) {
@@ -1073,16 +1274,15 @@ function calcUstun() {
         <div style="color:var(--gold);font-size:11px;font-weight:600;text-align:right;max-width:55%">${qopNom}</div>
       </div>
       <div style="padding:4px 14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
           <div>
             <div style="font-size:13px;font-weight:500;color:var(--dark)">📐 O'lcham</div>
             <div style="font-size:11px;color:var(--muted);margin-top:1px">Balandligi ${h}m × ⌀${d}sm</div>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2E2E2E">
           <div>
             <div style="font-size:13px;font-weight:500;color:var(--dark)">💡 1 metr narxi</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">Baza ${fmt(baza1m)}${d>20?` + ⌀ustama ${fmt(ustamaNarx)}`:''}  </div>
           </div>
           <div style="font-size:13px;font-weight:700;color:var(--gold2);white-space:nowrap;margin-left:10px">${fmt(metrNarx)}/m</div>
         </div>
@@ -1098,6 +1298,7 @@ function calcUstun() {
     </div>`;
 }
 function addUstun() {
+  if(document.activeElement) document.activeElement.blur();
   const h = parseFloat(document.getElementById('u-h').value)||0;
   const d = parseFloat(document.getElementById('u-d').value)||0;
   if(!h||!d) return;
@@ -1114,8 +1315,17 @@ function addUstun() {
     qopTuri = 'Qoplamali (Premium 180° qolip)';
   }
   const razmer=`D:${d}sm, H:${h}m, ${qopTuri}`;
-  upsertSavat('ustun','Yumaloq ustun',razmer,'dona',narx,1,'nostandart');
-  setBtnAdded('u-add');
+  const ustunId = `ustun_${d}_${h}_${ustunQ}`;
+  upsertSavat(ustunId,'Yumaloq ustun',razmer,'dona',narx,1,'nostandart');
+  const btn=document.getElementById('u-add');
+  if(btn){btn.textContent='✓ Savatda';btn.classList.add('added');}
+  // Inputlarni tozalash — yangi razmer kiritish uchun
+  setTimeout(()=>{
+    if(btn){btn.textContent="🛒 Savatga qo'shish";btn.classList.remove('added');}
+    document.getElementById('u-h').value='';
+    document.getElementById('u-d').value='';
+    document.getElementById('u-res').innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px">Balandlik va diametrni kiriting</div>';
+  }, 1500);
 }
 
 // ===== KAPITEL VA BAZA =====
@@ -1131,15 +1341,15 @@ function renderKapitel(c) {
   c.innerHTML += '<div class="sec-title">&#127959;&#65039; Yumaloq Kapitel va Baza</div>';
   c.innerHTML += `<div id="kap-img-wrap" style="display:flex;gap:10px;justify-content:center;padding:0 11px 10px;align-items:center">
     <div style="text-align:center">
-      <img id="kap-img-k" src="${BASE}/KOPITEL_01.jpg" onclick="openImg(this.src)"
+      <img id="kap-img-k" src="https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg" onclick="openImg(this.src)"
         style="height:130px;width:130px;object-fit:cover;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-        onerror="this.style.display='none'">
+        onerror="this.style.opacity='0'">
       <div id="kap-img-k-label" style="font-size:10px;color:var(--muted);margin-top:4px;display:none">Kapitel</div>
     </div>
     <div id="kap-img-b-wrap" style="display:none;text-align:center">
-      <img id="kap-img-b" src="${BASE}/BAZA_01.jpg" onclick="openImg(this.src)"
+      <img id="kap-img-b" src="https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg" onclick="openImg(this.src)"
         style="height:130px;width:130px;object-fit:cover;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-        onerror="this.style.display='none'">
+        onerror="this.style.opacity='0'">
       <div style="font-size:10px;color:var(--muted);margin-top:4px">Baza</div>
     </div>
   </div>`;
@@ -1193,14 +1403,14 @@ function setKapModelK(m) {
   kapModelK = m;
   const n = m.replace('M-','').padStart(2,'0');
   const img = document.getElementById('kap-img-k');
-  if(img){ img.src = `${BASE}/KOPITEL_${n}.jpg`; }
+  if(img){ img.src = `https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_${n}.jpg`; }
   calcKapitel();
 }
 function setKapModelB(m) {
   kapModelB = m;
   const n = m.replace('B-','').padStart(2,'0');
   const img = document.getElementById('kap-img-b');
-  if(img){ img.src = `${BASE}/BAZA_${n}.jpg`; }
+  if(img){ img.src = `https://muzaffar57.github.io/-penodecor-katalog/BAZA_${n}.jpg`; }
   calcKapitel();
 }
 function setKapTur(v) {
@@ -1218,14 +1428,14 @@ function setKapTur(v) {
     imgBWrap.style.display = 'none';
     imgKLabel.style.display = 'none';
     const n = kapModelK.replace('M-','').padStart(2,'0');
-    if(imgK) imgK.src = `${BASE}/KOPITEL_${n}.jpg`;
+    if(imgK) imgK.src = `https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_${n}.jpg`;
   } else if(v === 'baza') {
     kRow.style.display = 'none';
     bRow.style.display = 'block';
     imgBWrap.style.display = 'none';
     imgKLabel.style.display = 'none';
     const n = kapModelB.replace('B-','').padStart(2,'0');
-    if(imgK) imgK.src = `${BASE}/BAZA_${n}.jpg`;
+    if(imgK) imgK.src = `https://muzaffar57.github.io/-penodecor-katalog/BAZA_${n}.jpg`;
   } else {
     // Komplekt — ikki rasm yonma-yon
     kRow.style.display = 'block';
@@ -1234,8 +1444,8 @@ function setKapTur(v) {
     imgKLabel.style.display = 'block';
     const nk = kapModelK.replace('M-','').padStart(2,'0');
     const nb = kapModelB.replace('B-','').padStart(2,'0');
-    if(imgK) imgK.src = `${BASE}/KOPITEL_${nk}.jpg`;
-    if(imgB) imgB.src = `${BASE}/BAZA_${nb}.jpg`;
+    if(imgK) imgK.src = `https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_${nk}.jpg`;
+    if(imgB) imgB.src = `https://muzaffar57.github.io/-penodecor-katalog/BAZA_${nb}.jpg`;
   }
   calcKapitel();
 }
@@ -1278,6 +1488,7 @@ function calcKapitel() {
   el.textContent=`${turNom}${qopNom}: ${fmt(narx)}`;
 }
 function addKapitel() {
+  if(document.activeElement) document.activeElement.blur();
   const d = parseFloat(document.getElementById('kap-d').value)||0;
   const s = parseFloat(document.getElementById('kap-s').value)||0;
   if(!d||!s) return;
@@ -1299,7 +1510,8 @@ function addKapitel() {
   else if(kapTur==='baza') nom=`Yumaloq Baza ${kapModelB}`;
   else nom=`Yumaloq Komplekt (Kapitel: ${kapModelK}, Baza: ${kapModelB})`;
   const razmer=`D:${d}sm, ${s} dona, ${qopTuri}`;
-  upsertSavat('kapitel',nom,razmer,'dona',narx,1,'nostandart');
+  const kapId = `kapitel_${d}_${kapTur}_${kapQ}`;
+  upsertSavat(kapId,nom,razmer,'dona',narx,1,'nostandart');
   setBtnAdded('kap-add');
 }
 
@@ -1311,17 +1523,17 @@ function renderKalvak(c) {
   let galleryHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:0 11px 8px;scrollbar-width:none">';
   for(let i=1;i<=9;i++){
     const n=String(i).padStart(2,'0');
-    galleryHtml+=`<img src="${BASE}/Kalvak_${n}.jpeg" onclick="openImg('${BASE}/Kalvak_${n}.jpeg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.display='none'">`;
+    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.opacity='0'">`;
   }
   galleryHtml += '</div>';
   c.innerHTML += galleryHtml;
   c.innerHTML += `<div class="sp-card">
     <div class="sp-title">🔩 Kalvak hisoblash</div>
     <div style="text-align:center;margin-bottom:10px">
-      <img src="${BASE}/kalvak_eskiz.jpg"
+      <img src="https://muzaffar57.github.io/-penodecor-katalog/kalvak_eskiz.jpg"
         style="max-width:100%;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)"
-        onclick="openImg('${BASE}/kalvak_eskiz.jpg')"
-        onerror="this.style.display='none'">
+        onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/kalvak_eskiz.jpg')"
+        onerror="this.style.opacity='0'">
     </div>
     <div class="q2row">
       <div class="fl-group"><div class="fl-label">Balandligi (sm)</div>
@@ -1366,6 +1578,7 @@ function calcKalvak() {
   el.textContent=`Kalvak (${qopNom}): ${fmt(narx)}`;
 }
 function addKalvak() {
+  if(document.activeElement) document.activeElement.blur();
   const h=parseFloat(document.getElementById('kal-h').value)||0;
   const w=parseFloat(document.getElementById('kal-w').value)||0;
   const t=parseFloat(document.getElementById('kal-t').value)||0;
@@ -1378,7 +1591,8 @@ function addKalvak() {
   const narx=xNarx*koef*s;
   const qopTuri=kalvakQoplama==='sep'?'Sepma qoplamali':'Oq (qoplamasiz)';
   const razmer=`${h}x${w}x${t}sm, ${s} dona, ${qopTuri}`;
-  upsertSavat('kalvak_'+Date.now(),'Kalvak (Kronshteyn)',razmer,'dona',narx,1,'nostandart');
+  const kalvakId = `kalvak_${h}x${w}x${t}_${kalvakQoplama}`;
+  upsertSavat(kalvakId,'Kalvak (Kronshteyn)',razmer,'dona',narx,s,'nostandart');
   setBtnAdded('kal-add');
 }
 
@@ -1388,7 +1602,7 @@ function renderBarelyef(c) {
   let galleryHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:0 11px 8px;scrollbar-width:none">';
   for(let i=1;i<=7;i++){
     const n=String(i).padStart(2,'0');
-    galleryHtml+=`<img src="${BASE}/Baraleg_${n}.jpg" onclick="openImg('${BASE}/Baraleg_${n}.jpg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.display='none'">`;
+    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.opacity='0'">`;
   }
   galleryHtml += '</div>';
   c.innerHTML += galleryHtml;
@@ -1424,6 +1638,7 @@ function calcBarelyef() {
   el.textContent=`Barelyef Gul: ${fmt(narx)}`;
 }
 function addBarelyef() {
+  if(document.activeElement) document.activeElement.blur();
   const w=parseFloat(document.getElementById('bar-w').value)||0;
   const s=parseFloat(document.getElementById('bar-s').value)||0;
   if(!w||!s) return;
@@ -1431,23 +1646,32 @@ function addBarelyef() {
   const baza=sheetsNarx['Barelyef_standart_baza']||350000;
   const narx=(baza/200)*w*s;
   const razmer=`${w}x${boy}x6 sm, ${s} dona`;
-  upsertSavat('barelyef_'+Date.now(),'Barelyef Gul',razmer,'dona',narx,1,'nostandart');
+  const barelyefId = `barelyef_${w}x${boy}`;
+  upsertSavat(barelyefId,'Barelyef Gul',razmer,'dona',narx,s,'nostandart');
   setBtnAdded('bar-add');
 }
 
 // ===== SAVAT YORDAMCHI =====
 function upsertSavat(id,name,razmer,unit,price,qty,cat) {
-  // Narx va qoplama holati savatga qulflanadi — svitch o'zgarganda ta'sir qilmaydi
+  // iPhone klaviaturasini yopish
+  if(document.activeElement) document.activeElement.blur();
   const ex=savat.findIndex(s=>s.id===id);
-  const jami=Math.round(price*qty);
   const qoplama_turi = qoplamali ? 'Qoplamali' : 'Qoplamasiz';
-  const item = {id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi};
-  if(ex>=0) savat[ex]=item;
-  else savat.push(item);
+  if(ex>=0) {
+    // Bir xil mahsulot — miqdorlarni qo'shish
+    const newQty = savat[ex].qty + qty;
+    const jami = Math.round(price * newQty);
+    savat[ex]={...savat[ex], qty:newQty, price:Math.round(price), jami, razmer};
+  } else {
+    const jami=Math.round(price*qty);
+    savat.push({id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi});
+  }
+  savatSaqla();
   updateUI();
 }
 function removeFromCart(id) {
   savat=savat.filter(s=>s.id!==id);
+  savatSaqla(); // Xotiraga yozish
   updateUI(); renderCartItems();
   renderContent(currentCat);
 }
@@ -1494,12 +1718,17 @@ function buyurtmaBerish() {
   document.getElementById('buyurtma-tel').value='';
 }
 function pdfOlish() {
-  // Bot ga PDF so'rovi yuborish
-  const total=savat.reduce((s,i)=>s+i.jami,0);
-  const data={
-    amal:'pdf_so\'rov',
-    savat:savat.map(i=>({mahsulot:i.name,razmer:i.razmer,miqdor:i.qty+' '+i.unit,birlik_narx:i.price,jami:i.jami,qoplama:i.qoplama_turi||''})),
-    jami_summa:Math.round(total)
+  const total = savat.reduce((s,i)=>s+i.jami, 0);
+  if(!savat.length){ alert("Savat bo'sh!"); return; }
+  const data = {
+    amal: 'pdf_sorovi',
+    savat: savat.map(i=>({
+      mahsulot: i.name, razmer: i.razmer,
+      miqdor: i.qty+' '+i.unit,
+      birlik_narx: i.price, jami: i.jami,
+      qoplama: i.qoplama_turi||''
+    })),
+    jami_summa: Math.round(total)
   };
   tg.sendData(JSON.stringify(data));
 }
@@ -1518,28 +1747,111 @@ function buyurtmaYuborish() {
     jami_summa:Math.round(total)
   };
   tg.sendData(JSON.stringify(data));
+  savatTozala(); // Buyurtma yuborilgandan keyin savat tozalanadi
 }
-
+// ===== STEPPER VA KLAVIATURA =====
+function stepInp(id, delta, step) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const cur = parseInt(el.value) || 0;
+  const newVal = Math.max(0, cur + delta);
+  el.value = newVal;
+  el.dispatchEvent(new Event('input'));
+}
+function closeKeyboard() {
+  if(document.activeElement) document.activeElement.blur();
+  document.getElementById('kbdClose').classList.remove('show');
+}
+// Input focusda klaviatura tugmasi ko'rinsin
+document.addEventListener('focusin', (e) => {
+  if(e.target.matches('input[type="number"]')) {
+    document.getElementById('kbdClose').classList.add('show');
+  }
+});
+document.addEventListener('focusout', (e) => {
+  setTimeout(() => {
+    if(!document.activeElement.matches('input[type="number"]')) {
+      document.getElementById('kbdClose').classList.remove('show');
+    }
+  }, 200);
+});
 function shakeInp(id){
-  const el=document.getElementById(id);if(!el)return;
   el.style.borderColor='#C0392B';el.focus();
   setTimeout(()=>el.style.borderColor='',1200);
 }
 function setBtnAdded(id){
   const btn=document.getElementById(id);if(!btn)return;
-  const was=btn.textContent;btn.textContent='✓ Savatda';btn.classList.add('added');
-  setTimeout(()=>{if(btn.classList.contains('added')&&btn.textContent!=="✓ Savatda")return;},3000);
+  const orig=btn.textContent;
+  btn.textContent='✓ Savatda';btn.classList.add('added');
+  setTimeout(()=>{
+    btn.textContent=orig.includes('Savatda')?'+ Qo\'shish':orig;
+    btn.classList.remove('added');
+  },1500);
 }
 function openImg(src){document.getElementById('imgBig').src=src;document.getElementById('imgOv').classList.add('show');}
 function closeImg(){document.getElementById('imgOv').classList.remove('show');}
 function openCart(){document.getElementById('cpanel').classList.add('open');document.getElementById('ov').classList.add('show');}
 function closeCart(){document.getElementById('cpanel').classList.remove('open');document.getElementById('ov').classList.remove('show');}
+function showHome() {
+  document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
+  document.getElementById('cat-home').classList.add('active');
+  document.getElementById('homeCatalog').style.display='block';
+  document.getElementById('mainContent').style.display='none';
+  // Menyu yashirish
+  document.getElementById('cats-el').classList.add('hidden');
+  // Svitch ko'rsatish
+  const swWrap=document.getElementById('sw-wrap-el');
+  const swNote=document.getElementById('sw-note');
+  if(swWrap) swWrap.style.display='flex';
+  if(swNote) swNote.style.display='block';
+}
+
+function filterCatHome(cat) {
+  const catBtns = document.querySelectorAll('.cat');
+  catBtns.forEach(b=>b.classList.remove('active'));
+  const tabMap = {
+    'rom':'🪟 Deraza bezaklari','karniz':'📐 Shift karnizlari',
+    'belbog':'🎀 Ichki karnizlar','plyastr':'🏛️ Plyastr ustunlar',
+    'ustun':'🏛️ Rim ustunlari','kapitel':'🏛️ Kapitel/Baza',
+    'kalvak':'🔩 Qavslar','barelyef':"🌸 O'ymakor gullar",'ramka':'🔲 Ramkalar'
+  };
+  catBtns.forEach(b=>{
+    if(b.textContent.trim()===tabMap[cat]) b.classList.add('active');
+  });
+  // Katalogni yashir, mahsulotlarni ko'rsat
+  document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('homeCatalog').style.visibility='hidden';
+  const mc = document.getElementById('mainContent');
+  mc.style.display='block';
+  mc.style.visibility='visible';
+  // Menyu ko'rsatish
+  document.getElementById('cats-el').classList.remove('hidden');
+  renderContent(cat);
+  window.scrollTo(0,0);
+  // Svitch
+  const swWrap=document.getElementById('sw-wrap-el');
+  const swNote=document.getElementById('sw-note');
+  if(cat==='ustun'){
+    if(swWrap) swWrap.style.display='none';
+    if(swNote) swNote.style.display='none';
+  } else {
+    if(swWrap) swWrap.style.display='flex';
+    if(swNote) swNote.style.display='block';
+  }
+}
+
 function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  // Menyu ko'rsatish
+  document.getElementById('cats-el').classList.remove('hidden');
+  document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('mainContent').style.display='block';
+  document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('mainContent').style.display='block';
   // Yumaloq ustun bo'limida global svitch yashiriladi
-  const swWrap = document.querySelector('.sw-wrap');
-  const swNote = document.querySelector('.sw-note');
+  const swWrap = document.getElementById('sw-wrap-el');
+  const swNote = document.getElementById('sw-note');
   if(cat==='ustun'){
     if(swWrap) swWrap.style.display='none';
     if(swNote) swNote.style.display='none';
@@ -1551,25 +1863,25 @@ function filterCat(cat,btn){
 }
 
 // Telegram Main Button
-tg.MainButton.onClick(()=>{
-  const total=savat.reduce((s,i)=>s+i.jami,0);
-  const data={
-    savat: savat.map(i=>({
-      mahsulot: i.name,
-      razmer: i.razmer,
-      miqdor: i.qty+' '+i.unit,
-      birlik_narx: i.price,
-      jami: i.jami
-    })),
-    jami_summa: Math.round(total),
-    qoplama_holati: qoplamali ? 'Qoplamali' : 'Qoplamasiz'
-  };
-  tg.sendData(JSON.stringify(data));
-});
+// MainButton ishlatilmaydi
 
-// Sahifani darhol ochish, Sheets fonda yuklanadi
-renderContent('all');
-loadSheetsNarx(); // fonda ishlaydi
+// Sticky nav top ni header balandligiga moslashtirish
+function fixStickyNav() {
+  const hdr = document.querySelector('.hdr');
+  const nav = document.getElementById('sticky-nav');
+  if(hdr && nav) {
+    nav.style.top = hdr.offsetHeight + 'px';
+  }
+}
+window.addEventListener('resize', fixStickyNav);
+setTimeout(fixStickyNav, 100);
+// Sahifani boshlash
+showHome();
+loadSheetsNarx();
+// CloudStorage dan savatni yuklab ko'rish (ishlasa)
+try {
+  savatYukla(()=>{});
+} catch(e) {}
 tg.ready();
 </script>
 </body>
