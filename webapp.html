@@ -158,15 +158,15 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 <div class="cats hidden">
   <button class="cat active" id="cat-home" onclick="showHome()">🏠 Katalog</button>
-  <button class="cat" onclick="filterCat('rom',this)">Rom bezak</button>
-  <button class="cat" onclick="filterCat('karniz',this)">Karnizlar</button>
-  <button class="cat" onclick="filterCat('belbog',this)">Belbog'</button>
-  <button class="cat" onclick="filterCat('plyastr',this)">Plyastr ustun</button>
-  <button class="cat" onclick="filterCat('ustun',this)">Yumaloq ustun</button>
-  <button class="cat" onclick="filterCat('kapitel',this)">Kapitel/Baza</button>
-  <button class="cat" onclick="filterCat('kalvak',this)">Kalvak</button>
-  <button class="cat" onclick="filterCat('barelyef',this)">Barelyef</button>
-  <button class="cat" onclick="filterCat('ramka',this)">Ramkalar</button>
+  <button class="cat" onclick="filterCat('rom',this)">🪟 Deraza bezaklari</button>
+  <button class="cat" onclick="filterCat('karniz',this)">📐 Shift karnizlari</button>
+  <button class="cat" onclick="filterCat('belbog',this)">🎀 Ichki karnizlar</button>
+  <button class="cat" onclick="filterCat('plyastr',this)">🏛️ Plyastr ustunlar</button>
+  <button class="cat" onclick="filterCat('ustun',this)">🏛️ Rim ustunlari</button>
+  <button class="cat" onclick="filterCat('kapitel',this)">🏛️ Kapitel/Baza</button>
+  <button class="cat" onclick="filterCat('kalvak',this)">🔩 Qavslar</button>
+  <button class="cat" onclick="filterCat('barelyef',this)">🌸 O'ymakor gullar</button>
+  <button class="cat" onclick="filterCat('ramka',this)">🔲 Ramkalar</button>
 </div>
 
 <!-- BOSH SAHIFA KATALOG -->
@@ -1646,8 +1646,10 @@ function filterCatHome(cat) {
   const catBtns = document.querySelectorAll('.cat');
   catBtns.forEach(b=>b.classList.remove('active'));
   const tabMap = {
-    'rom':'Rom bezak','karniz':'Karnizlar','belbog':"Belbog'",'plyastr':'Plyastr ustun',
-    'ustun':'Yumaloq ustun','kapitel':'Kapitel/Baza','kalvak':'Kalvak','barelyef':'Barelyef','ramka':'Ramkalar'
+    'rom':'🪟 Deraza bezaklari','karniz':'📐 Shift karnizlari',
+    'belbog':'🎀 Ichki karnizlar','plyastr':'🏛️ Plyastr ustunlar',
+    'ustun':'🏛️ Rim ustunlari','kapitel':'🏛️ Kapitel/Baza',
+    'kalvak':'🔩 Qavslar','barelyef':"🌸 O'ymakor gullar",'ramka':'🔲 Ramkalar'
   };
   catBtns.forEach(b=>{
     if(b.textContent.trim()===tabMap[cat]) b.classList.add('active');
