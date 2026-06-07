@@ -1626,14 +1626,16 @@ function buyurtmaBerish() {
   document.getElementById('buyurtma-tel').value='';
 }
 function pdfOlish() {
-  // Bot ga PDF so'rovi yuborish
+  // Savat ma'lumotlarini botga yuborish — faqat buyurtma berishda yopilsin
   const total=savat.reduce((s,i)=>s+i.jami,0);
   const data={
-    amal:'pdf_so\'rov',
+    amal:'pdf_sorovi',
     savat:savat.map(i=>({mahsulot:i.name,razmer:i.razmer,miqdor:i.qty+' '+i.unit,birlik_narx:i.price,jami:i.jami,qoplama:i.qoplama_turi||''})),
     jami_summa:Math.round(total)
   };
-  tg.sendData(JSON.stringify(data));
+  // PDF ni bot orqali olish uchun WebApp ni yopib yuborish kerak
+  // Foydalanuvchiga eslatma ko'rsatamiz
+  alert('PDF hisobni olish uchun \"Buyurtma berish\" tugmasini bosing va ma\'lumotlarni kiriting. Bot sizga PDF yuboradi!');
 }
 function buyurtmaYuborish() {
   const ism=document.getElementById('buyurtma-ism').value.trim();
@@ -1732,21 +1734,7 @@ function filterCat(cat,btn){
 }
 
 // Telegram Main Button
-tg.MainButton.onClick(()=>{
-  const total=savat.reduce((s,i)=>s+i.jami,0);
-  const data={
-    savat: savat.map(i=>({
-      mahsulot: i.name,
-      razmer: i.razmer,
-      miqdor: i.qty+' '+i.unit,
-      birlik_narx: i.price,
-      jami: i.jami
-    })),
-    jami_summa: Math.round(total),
-    qoplama_holati: qoplamali ? 'Qoplamali' : 'Qoplamasiz'
-  };
-  tg.sendData(JSON.stringify(data));
-});
+// MainButton ishlatilmaydi
 
 // Sahifani darhol ochish — bosh katalog ko'rinadi
 savatYukla(() => {
