@@ -802,31 +802,50 @@ function calcRom() {
   const ramka      = parseFloat(document.getElementById('rom-ramka')?.value)      || 0;
   const korona     = parseFloat(document.getElementById('rom-korona')?.value)     || 0;
   const kalvak     = parseFloat(document.getElementById('rom-kalvak')?.value)     || 0;
-  if(!nalichnik&&!karniz&&!padakolnik){el.textContent="O'lchamlarni kiriting";return;}
-  const {karnizNarx,padakolNarx,nalichNarx,koronaNarx,kalvakNarx,ramkaNarx} = getRomNarx();
+  if(!nalichnik&&!karniz&&!padakolnik){el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px">O\'lchamlarni kiriting</div>';return;}
+  const {karnizNarx,padakolNarx,nalichNarx,koronaNarx,kalvakNarx} = getRomNarx();
   const nalich_metr  = Math.ceil(nalichnik/2)*2;
   const karniz_metr  = Math.ceil(karniz/2)*2;
   const padakol_metr = Math.ceil(padakolnik/2)*2;
   const ramka_metr   = Math.ceil(ramka/2)*2;
-  const nalich_sum  = nalich_metr  * nalichNarx;
-  const karniz_sum  = karniz_metr  * karnizNarx;
-  const padakol_sum = padakol_metr * padakolNarx;
-  const ramka_sum   = ramka_metr   * ramkaNarx;
-  const korona_sum  = korona * koronaNarx;
-  const kalvak_sum  = kalvak * kalvakNarx;
-  const jami = nalich_sum + karniz_sum + padakol_sum + ramka_sum + korona_sum + kalvak_sum;
+  const nalich_sum   = nalich_metr  * nalichNarx;
+  const karniz_sum   = karniz_metr  * karnizNarx;
+  const padakol_sum  = padakol_metr * padakolNarx;
+  const ramka_sum    = ramka_metr   * karnizNarx;
+  const korona_sum   = korona * koronaNarx;
+  const kalvak_sum   = kalvak * kalvakNarx;
+  const jami = nalich_sum+karniz_sum+padakol_sum+ramka_sum+korona_sum+kalvak_sum;
   const foizVal = sheetsNarx['Rom_narx_foiz'] || 100;
-  const chegirma = foizVal < 100 ? ` <span style="color:var(--green);font-size:11px">-${100-foizVal}% chegirma</span>` : '';
-  const qopNom = qoplamali ? '' : ' <span style="color:var(--green);font-size:11px">| Qoplamasiz −50%</span>';
-  let html = `<b>Model-${romModel} (${romOlcham==='katta'?'Katta':'Kichik'} komplekt)</b>${chegirma}${qopNom}<br>`;
-  if(nalichnik>0) html += `📏 Nalichnik: ${nalich_metr}m x ${fmt(nalichNarx)} = ${fmt(nalich_sum)}<br>`;
-  if(karniz>0)    html += `📏 Karniz: ${karniz_metr}m x ${fmt(karnizNarx)} = ${fmt(karniz_sum)}<br>`;
-  if(padakolnik>0)html += `📏 Padakolnik: ${padakol_metr}m x ${fmt(padakolNarx)} = ${fmt(padakol_sum)}<br>`;
-  if(ramka>0)     html += `📏 Ramka: ${ramka_metr}m x ${fmt(ramkaNarx)} = ${fmt(ramka_sum)}<br>`;
-  if(korona>0)    html += `👑 Korona: ${korona} dona x ${fmt(koronaNarx)} = ${fmt(korona_sum)}<br>`;
-  if(kalvak>0)    html += `🔩 Kalvak: ${kalvak} dona x ${fmt(kalvakNarx)} = ${fmt(kalvak_sum)}<br>`;
-  html += `💰 <b>Jami: ${fmt(jami)}</b>`;
-  el.innerHTML = html;
+
+  const row = (nom, miqdor, birlik, sum) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #EEE">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--dark)">${nom}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${miqdor} x ${fmt(birlik)}</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--gold2);white-space:nowrap;margin-left:10px">${fmt(sum)}</div>
+    </div>`;
+
+  let rows = '';
+  if(nalichnik>0) rows += row('Nalichnik', nalich_metr+'m', nalichNarx, nalich_sum);
+  if(karniz>0)    rows += row('Rom Karnizi', karniz_metr+'m', karnizNarx, karniz_sum);
+  if(padakolnik>0)rows += row('Padakolnik', padakol_metr+'m', padakolNarx, padakol_sum);
+  if(ramka>0)     rows += row('Dekorativ Ramka', ramka_metr+'m', karnizNarx, ramka_sum);
+  if(korona>0)    rows += row('Korona', korona+' dona', koronaNarx, korona_sum);
+  if(kalvak>0)    rows += row('Kalvak', kalvak+' dona', kalvakNarx, kalvak_sum);
+
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:12px;border:1.5px solid var(--border);overflow:hidden;margin-top:8px">
+      <div style="background:var(--dark);padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+        <div style="color:#fff;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700">Model-${romModel}</div>
+        <div style="color:var(--gold);font-size:11px;font-weight:600">${romOlcham==='katta'?'Katta komplekt':'Kichik komplekt'}${foizVal<100?` <span style="background:var(--green);color:#fff;border-radius:4px;padding:1px 5px">-${100-foizVal}%</span>`:''}</div>
+      </div>
+      <div style="padding:4px 14px">${rows}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F8F5EF;border-top:2px solid var(--dark)">
+        <div style="font-size:14px;font-weight:700;color:var(--dark)">Jami summa:</div>
+        <div style="font-size:17px;font-weight:800;color:var(--gold2)">${fmt(jami)}</div>
+      </div>
+    </div>`;
 }
 
 function addRom() {
