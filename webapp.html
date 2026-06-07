@@ -1581,14 +1581,18 @@ function addBarelyef() {
 
 // ===== SAVAT YORDAMCHI =====
 function upsertSavat(id,name,razmer,unit,price,qty,cat) {
-  // Narx va qoplama holati savatga qulflanadi — svitch o'zgarganda ta'sir qilmaydi
   const ex=savat.findIndex(s=>s.id===id);
-  const jami=Math.round(price*qty);
   const qoplama_turi = qoplamali ? 'Qoplamali' : 'Qoplamasiz';
-  const item = {id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi};
-  if(ex>=0) savat[ex]=item;
-  else savat.push(item);
-  savatSaqla(); // Xotiraga yozish
+  if(ex>=0) {
+    // Bir xil mahsulot — miqdorlarni qo'shish
+    const newQty = savat[ex].qty + qty;
+    const jami = Math.round(price * newQty);
+    savat[ex]={...savat[ex], qty:newQty, price:Math.round(price), jami, razmer};
+  } else {
+    const jami=Math.round(price*qty);
+    savat.push({id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi});
+  }
+  savatSaqla();
   updateUI();
 }
 function removeFromCart(id) {
