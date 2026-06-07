@@ -926,16 +926,18 @@ function updateRomChizma() {
 
 function getRomNarx() {
   const foiz = (sheetsNarx['Rom_narx_foiz'] || 100) / 100;
-  const qoplamaKoef = qoplamali ? 1 : 0.5;
-  const O = romOlcham.charAt(0).toUpperCase() + romOlcham.slice(1);
-  const num = romModel || '01';
-  const karnizNarx   = (sheetsNarx[`Rom_${num}_${O}_Karniz`]    || 30000) * foiz * qoplamaKoef;
-  const padakolNarx  = (sheetsNarx[`Rom_${num}_${O}_Padakolnik`] || 25000) * foiz * qoplamaKoef;
-  const nalichNarx   = (sheetsNarx[`Rom_${num}_${O}_Nalichnik`]  || 25000) * foiz * qoplamaKoef;
-  const koronaNarx   = (sheetsNarx[`Rom_${num}_${O}_Korona`]     || 45000) * foiz * qoplamaKoef;
-  const kalvakNarx   = (sheetsNarx[`Rom_${num}_${O}_Kalvak`]     || 45000) * foiz * qoplamaKoef;
-  const ramkaNarx    = (sheetsNarx[`Rom_${num}_${O}_Ramka`]      || 30000) * foiz * qoplamaKoef;
-  return {karnizNarx, padakolNarx, nalichNarx, koronaNarx, kalvakNarx, ramkaNarx};
+  const O = romOlcham === 'katta' ? 'Katta' : 'Kichik';
+  const num = (romModel || '01').padStart(2,'0');
+  // Kalit format: Rom_01_Katta_Nalichnik
+  const get = (detal, def) => (sheetsNarx[`Rom_${num}_${O}_${detal}`] || def) * foiz;
+  return {
+    nalichNarx  : get('Nalichnik',  25000),
+    karnizNarx  : get('Karniz',     30000),
+    padakolNarx : get('Padakolnik', 25000),
+    koronaNarx  : get('Korona',     45000),
+    kalvakNarx  : get('Kalvak',     45000),
+    ramkaNarx   : get('Ramka',      30000),
+  };
 }
 
 function calcRom() {
