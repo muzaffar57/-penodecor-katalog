@@ -507,6 +507,7 @@ function renderContent(cat) {
   const c = document.getElementById('mainContent');
   c.style.display = 'block';
   c.innerHTML = '';
+  console.log('renderContent:', cat, 'KARNIZ keys:', Object.keys(KARNIZ).length);
   if(cat==='all'||cat==='karniz') renderKarniz(c);
   if(cat==='all'||cat==='belbog') renderBelbog(c);
   if(cat==='all'||cat==='rom') renderRom(c);
@@ -516,6 +517,7 @@ function renderContent(cat) {
   if(cat==='kapitel') renderKapitel(c);
   if(cat==='kalvak') renderKalvak(c);
   if(cat==='barelyef') renderBarelyef(c);
+  console.log('mainContent innerHTML length:', c.innerHTML.length);
 }
 
 // ===== KARNIZ =====
