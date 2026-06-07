@@ -1863,10 +1863,13 @@ function fixStickyNav() {
 }
 window.addEventListener('resize', fixStickyNav);
 setTimeout(fixStickyNav, 100);
-savatYukla(() => {
-  showHome();
-});
+// Sahifani boshlash
+showHome();
 loadSheetsNarx();
+// CloudStorage dan savatni yuklab ko'rish (ishlasa)
+try {
+  savatYukla(()=>{});
+} catch(e) {}
 tg.ready();
 </script>
 </body>
