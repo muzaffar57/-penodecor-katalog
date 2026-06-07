@@ -1813,11 +1813,27 @@ function filterCatHome(cat) {
   catBtns.forEach(b=>{
     if(b.textContent.trim()===tabMap[cat]) b.classList.add('active');
   });
+  // Katalogni yashir, mahsulotlarni ko'rsat
   document.getElementById('homeCatalog').style.display='none';
-  document.getElementById('mainContent').style.display='block';
+  document.getElementById('homeCatalog').style.visibility='hidden';
+  const mc = document.getElementById('mainContent');
+  mc.style.display='block';
+  mc.style.visibility='visible';
   // Menyu ko'rsatish
   document.getElementById('cats-el').classList.remove('hidden');
   renderContent(cat);
+  window.scrollTo(0,0);
+  // Svitch
+  const swWrap=document.getElementById('sw-wrap-el');
+  const swNote=document.getElementById('sw-note');
+  if(cat==='ustun'){
+    if(swWrap) swWrap.style.display='none';
+    if(swNote) swNote.style.display='none';
+  } else {
+    if(swWrap) swWrap.style.display='flex';
+    if(swNote) swNote.style.display='block';
+  }
+}
   // Svitch ko'rsatish/yashirish
   const swWrap=document.getElementById('sw-wrap-el');
   const swNote=document.getElementById('sw-note');
