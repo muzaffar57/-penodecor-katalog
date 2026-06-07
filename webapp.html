@@ -336,6 +336,47 @@ async function loadSheetsNarx() {
 // ===== HOLAT =====
 let qoplamali = true;
 let savat = [];
+
+// ===== SAVAT XOTIRASI (Telegram CloudStorage) =====
+function savatSaqla() {
+  try {
+    if(tg.CloudStorage) {
+      tg.CloudStorage.setItem('penodecor_cart', JSON.stringify(savat));
+    }
+  } catch(e) { console.log('Saqlash xato:', e); }
+}
+
+function savatYukla(callback) {
+  try {
+    if(tg.CloudStorage) {
+      tg.CloudStorage.getItem('penodecor_cart', (err, val) => {
+        if(!err && val) {
+          try {
+            const loaded = JSON.parse(val);
+            if(Array.isArray(loaded) && loaded.length > 0) {
+              savat = loaded;
+              updateUI();
+              console.log('Savat yuklandi:', savat.length, 'ta mahsulot');
+            }
+          } catch(e) { console.log('Parse xato:', e); }
+        }
+        if(callback) callback();
+      });
+    } else {
+      if(callback) callback();
+    }
+  } catch(e) {
+    if(callback) callback();
+  }
+}
+
+function savatTozala() {
+  savat = [];
+  try {
+    if(tg.CloudStorage) tg.CloudStorage.removeItem('penodecor_cart');
+  } catch(e) {}
+  updateUI();
+}
 let selRazmer = {};
 let selRom = {};
 let currentCat = 'all';
@@ -1443,10 +1484,12 @@ function upsertSavat(id,name,razmer,unit,price,qty,cat) {
   const item = {id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi};
   if(ex>=0) savat[ex]=item;
   else savat.push(item);
+  savatSaqla(); // Xotiraga yozish
   updateUI();
 }
 function removeFromCart(id) {
   savat=savat.filter(s=>s.id!==id);
+  savatSaqla(); // Xotiraga yozish
   updateUI(); renderCartItems();
   renderContent(currentCat);
 }
@@ -1517,8 +1560,8 @@ function buyurtmaYuborish() {
     jami_summa:Math.round(total)
   };
   tg.sendData(JSON.stringify(data));
+  savatTozala(); // Buyurtma yuborilgandan keyin savat tozalanadi
 }
-
 function shakeInp(id){
   const el=document.getElementById(id);if(!el)return;
   el.style.borderColor='#C0392B';el.focus();
@@ -1567,7 +1610,9 @@ tg.MainButton.onClick(()=>{
 });
 
 // Sahifani darhol ochish, Sheets fonda yuklanadi
-renderContent('all');
+savatYukla(() => {
+  renderContent('all');
+});
 loadSheetsNarx(); // fonda ishlaydi
 tg.ready();
 </script>
