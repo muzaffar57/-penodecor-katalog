@@ -1834,17 +1834,6 @@ function filterCatHome(cat) {
     if(swNote) swNote.style.display='block';
   }
 }
-  // Svitch ko'rsatish/yashirish
-  const swWrap=document.getElementById('sw-wrap-el');
-  const swNote=document.getElementById('sw-note');
-  if(cat==='ustun'){
-    if(swWrap) swWrap.style.display='none';
-    if(swNote) swNote.style.display='none';
-  } else {
-    if(swWrap) swWrap.style.display='flex';
-    if(swNote) swNote.style.display='block';
-  }
-}
 
 function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
