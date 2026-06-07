@@ -249,7 +249,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
   </div>
 </div>
 
-<div id="mainContent" style="display:block;min-height:400px;position:relative;z-index:1;overflow:visible;border:3px solid red;background:yellow"></div>
+<div id="mainContent" style="display:block;min-height:400px;position:relative;z-index:1"></div>
 
 <div class="img-ov" id="imgOv" onclick="closeImg()">
   <button class="img-x">✕</button>
@@ -1844,13 +1844,9 @@ function filterCatHome(cat) {
 function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  // Menyu ko'rsatish
   document.getElementById('cats-el').classList.remove('hidden');
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
-  document.getElementById('homeCatalog').style.display='none';
-  document.getElementById('mainContent').style.display='block';
-  // Yumaloq ustun bo'limida global svitch yashiriladi
   const swWrap = document.getElementById('sw-wrap-el');
   const swNote = document.getElementById('sw-note');
   if(cat==='ustun'){
@@ -1861,6 +1857,7 @@ function filterCat(cat,btn){
     if(swNote) swNote.style.display='block';
   }
   renderContent(cat);
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 // Telegram Main Button
