@@ -77,7 +77,12 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 
 /* CARD BOTTOM */
 .cbot{padding:7px 11px 11px;border-top:1px solid var(--border);display:flex;align-items:center;gap:5px}
-.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 9px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s}
+.qinp{flex:1;height:36px;border:1.5px solid var(--border);border-radius:8px;padding:0 6px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s;text-align:center}
+.stepper{display:flex;align-items:center;gap:4px;flex:1}
+.step-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:18px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;line-height:1}
+.step-btn:active{background:var(--dark);color:#fff}
+.kbd-close{position:fixed;bottom:0;left:0;right:0;padding:10px 14px;background:var(--dark);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;z-index:400;display:none}
+.kbd-close.show{display:block}
 .qinp:focus{border-color:var(--gold)}
 .qinp::placeholder{color:var(--muted);font-size:11px}
 .abtn{height:36px;padding:0 12px;background:var(--dark);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}
@@ -245,6 +250,9 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
   <button class="img-x">✕</button>
   <img class="img-big" id="imgBig" src="" alt="">
 </div>
+
+<!-- Klaviatura yopish tugmasi (iPhone uchun) -->
+<button class="kbd-close" id="kbdClose" onclick="closeKeyboard()">⌨️ Klaviaturani yopish ✓</button>
 
 <div class="ov" id="ov" onclick="closeCart()"></div>
 <div class="cpanel" id="cpanel">
@@ -535,8 +543,10 @@ function renderKarniz(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="kq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="kb_${num}" onclick="addKarniz('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('kq_${num}',-1,1)">−</button>
+        <input class="qinp" id="kq_${num}" type="number" min="0" step="0.5" placeholder="metr" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('kq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="kb_${num}" onclick="addKarniz('${num}')">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -588,8 +598,10 @@ function renderBelbog(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="bq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="bb_${num}" onclick="addBelbog('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('bq_${num}',-1,1)">−</button>
+        <input class="qinp" id="bq_${num}" type="number" min="0" step="0.5" placeholder="metr" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('bq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="bb_${num}" onclick="addBelbog('${num}')">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -1029,8 +1041,10 @@ function renderRamka(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="rmq_${num}" type="number" min="1" step="1" placeholder="Necha dona?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="rmb_${num}" onclick="addRamka('${num}',${narxAsl})">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('rmq_${num}',-1,1)">−</button>
+        <input class="qinp" id="rmq_${num}" type="number" min="0" step="1" placeholder="dona" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('rmq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="rmb_${num}" onclick="addRamka('${num}',${narxAsl})">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   });
@@ -1109,8 +1123,10 @@ function renderPlyastr(c) {
         </div>
       </div>
       <div class="cbot">
-        <input class="qinp" id="pq_${num}" type="number" min="0.5" step="0.5" placeholder="Necha metr?" value="${inCart?inCart.qty:''}">
-        <button class="abtn ${inCart?'added':''}" id="pb_${num}" onclick="addPlyastr('${num}')">${inCart?"✓ Savatda":"+ Qo'shish"}</button>
+        <button class="step-btn" onclick="stepInp('pq_${num}',-1,1)">−</button>
+        <input class="qinp" id="pq_${num}" type="number" min="0" step="0.5" placeholder="metr" value="${inCart?inCart.qty:''}">
+        <button class="step-btn" onclick="stepInp('pq_${num}',1,1)">+</button>
+        <button class="abtn ${inCart?'added':''}" id="pb_${num}" onclick="addPlyastr('${num}')">${inCart?"✓":"Qo'sh"}</button>
       </div>
     </div>`;
   }
@@ -1232,6 +1248,7 @@ function calcUstun() {
     </div>`;
 }
 function addUstun() {
+  if(document.activeElement) document.activeElement.blur();
   const h = parseFloat(document.getElementById('u-h').value)||0;
   const d = parseFloat(document.getElementById('u-d').value)||0;
   if(!h||!d) return;
@@ -1421,6 +1438,7 @@ function calcKapitel() {
   el.textContent=`${turNom}${qopNom}: ${fmt(narx)}`;
 }
 function addKapitel() {
+  if(document.activeElement) document.activeElement.blur();
   const d = parseFloat(document.getElementById('kap-d').value)||0;
   const s = parseFloat(document.getElementById('kap-s').value)||0;
   if(!d||!s) return;
@@ -1510,6 +1528,7 @@ function calcKalvak() {
   el.textContent=`Kalvak (${qopNom}): ${fmt(narx)}`;
 }
 function addKalvak() {
+  if(document.activeElement) document.activeElement.blur();
   const h=parseFloat(document.getElementById('kal-h').value)||0;
   const w=parseFloat(document.getElementById('kal-w').value)||0;
   const t=parseFloat(document.getElementById('kal-t').value)||0;
@@ -1569,6 +1588,7 @@ function calcBarelyef() {
   el.textContent=`Barelyef Gul: ${fmt(narx)}`;
 }
 function addBarelyef() {
+  if(document.activeElement) document.activeElement.blur();
   const w=parseFloat(document.getElementById('bar-w').value)||0;
   const s=parseFloat(document.getElementById('bar-s').value)||0;
   if(!w||!s) return;
@@ -1583,6 +1603,8 @@ function addBarelyef() {
 
 // ===== SAVAT YORDAMCHI =====
 function upsertSavat(id,name,razmer,unit,price,qty,cat) {
+  // iPhone klaviaturasini yopish
+  if(document.activeElement) document.activeElement.blur();
   const ex=savat.findIndex(s=>s.id===id);
   const qoplama_turi = qoplamali ? 'Qoplamali' : 'Qoplamasiz';
   if(ex>=0) {
@@ -1677,8 +1699,33 @@ function buyurtmaYuborish() {
   tg.sendData(JSON.stringify(data));
   savatTozala(); // Buyurtma yuborilgandan keyin savat tozalanadi
 }
+// ===== STEPPER VA KLAVIATURA =====
+function stepInp(id, delta, step) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const cur = parseFloat(el.value) || 0;
+  const newVal = Math.max(0, Math.round((cur + delta) * 100) / 100);
+  el.value = newVal;
+  el.dispatchEvent(new Event('input'));
+}
+function closeKeyboard() {
+  if(document.activeElement) document.activeElement.blur();
+  document.getElementById('kbdClose').classList.remove('show');
+}
+// Input focusda klaviatura tugmasi ko'rinsin
+document.addEventListener('focusin', (e) => {
+  if(e.target.matches('input[type="number"]')) {
+    document.getElementById('kbdClose').classList.add('show');
+  }
+});
+document.addEventListener('focusout', (e) => {
+  setTimeout(() => {
+    if(!document.activeElement.matches('input[type="number"]')) {
+      document.getElementById('kbdClose').classList.remove('show');
+    }
+  }, 200);
+});
 function shakeInp(id){
-  const el=document.getElementById(id);if(!el)return;
   el.style.borderColor='#C0392B';el.focus();
   setTimeout(()=>el.style.borderColor='',1200);
 }
