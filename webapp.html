@@ -123,7 +123,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .home-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;animation:up 0.28s ease both;border:1.5px solid var(--border)}
 .home-card:active{transform:scale(0.96);box-shadow:0 8px 28px rgba(0,0,0,0.16)}
 .home-card img{width:100%;height:140px;object-fit:cover;background:#F0F4F8;display:block}
-.home-card-name{padding:10px 12px;font-size:12px;font-weight:700;color:var(--dark);line-height:1.4;border-top:3px solid var(--gold);background:linear-gradient(135deg,#1E1E1E,#252520)}
+.home-card-name{padding:10px 12px;font-size:12px;font-weight:700;color:#1A1A1E;line-height:1.4;border-top:3px solid var(--gold);background:linear-gradient(135deg,#fff,#FAF6EE)}
 .ov.show{display:block}
 .cpanel{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,0.14);z-index:200;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:76vh;overflow-y:auto}
 .cpanel.open{transform:translateY(0)}
@@ -147,7 +147,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 <body>
 
 <div class="hdr">
-  <img class="hlogo" src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" onerror="this.style.display='none'" alt="">
+  <img class="hlogo" src="https://muzaffar57.github.io/-penodecor-katalog/LOGO.jpg" loading="eager" onerror="this.style.opacity='0'" alt="">
   <div class="hinfo">
     <h1>PenoDecorPro</h1>
     <p>Fasad bezaklari</p>
@@ -533,8 +533,8 @@ function renderKarniz(c) {
     ).join('');
     g.innerHTML += `<div class="card" id="kc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
-          onerror="this.style.display='none'">
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" loading="eager" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
+          onerror="this.style.background='#F0F4F8';this.alt='📐'">
         <div class="cinfo">
           <div class="cname">Karniz MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -589,7 +589,7 @@ function renderBelbog(c) {
     g.innerHTML += `<div class="card" id="bc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg')"
-          onerror="this.style.display='none'">
+          loading="eager" onerror="this.style.background='#F0F4F8';this.alt='🎀'">
         <div class="cinfo">
           <div class="cname">Belbog MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -678,21 +678,21 @@ function renderRom(c) {
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
       <img src="https://muzaffar57.github.io/-penodecor-katalog/01.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
-        onerror="this.style.background='#E8E0D0'">
+        loading="eager" onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Ekonom</div>
     </div>
     <div onclick="openRomGuruh('standart')" id="rom-blok-standart"
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
       <img src="https://muzaffar57.github.io/-penodecor-katalog/04.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
-        onerror="this.style.background='#E8E0D0'">
+        loading="eager" onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Standart</div>
     </div>
     <div onclick="openRomGuruh('premium')" id="rom-blok-premium"
       style="border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;box-shadow:var(--shadow)">
       <img src="https://muzaffar57.github.io/-penodecor-katalog/15.jpg"
         style="width:100%;height:100px;object-fit:contain;background:#f8f9fa;padding:6px;display:block"
-        onerror="this.style.background='#E8E0D0'">
+        loading="eager" onerror="this.style.background='#E8E0D0'">
       <div style="background:var(--dark);color:white;text-align:center;padding:6px 4px;font-size:11px;font-weight:600">Premium</div>
     </div>
   </div>
@@ -712,7 +712,7 @@ function renderRom(c) {
       <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;background:#F8F5EF;border-radius:10px;padding:10px">
         <img id="rom-chizma-img" src=""
           style="width:90px;height:90px;object-fit:contain;border-radius:8px;cursor:pointer;flex-shrink:0;box-shadow:var(--shadow);background:#fff"
-          onclick="openImg(this.src)" onerror="this.style.display='none'">
+          onclick="openImg(this.src)" loading="eager" onerror="this.style.opacity='0'">
         <div style="font-size:11px;color:var(--gold2);line-height:1.7">
           👆 <b>Eskiz ustiga bosing</b> va detallar nomlarini ko'rib chiqing.<br>
           Pastdagi buyurtma panelidagi input maydonlari faqat <b>siz tanlagan modelda mavjud detallar</b> uchun ko'rsatiladi.<br>
@@ -746,7 +746,7 @@ function renderRom(c) {
       <div style="text-align:center;margin:10px 0">
         <img id="rom-main-img" src=""
           style="width:100%;min-height:350px;max-height:450px;object-fit:contain;background:#f8f9fa;padding:8px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-          onclick="openImg(this.src)" onerror="this.style.display='none'">
+          onclick="openImg(this.src)" loading="eager" onerror="this.style.opacity='0'">
         <div id="rom-model-label" style="font-size:12px;color:var(--gold2);font-weight:600;margin-top:6px"></div>
       </div>
 
@@ -889,7 +889,7 @@ function toggleOlcham(tur) {
       <div style="display:flex;gap:10px;align-items:flex-start">
         <img src="https://muzaffar57.github.io/-penodecor-katalog/rom_katta.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/rom_katta.jpg')"
           style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
-          onerror="this.style.display='none'">
+          loading="eager" onerror="this.style.opacity='0'">
         <div style="font-size:12px;line-height:2">
           <b style="color:var(--dark)">📐 Katta komplekt:</b><br>
           🔹 Karniz (tepa) — <b>18 sm</b><br>
@@ -905,7 +905,7 @@ function toggleOlcham(tur) {
       <div style="display:flex;gap:10px;align-items:flex-start">
         <img src="https://muzaffar57.github.io/-penodecor-katalog/rom_kichik.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/rom_kichik.jpg')"
           style="width:110px;flex-shrink:0;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)"
-          onerror="this.style.display='none'">
+          loading="eager" onerror="this.style.opacity='0'">
         <div style="font-size:12px;line-height:2">
           <b style="color:var(--dark)">📐 Kichik komplekt:</b><br>
           🔹 Karniz (tepa) — <b>15 sm</b><br>
@@ -1035,7 +1035,7 @@ function renderRamka(c) {
     g.innerHTML += `<div class="card" style="animation-delay:${Math.min(i*0.05,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg')"
-          onerror="this.style.display='none'">
+          loading="eager" onerror="this.style.opacity='0'">
         <div class="cinfo">
           <div class="cname">Devorga ramka MODEL-${num}</div>
           <div class="price-row" style="margin-top:12px">
@@ -1336,13 +1336,13 @@ function renderKapitel(c) {
     <div style="text-align:center">
       <img id="kap-img-k" src="https://muzaffar57.github.io/-penodecor-katalog/KOPITEL_01.jpg" onclick="openImg(this.src)"
         style="height:130px;width:130px;object-fit:cover;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-        onerror="this.style.display='none'">
+        loading="eager" onerror="this.style.opacity='0'">
       <div id="kap-img-k-label" style="font-size:10px;color:var(--muted);margin-top:4px;display:none">Kapitel</div>
     </div>
     <div id="kap-img-b-wrap" style="display:none;text-align:center">
       <img id="kap-img-b" src="https://muzaffar57.github.io/-penodecor-katalog/BAZA_01.jpg" onclick="openImg(this.src)"
         style="height:130px;width:130px;object-fit:cover;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)"
-        onerror="this.style.display='none'">
+        loading="eager" onerror="this.style.opacity='0'">
       <div style="font-size:10px;color:var(--muted);margin-top:4px">Baza</div>
     </div>
   </div>`;
@@ -1516,7 +1516,7 @@ function renderKalvak(c) {
   let galleryHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:0 11px 8px;scrollbar-width:none">';
   for(let i=1;i<=9;i++){
     const n=String(i).padStart(2,'0');
-    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.display='none'">`;
+    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Kalvak_${n}.jpeg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" loading="eager" onerror="this.style.opacity='0'">`;
   }
   galleryHtml += '</div>';
   c.innerHTML += galleryHtml;
@@ -1526,7 +1526,7 @@ function renderKalvak(c) {
       <img src="https://muzaffar57.github.io/-penodecor-katalog/kalvak_eskiz.jpg"
         style="max-width:100%;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)"
         onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/kalvak_eskiz.jpg')"
-        onerror="this.style.display='none'">
+        loading="eager" onerror="this.style.opacity='0'">
     </div>
     <div class="q2row">
       <div class="fl-group"><div class="fl-label">Balandligi (sm)</div>
@@ -1595,7 +1595,7 @@ function renderBarelyef(c) {
   let galleryHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:0 11px 8px;scrollbar-width:none">';
   for(let i=1;i<=7;i++){
     const n=String(i).padStart(2,'0');
-    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" onerror="this.style.display='none'">`;
+    galleryHtml+=`<img src="https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Baraleg_${n}.jpg')" style="height:90px;width:90px;object-fit:cover;border-radius:10px;flex-shrink:0;cursor:pointer" loading="eager" onerror="this.style.opacity='0'">`;
   }
   galleryHtml += '</div>';
   c.innerHTML += galleryHtml;
