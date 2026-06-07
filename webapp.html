@@ -1736,7 +1736,16 @@ function filterCat(cat,btn){
 // Telegram Main Button
 // MainButton ishlatilmaydi
 
-// Sahifani darhol ochish — bosh katalog ko'rinadi
+// Sticky nav top ni header balandligiga moslashtirish
+function fixStickyNav() {
+  const hdr = document.querySelector('.hdr');
+  const nav = document.getElementById('sticky-nav');
+  if(hdr && nav) {
+    nav.style.top = hdr.offsetHeight + 'px';
+  }
+}
+window.addEventListener('resize', fixStickyNav);
+setTimeout(fixStickyNav, 100);
 savatYukla(() => {
   showHome();
 });
