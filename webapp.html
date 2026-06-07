@@ -534,7 +534,7 @@ function renderKarniz(c) {
     g.innerHTML += `<div class="card" id="kc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
-          onerror="this.style.background='#F0F4F8';this.alt='📐'">
+          onerror="this.outerHTML='<div class=\'cimg-ph\' onclick=\'openImg(\''+this.src+'\')\'>📐</div>'">
         <div class="cinfo">
           <div class="cname">Karniz MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
@@ -589,7 +589,7 @@ function renderBelbog(c) {
     g.innerHTML += `<div class="card" id="bc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg')"
-          onerror="this.style.background='#F0F4F8';this.alt='🎀'">
+          onerror="this.outerHTML='<div class=\'cimg-ph\'>🎀</div>'">
         <div class="cinfo">
           <div class="cname">Belbog MODEL-${num}</div>
           <div class="rrow">${rBtns}</div>
