@@ -18,7 +18,7 @@
 body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);padding-bottom:140px}
 
 /* HEADER */
-.hdr{background:var(--dark);padding:13px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.hdr{background:#1A252F;padding:13px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
 .hlogo{height:36px;border-radius:6px;object-fit:contain}
 .hinfo h1{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.2}
 .hinfo p{font-size:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
@@ -533,7 +533,7 @@ function renderKarniz(c) {
     ).join('');
     g.innerHTML += `<div class="card" id="kc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" loading="eager" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg" alt="" loading="eager" crossorigin="anonymous" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Karniz_${num}.jpg')"
           onerror="this.style.background='#F0F4F8';this.alt='📐'">
         <div class="cinfo">
           <div class="cname">Karniz MODEL-${num}</div>
@@ -588,7 +588,7 @@ function renderBelbog(c) {
     ).join('');
     g.innerHTML += `<div class="card" id="bc_${num}" style="animation-delay:${Math.min(i*0.03,0.4)}s">
       <div class="ctop">
-        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg')"
+        <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg" alt="" loading="eager" crossorigin="anonymous" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/Belbog_karniz_${num}.jpg')"
           loading="eager" onerror="this.style.background='#F0F4F8';this.alt='🎀'">
         <div class="cinfo">
           <div class="cname">Belbog MODEL-${num}</div>
