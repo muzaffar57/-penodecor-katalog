@@ -21,7 +21,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .hlogo{height:36px;border-radius:6px;object-fit:contain}
 .hinfo h1{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.2}
 .hinfo p{font-size:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
-.hbadge{margin-left:auto;background:var(--gold);color:var(--dark);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;display:none;cursor:pointer}
+.hbadge{background:var(--gold);color:var(--dark);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;display:none;cursor:pointer}
 .hbadge.show{display:block}
 
 /* SHEETS STATUS */
@@ -145,7 +145,12 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
     <h1>PenoDecorPro</h1>
     <p>Fasad bezaklari</p>
   </div>
-  <div class="hbadge" id="hbadge" onclick="openCart()">🛒 0</div>
+  <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+    <div class="hbadge" id="hbadge" onclick="openCart()">🛒 0</div>
+    <a onclick="tg.openLink('tel:+998979995757')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 97 999 57 57</a>
+    <a onclick="tg.openLink('tel:+998906232272')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 90 623 22 72</a>
+    <a onclick="tg.openLink('tel:+998976991919')" style="font-size:9px;color:var(--gold);text-decoration:none;white-space:nowrap;cursor:pointer">📞 +998 97 699 19 19</a>
+  </div>
 </div>
 
 <div class="sheets-status" id="sheets-status" style="display:none"></div>
