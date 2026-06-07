@@ -505,13 +505,13 @@ function setQoplama(val) {
 function renderContent(cat) {
   currentCat = cat;
   const c = document.getElementById('mainContent');
+  c.style.display = 'block';
   c.innerHTML = '';
   if(cat==='all'||cat==='karniz') renderKarniz(c);
   if(cat==='all'||cat==='belbog') renderBelbog(c);
   if(cat==='all'||cat==='rom') renderRom(c);
   if(cat==='all'||cat==='ramka') renderRamka(c);
   if(cat==='all'||cat==='plyastr') renderPlyastr(c);
-  // Nostandart bo'limlar faqat o'z tugmalari bosilganda chiqsin
   if(cat==='ustun') renderUstun(c);
   if(cat==='kapitel') renderKapitel(c);
   if(cat==='kalvak') renderKalvak(c);
