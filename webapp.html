@@ -415,14 +415,7 @@ function savatSaqla() {
     const data = JSON.stringify(savat);
     // sessionStorage zaxira
     try { sessionStorage.setItem('penodecor_cart', data); } catch(e){}
-    // Bot orqali serverda saqlash
-    if(savat.length > 0) {
-      tg.sendData(JSON.stringify({
-        amal: 'savat_saqlash',
-        savat: savat
-      }));
-    }
-    // CloudStorage ham
+    // CloudStorage
     if(tg.CloudStorage) {
       tg.CloudStorage.setItem('penodecor_cart', data);
     }
