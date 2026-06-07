@@ -1522,7 +1522,8 @@ function addKalvak() {
   const narx=xNarx*koef*s;
   const qopTuri=kalvakQoplama==='sep'?'Sepma qoplamali':'Oq (qoplamasiz)';
   const razmer=`${h}x${w}x${t}sm, ${s} dona, ${qopTuri}`;
-  upsertSavat('kalvak_'+Date.now(),'Kalvak (Kronshteyn)',razmer,'dona',narx,1,'nostandart');
+  const kalvakId = `kalvak_${h}x${w}x${t}_${kalvakQoplama}`;
+  upsertSavat(kalvakId,'Kalvak (Kronshteyn)',razmer,'dona',narx,s,'nostandart');
   setBtnAdded('kal-add');
 }
 
@@ -1575,7 +1576,8 @@ function addBarelyef() {
   const baza=sheetsNarx['Barelyef_standart_baza']||350000;
   const narx=(baza/200)*w*s;
   const razmer=`${w}x${boy}x6 sm, ${s} dona`;
-  upsertSavat('barelyef_'+Date.now(),'Barelyef Gul',razmer,'dona',narx,1,'nostandart');
+  const barelyefId = `barelyef_${w}x${boy}`;
+  upsertSavat(barelyefId,'Barelyef Gul',razmer,'dona',narx,s,'nostandart');
   setBtnAdded('bar-add');
 }
 
