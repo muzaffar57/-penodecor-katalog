@@ -1678,8 +1678,12 @@ function shakeInp(id){
 }
 function setBtnAdded(id){
   const btn=document.getElementById(id);if(!btn)return;
-  const was=btn.textContent;btn.textContent='✓ Savatda';btn.classList.add('added');
-  setTimeout(()=>{if(btn.classList.contains('added')&&btn.textContent!=="✓ Savatda")return;},3000);
+  const orig=btn.textContent;
+  btn.textContent='✓ Savatda';btn.classList.add('added');
+  setTimeout(()=>{
+    btn.textContent=orig.includes('Savatda')?'+ Qo\'shish':orig;
+    btn.classList.remove('added');
+  },1500);
 }
 function openImg(src){document.getElementById('imgBig').src=src;document.getElementById('imgOv').classList.add('show');}
 function closeImg(){document.getElementById('imgOv').classList.remove('show');}
