@@ -1148,7 +1148,7 @@ function addPlyastr(num) {
   const narxAsl = getPlyastrNarx(en, q);
   const narx = applyQ(narxAsl);
   const razmer = en+'x'+q+'sm';
-  const puQid=id+(qoplamali?'_q':'_nq');
+  const puQid='pu'+num+'_'+en+'_'+q+(qoplamali?'_q':'_nq');
   upsertSavat(puQid,'To\'rtburchak ustun MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),razmer,'metr',narx,qty,'plyastr');
   setBtnAdded('pb_'+num);
 }
