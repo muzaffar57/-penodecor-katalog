@@ -36,7 +36,8 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .sw-note{text-align:center;font-size:11px;color:var(--muted);margin:5px 13px 2px}
 
 /* KATEGORIYA */
-.cats{display:flex;gap:5px;padding:10px 12px 4px;overflow-x:auto;scrollbar-width:none}
+.cats{display:flex;gap:5px;padding:8px 12px 6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:104px;z-index:48;background:var(--bg);box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.25s}
+.cats.hidden{opacity:0;pointer-events:none;transform:translateY(-8px);max-height:0;padding:0;overflow:hidden}
 .cats::-webkit-scrollbar{display:none}
 .cat{flex-shrink:0;padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s}
 .cat.active{background:var(--dark);border-color:var(--dark);color:#fff}
@@ -155,7 +156,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 </div>
 <div class="sw-note" id="sw-note">Qoplama bilan narxlar ko'rsatilmoqda</div>
 
-<div class="cats">
+<div class="cats hidden">
   <button class="cat active" id="cat-home" onclick="showHome()">🏠 Katalog</button>
   <button class="cat" onclick="filterCat('rom',this)">Rom bezak</button>
   <button class="cat" onclick="filterCat('karniz',this)">Karnizlar</button>
@@ -1632,6 +1633,8 @@ function showHome() {
   document.getElementById('cat-home').classList.add('active');
   document.getElementById('homeCatalog').style.display='grid';
   document.getElementById('mainContent').style.display='none';
+  // Menyu yashirish
+  document.querySelector('.cats').classList.add('hidden');
   // Svitch ko'rsatish
   const swWrap=document.querySelector('.sw-wrap');
   const swNote=document.querySelector('.sw-note');
@@ -1640,10 +1643,8 @@ function showHome() {
 }
 
 function filterCatHome(cat) {
-  // Kartochka bosilganda to'g'ridan bo'limga o'tish
   const catBtns = document.querySelectorAll('.cat');
   catBtns.forEach(b=>b.classList.remove('active'));
-  // Mos tab ni topib active qilish
   const tabMap = {
     'rom':'Rom bezak','karniz':'Karnizlar','belbog':"Belbog'",'plyastr':'Plyastr ustun',
     'ustun':'Yumaloq ustun','kapitel':'Kapitel/Baza','kalvak':'Kalvak','barelyef':'Barelyef','ramka':'Ramkalar'
@@ -1653,6 +1654,8 @@ function filterCatHome(cat) {
   });
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
+  // Menyu ko'rsatish
+  document.querySelector('.cats').classList.remove('hidden');
   renderContent(cat);
   // Svitch ko'rsatish/yashirish
   const swWrap=document.querySelector('.sw-wrap');
@@ -1669,6 +1672,10 @@ function filterCatHome(cat) {
 function filterCat(cat,btn){
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  // Menyu ko'rsatish
+  document.querySelector('.cats').classList.remove('hidden');
+  document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('mainContent').style.display='block';
   document.getElementById('homeCatalog').style.display='none';
   document.getElementById('mainContent').style.display='block';
   // Yumaloq ustun bo'limida global svitch yashiriladi
