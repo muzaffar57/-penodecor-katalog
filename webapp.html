@@ -516,7 +516,7 @@ function renderKarniz(c) {
     const r = selRazmer['k'+num];
     const narxAsl = razmlar[r];
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='k'+num);
+    const kQid='k'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===kQid || s.id==='k'+num+'_q' || s.id==='k'+num+'_nq');
     const rBtns = Object.keys(razmlar).map(rz =>
       `<button class="rbtn ${r===rz?'active':''}" onclick="setKarnizR('${num}','${rz}')">${rz}</button>`
     ).join('');
@@ -548,14 +548,15 @@ function setKarnizR(num, rz) {
   const narx = applyQ(narxAsl);
   document.getElementById('kc_'+num).querySelectorAll('.rbtn').forEach(b=>b.classList.toggle('active',b.textContent===rz));
   document.getElementById('kpr_'+num).innerHTML=`<span class="pmain">${fmt(narx)}</span>${!qoplamali?`<span class="pold">${fmt(narxAsl)}</span>`:''}<span class="punit">/metr</span>`;
-  const ex=savat.findIndex(s=>s.id==='k'+num);
+  const ex=savat.findIndex(s=>s.id==='k'+num+'_q' || s.id==='k'+num+'_nq');
   if(ex>=0){savat[ex].razmer=rz;savat[ex].price=narx;savat[ex].jami=savat[ex].qty*narx;updateUI();}
 }
 function addKarniz(num) {
   const qty = parseFloat(document.getElementById('kq_'+num).value);
   if(!qty||qty<=0){shakeInp('kq_'+num);return;}
   const r = selRazmer['k'+num];
-  upsertSavat('k'+num,'Karniz MODEL-'+num,r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
+  const kQid='k'+num+(qoplamali?'_q':'_nq');
+  upsertSavat(kQid,'Karniz MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
   setBtnAdded('kb_'+num);
 }
 
@@ -568,7 +569,7 @@ function renderBelbog(c) {
     const r = selRazmer['b'+num];
     const narxAsl = razmlar[r];
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='b'+num);
+    const bQid='b'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===bQid || s.id==='b'+num+'_q' || s.id==='b'+num+'_nq');
     const rBtns = Object.keys(razmlar).map(rz =>
       `<button class="rbtn ${r===rz?'active':''}" onclick="setBelbogR('${num}','${rz}')">${rz}</button>`
     ).join('');
@@ -607,7 +608,8 @@ function addBelbog(num) {
   const qty = parseFloat(document.getElementById('bq_'+num).value);
   if(!qty||qty<=0){shakeInp('bq_'+num);return;}
   const r = selRazmer['b'+num];
-  upsertSavat('b'+num,"Belbog MODEL-"+num,r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
+  const bQid='b'+num+(qoplamali?'_q':'_nq');
+  upsertSavat(bQid,'Belbog MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
   setBtnAdded('bb_'+num);
 }
 
@@ -1012,7 +1014,7 @@ function renderRamka(c) {
   const g = document.createElement('div'); g.className = 'products';
   Object.entries(RAMKA).forEach(([num, narxAsl], i) => {
     const narx = applyQ(narxAsl);
-    const inCart = savat.find(s=>s.id==='rm'+num);
+    const rmQid='rm'+num+(qoplamali?'_q':'_nq'); const inCart = savat.find(s=>s.id===rmQid || s.id==='rm'+num+'_q' || s.id==='rm'+num+'_nq');
     g.innerHTML += `<div class="card" style="animation-delay:${Math.min(i*0.05,0.4)}s">
       <div class="ctop">
         <img class="cimg" src="https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg" alt="" onclick="openImg('https://muzaffar57.github.io/-penodecor-katalog/ramka_${num}.jpg')"
@@ -1037,7 +1039,8 @@ function renderRamka(c) {
 function addRamka(num, narxAsl) {
   const qty = parseFloat(document.getElementById('rmq_'+num).value);
   if(!qty||qty<=0){shakeInp('rmq_'+num);return;}
-  upsertSavat('rm'+num,'Devorga ramka MODEL-'+num,'standart','dona',applyQ(narxAsl),qty,'ramka');
+  const rmQid='rm'+num+(qoplamali?'_q':'_nq');
+  upsertSavat(rmQid,'Devorga ramka MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),'standart','dona',applyQ(narxAsl),qty,'ramka');
   setBtnAdded('rmb_'+num);
 }
 
@@ -1145,7 +1148,8 @@ function addPlyastr(num) {
   const narxAsl = getPlyastrNarx(en, q);
   const narx = applyQ(narxAsl);
   const razmer = en+'x'+q+'sm';
-  upsertSavat(id,'To\'rtburchak ustun MODEL-'+num,razmer,'metr',narx,qty,'plyastr');
+  const puQid=id+(qoplamali?'_q':'_nq');
+  upsertSavat(puQid,'To\'rtburchak ustun MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),razmer,'metr',narx,qty,'plyastr');
   setBtnAdded('pb_'+num);
 }
 function renderUstun(c) {
@@ -1244,7 +1248,8 @@ function addUstun() {
     qopTuri = 'Qoplamali (Premium 180° qolip)';
   }
   const razmer=`D:${d}sm, H:${h}m, ${qopTuri}`;
-  upsertSavat('ustun','Yumaloq ustun',razmer,'dona',narx,1,'nostandart');
+  const ustunId = `ustun_${d}_${h}_${ustunQ}`;
+  upsertSavat(ustunId,'Yumaloq ustun',razmer,'dona',narx,1,'nostandart');
   setBtnAdded('u-add');
 }
 
@@ -1429,7 +1434,8 @@ function addKapitel() {
   else if(kapTur==='baza') nom=`Yumaloq Baza ${kapModelB}`;
   else nom=`Yumaloq Komplekt (Kapitel: ${kapModelK}, Baza: ${kapModelB})`;
   const razmer=`D:${d}sm, ${s} dona, ${qopTuri}`;
-  upsertSavat('kapitel',nom,razmer,'dona',narx,1,'nostandart');
+  const kapId = `kapitel_${d}_${kapTur}_${kapQ}`;
+  upsertSavat(kapId,nom,razmer,'dona',narx,1,'nostandart');
   setBtnAdded('kap-add');
 }
 
