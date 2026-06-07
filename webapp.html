@@ -410,28 +410,51 @@ async function loadSheetsNarx() {
 let qoplamali = true;
 let savat = [];
 
-// ===== SAVAT XOTIRASI (Telegram CloudStorage) =====
 function savatSaqla() {
   try {
+    const data = JSON.stringify(savat);
+    // sessionStorage zaxira
+    try { sessionStorage.setItem('penodecor_cart', data); } catch(e){}
+    // Bot orqali serverda saqlash
+    if(savat.length > 0) {
+      tg.sendData(JSON.stringify({
+        amal: 'savat_saqlash',
+        savat: savat
+      }));
+    }
+    // CloudStorage ham
     if(tg.CloudStorage) {
-      tg.CloudStorage.setItem('penodecor_cart', JSON.stringify(savat));
+      tg.CloudStorage.setItem('penodecor_cart', data);
     }
   } catch(e) { console.log('Saqlash xato:', e); }
 }
 
 function savatYukla(callback) {
+  // sessionStorage dan yuklab ko'ramiz
+  try {
+    const ssData = sessionStorage.getItem('penodecor_cart');
+    if(ssData) {
+      const loaded = JSON.parse(ssData);
+      if(Array.isArray(loaded) && loaded.length > 0) {
+        savat = loaded;
+        updateUI();
+        console.log('sessionStorage dan yuklandi:', savat.length, 'ta');
+      }
+    }
+  } catch(e){}
+
+  // CloudStorage dan ham yuklab ko'ramiz
   try {
     if(tg.CloudStorage) {
       tg.CloudStorage.getItem('penodecor_cart', (err, val) => {
         if(!err && val) {
           try {
             const loaded = JSON.parse(val);
-            if(Array.isArray(loaded) && loaded.length > 0) {
+            if(Array.isArray(loaded) && loaded.length > savat.length) {
               savat = loaded;
               updateUI();
-              console.log('Savat yuklandi:', savat.length, 'ta mahsulot');
             }
-          } catch(e) { console.log('Parse xato:', e); }
+          } catch(e){}
         }
         if(callback) callback();
       });
@@ -445,9 +468,8 @@ function savatYukla(callback) {
 
 function savatTozala() {
   savat = [];
-  try {
-    if(tg.CloudStorage) tg.CloudStorage.removeItem('penodecor_cart');
-  } catch(e) {}
+  try { if(tg.CloudStorage) tg.CloudStorage.removeItem('penodecor_cart'); } catch(e){}
+  try { sessionStorage.removeItem('penodecor_cart'); } catch(e){}
   updateUI();
 }
 let selRazmer = {};
