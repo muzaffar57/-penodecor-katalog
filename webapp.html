@@ -1250,7 +1250,15 @@ function addUstun() {
   const razmer=`D:${d}sm, H:${h}m, ${qopTuri}`;
   const ustunId = `ustun_${d}_${h}_${ustunQ}`;
   upsertSavat(ustunId,'Yumaloq ustun',razmer,'dona',narx,1,'nostandart');
-  setBtnAdded('u-add');
+  const btn=document.getElementById('u-add');
+  if(btn){btn.textContent='✓ Savatda';btn.classList.add('added');}
+  // Inputlarni tozalash — yangi razmer kiritish uchun
+  setTimeout(()=>{
+    if(btn){btn.textContent="🛒 Savatga qo'shish";btn.classList.remove('added');}
+    document.getElementById('u-h').value='';
+    document.getElementById('u-d').value='';
+    document.getElementById('u-res').innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px">Balandlik va diametrni kiriting</div>';
+  }, 1500);
 }
 
 // ===== KAPITEL VA BAZA =====
