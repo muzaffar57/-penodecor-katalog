@@ -1703,8 +1703,8 @@ function buyurtmaYuborish() {
 function stepInp(id, delta, step) {
   const el = document.getElementById(id);
   if(!el) return;
-  const cur = parseFloat(el.value) || 0;
-  const newVal = Math.max(0, Math.round((cur + delta) * 100) / 100);
+  const cur = parseInt(el.value) || 0;
+  const newVal = Math.max(0, cur + delta);
   el.value = newVal;
   el.dispatchEvent(new Event('input'));
 }
