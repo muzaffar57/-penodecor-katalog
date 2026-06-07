@@ -129,9 +129,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
 .cdel{width:26px;height:26px;border-radius:50%;background:#FEE;border:none;color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
 .ctotal{margin:6px 17px 18px;padding:12px 14px;background:var(--bg);border-radius:10px;display:flex;justify-content:space-between;align-items:center}
 .ctotal span:last-child{font-size:17px;font-weight:700}
-.cfab{position:fixed;bottom:22px;right:13px;background:var(--dark);color:#fff;border:none;border-radius:50px;padding:11px 17px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,0.24);display:none;align-items:center;gap:6px;z-index:150}
-.cfab.show{display:flex}
-.cfab:active{transform:scale(0.96)}
+
 </style>
 </head>
 <body>
@@ -179,8 +177,40 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
   <div class="cheader"><h2>🛒 Savat</h2><button class="cx" onclick="closeCart()">✕</button></div>
   <div class="citems" id="citems"></div>
   <div class="ctotal" id="ctotal" style="display:none"><span>Jami summa:</span><span id="totalTxt">0 so'm</span></div>
+  <!-- Savat tugmalari -->
+  <div id="cart-btns" style="display:none;padding:0 17px 24px;display:flex;flex-direction:column;gap:8px">
+    <button onclick="buyurtmaBerish()"
+      style="width:100%;padding:13px;background:var(--dark);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">
+      ✅ Buyurtma berish
+    </button>
+    <button onclick="pdfOlish()"
+      style="width:100%;padding:13px;background:#fff;color:var(--dark);border:2px solid var(--dark);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">
+      📄 Hisobni PDF ko'rinishida olish
+    </button>
+  </div>
+  <!-- Buyurtma forma -->
+  <div id="buyurtma-forma" style="display:none;padding:0 17px 24px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--dark)">📝 Buyurtmani rasmiylashtirish</div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Ismingiz</div>
+      <input id="buyurtma-ism" class="sinp" type="text" placeholder="Ism Familiya" style="width:100%;height:40px">
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Telefon raqamingiz</div>
+      <input id="buyurtma-tel" class="sinp" type="tel" placeholder="+998 90 123 45 67" style="width:100%;height:40px">
+    </div>
+    <div id="buyurtma-xato" style="display:none;color:var(--red);font-size:12px;margin-bottom:8px"></div>
+    <button onclick="buyurtmaYuborish()"
+      style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">
+      📤 Botga yuborish
+    </button>
+    <button onclick="showCartBtns()"
+      style="width:100%;padding:10px;background:transparent;color:var(--muted);border:none;font-size:13px;cursor:pointer;margin-top:4px">
+      ← Orqaga
+    </button>
+  </div>
 </div>
-<button class="cfab" id="cfab" onclick="openCart()">🛒 <span id="fabTxt">Savat</span></button>
+
 
 <script>
 const tg = window.Telegram.WebApp;
@@ -1351,10 +1381,13 @@ function addBarelyef() {
 
 // ===== SAVAT YORDAMCHI =====
 function upsertSavat(id,name,razmer,unit,price,qty,cat) {
+  // Narx va qoplama holati savatga qulflanadi — svitch o'zgarganda ta'sir qilmaydi
   const ex=savat.findIndex(s=>s.id===id);
   const jami=Math.round(price*qty);
-  if(ex>=0) savat[ex]={id,name,razmer,unit,price:Math.round(price),qty,jami,cat};
-  else savat.push({id,name,razmer,unit,price:Math.round(price),qty,jami,cat});
+  const qoplama_turi = qoplamali ? 'Qoplamali' : 'Qoplamasiz';
+  const item = {id,name,razmer,unit,price:Math.round(price),qty,jami,cat,qoplama_turi};
+  if(ex>=0) savat[ex]=item;
+  else savat.push(item);
   updateUI();
 }
 function removeFromCart(id) {
@@ -1367,32 +1400,68 @@ function updateUI() {
   const count=savat.length;
   document.getElementById('hbadge').textContent='🛒 '+count;
   document.getElementById('hbadge').classList.toggle('show',count>0);
-  document.getElementById('cfab').classList.toggle('show',count>0);
-  document.getElementById('fabTxt').textContent=count+' ta — '+fmt(total);
-  if(count>0){
-    tg.MainButton.setText('✅ Buyurtmani tasdiqlash — '+fmt(total));
-    tg.MainButton.show();
-  } else tg.MainButton.hide();
   renderCartItems();
 }
 function renderCartItems() {
   const c=document.getElementById('citems');
   const t=document.getElementById('ctotal');
+  const btns=document.getElementById('cart-btns');
   if(!savat.length){
     c.innerHTML="<p style='text-align:center;color:#8E8E93;padding:20px 0;font-size:13px'>Savat bo'sh</p>";
-    t.style.display='none'; return;
+    t.style.display='none';
+    if(btns) btns.style.display='none';
+    return;
   }
   const total=savat.reduce((s,i)=>s+i.jami,0);
   c.innerHTML=savat.map(item=>`<div class="ci">
     <div class="ci-info">
       <div class="ci-name">${item.name}</div>
-      <div class="ci-det">📏 ${item.razmer}<br>💰 ${item.qty} ${item.unit} × ${fmt(item.price)}</div>
+      <div class="ci-det">📏 ${item.razmer}<br>💰 ${item.qty} ${item.unit} × ${fmt(item.price)}${item.qoplama_turi?' | '+item.qoplama_turi:''}</div>
     </div>
     <div class="ci-price">${fmt(item.jami)}</div>
     <button class="cdel" onclick="removeFromCart('${item.id}')">✕</button>
   </div>`).join('');
   document.getElementById('totalTxt').textContent=fmt(total);
   t.style.display='flex';
+  if(btns) btns.style.display='flex';
+}
+
+function showCartBtns() {
+  document.getElementById('buyurtma-forma').style.display='none';
+  document.getElementById('cart-btns').style.display='flex';
+}
+function buyurtmaBerish() {
+  document.getElementById('cart-btns').style.display='none';
+  document.getElementById('buyurtma-forma').style.display='block';
+  document.getElementById('buyurtma-xato').style.display='none';
+  document.getElementById('buyurtma-ism').value='';
+  document.getElementById('buyurtma-tel').value='';
+}
+function pdfOlish() {
+  // Bot ga PDF so'rovi yuborish
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const data={
+    amal:'pdf_so\'rov',
+    savat:savat.map(i=>({mahsulot:i.name,razmer:i.razmer,miqdor:i.qty+' '+i.unit,birlik_narx:i.price,jami:i.jami,qoplama:i.qoplama_turi||''})),
+    jami_summa:Math.round(total)
+  };
+  tg.sendData(JSON.stringify(data));
+}
+function buyurtmaYuborish() {
+  const ism=document.getElementById('buyurtma-ism').value.trim();
+  const tel=document.getElementById('buyurtma-tel').value.trim();
+  const xatoEl=document.getElementById('buyurtma-xato');
+  if(!ism){xatoEl.textContent='❌ Ism kiritilmagan!';xatoEl.style.display='block';return;}
+  if(!tel||tel.length<9){xatoEl.textContent='❌ Telefon raqam noto\'g\'ri!';xatoEl.style.display='block';return;}
+  xatoEl.style.display='none';
+  const total=savat.reduce((s,i)=>s+i.jami,0);
+  const data={
+    amal:'buyurtma',
+    ism,tel,
+    savat:savat.map(i=>({mahsulot:i.name,razmer:i.razmer,miqdor:i.qty+' '+i.unit,birlik_narx:i.price,jami:i.jami,qoplama:i.qoplama_turi||''})),
+    jami_summa:Math.round(total)
+  };
+  tg.sendData(JSON.stringify(data));
 }
 
 function shakeInp(id){
