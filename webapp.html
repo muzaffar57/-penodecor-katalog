@@ -249,7 +249,7 @@ body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--text);paddin
   </div>
 </div>
 
-<div id="mainContent" style="display:block;min-height:400px;position:relative;z-index:1"></div>
+<div id="mainContent" style="display:none;min-height:400px;position:relative;z-index:1"></div>
 
 <div class="img-ov" id="imgOv" onclick="closeImg()">
   <button class="img-x">✕</button>
@@ -1842,11 +1842,16 @@ function filterCatHome(cat) {
 }
 
 function filterCat(cat,btn){
+  console.log('=== filterCat boshlandi:', cat);
   document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('cats-el').classList.remove('hidden');
-  document.getElementById('homeCatalog').style.display='none';
-  document.getElementById('mainContent').style.display='block';
+  const home = document.getElementById('homeCatalog');
+  const mc = document.getElementById('mainContent');
+  home.style.display='none';
+  mc.style.display='block';
+  console.log('home display:', getComputedStyle(home).display);
+  console.log('mc display:', getComputedStyle(mc).display);
   const swWrap = document.getElementById('sw-wrap-el');
   const swNote = document.getElementById('sw-note');
   if(cat==='ustun'){
@@ -1857,6 +1862,10 @@ function filterCat(cat,btn){
     if(swNote) swNote.style.display='block';
   }
   renderContent(cat);
+  setTimeout(()=>{
+    const r = mc.getBoundingClientRect();
+    console.log('mc final: height=', r.height, 'top=', r.top, 'children=', mc.children.length);
+  }, 100);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
