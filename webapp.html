@@ -506,16 +506,22 @@ function setQoplama(val) {
 function renderContent(cat) {
   currentCat = cat;
   const c = document.getElementById('mainContent');
+  c.style.display = 'block';
   c.innerHTML = '';
-  if(cat==='all'||cat==='karniz') renderKarniz(c);
-  if(cat==='all'||cat==='belbog') renderBelbog(c);
-  if(cat==='all'||cat==='rom') renderRom(c);
-  if(cat==='all'||cat==='ramka') renderRamka(c);
-  if(cat==='all'||cat==='plyastr') renderPlyastr(c);
-  if(cat==='ustun') renderUstun(c);
-  if(cat==='kapitel') renderKapitel(c);
-  if(cat==='kalvak') renderKalvak(c);
-  if(cat==='barelyef') renderBarelyef(c);
+  try {
+    if(cat==='all'||cat==='karniz') renderKarniz(c);
+    if(cat==='all'||cat==='belbog') renderBelbog(c);
+    if(cat==='all'||cat==='rom') renderRom(c);
+    if(cat==='all'||cat==='ramka') renderRamka(c);
+    if(cat==='all'||cat==='plyastr') renderPlyastr(c);
+    if(cat==='ustun') renderUstun(c);
+    if(cat==='kapitel') renderKapitel(c);
+    if(cat==='kalvak') renderKalvak(c);
+    if(cat==='barelyef') renderBarelyef(c);
+  } catch(e) {
+    console.error('RENDER XATO:', cat, e.message, e.stack);
+    c.innerHTML = '<div style="padding:20px;color:red;font-size:14px">Xato: '+e.message+'<br>'+e.stack+'</div>';
+  }
 }
 
 // ===== KARNIZ =====
@@ -1810,6 +1816,7 @@ function filterCatHome(cat) {
     if(b.textContent.trim()===tabMap[cat]) b.classList.add('active');
   });
   document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('mainContent').style.display='block';
   document.getElementById('cats-el').classList.remove('hidden');
   renderContent(cat);
   window.scrollTo(0,0);
@@ -1829,6 +1836,7 @@ function filterCat(cat,btn){
   btn.classList.add('active');
   document.getElementById('cats-el').classList.remove('hidden');
   document.getElementById('homeCatalog').style.display='none';
+  document.getElementById('mainContent').style.display='block';
   const swWrap = document.getElementById('sw-wrap-el');
   const swNote = document.getElementById('sw-note');
   if(cat==='ustun'){
