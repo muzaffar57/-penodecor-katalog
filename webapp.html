@@ -939,7 +939,7 @@ function getRomNarx() {
   const O = romOlcham === 'katta' ? 'Katta' : 'Kichik';
   const num = (romModel || '01').padStart(2,'0');
   // Kalit format: Rom_01_Katta_Nalichnik
-  const get = (detal, def) => (sheetsNarx[`Rom_${num}_${O}_${detal}`] || def) * foiz;
+  const get = (detal, def) => applyQ((sheetsNarx[`Rom_${num}_${O}_${detal}`] || def) * foiz);
   return {
     nalichNarx  : get('Nalichnik',  25000),
     karnizNarx  : get('Karniz',     30000),
