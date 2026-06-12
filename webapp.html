@@ -1701,7 +1701,7 @@ function renderCartItems() {
     <div class="ci-price">${fmt(item.jami)}</div>
     <button class="cdel" onclick="removeFromCart('${item.id}')">✕</button>
   </div>`).join('');
-  document.getElementById('totalTxt').textContent=fmt(total);
+  document.getElementById('totalTxt').textContent=fmt(total);const discount=Math.round(total*0.9);document.getElementById('totalDiscount').textContent=fmt(discount);document.getElementById('ctotal2').style.display='flex';
   t.style.display='flex';
   if(btns) btns.style.display='flex';
 }
