@@ -1728,7 +1728,7 @@ function pdfOlish() {
       birlik_narx: i.price, jami: i.jami,
       qoplama: i.qoplama_turi||''
     })),
-    jami_summa: Math.round(total)
+    jami_summa: Math.round(total), chegirma_summa: Math.round(total*0.9)
   };
   tg.sendData(JSON.stringify(data));
 }
