@@ -1689,7 +1689,7 @@ function renderCartItems() {
   if(!savat.length){
     c.innerHTML="<p style='text-align:center;color:#8E8E93;padding:20px 0;font-size:13px'>Savat bo'sh</p>";
     t.style.display='none';
-    if(btns) btns.style.display='none';
+    document.getElementById('ctotal2').style.display='none';if(btns) btns.style.display='none';
     return;
   }
   const total=savat.reduce((s,i)=>s+i.jami,0);
