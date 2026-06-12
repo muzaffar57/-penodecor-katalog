@@ -500,7 +500,7 @@ function setQoplama(val) {
   document.getElementById('sw-note').textContent = val
     ? "Qoplama bilan narxlar ko'rsatilmoqda"
     : "⚡ Qoplamasiz — 2 barobar arzon!";
-  renderContent(currentCat);
+  if(currentCat==='rom'){calcRom();}else{renderContent(currentCat);}
 }
 
 // ===== RENDER =====
