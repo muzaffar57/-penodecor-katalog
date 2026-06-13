@@ -780,7 +780,7 @@ function renderRom(c) {
         </div>
         <div class="fl-group">
           <div class="fl-label">Korona jami (dona)</div>
-          <input class="sinp" id="rom-korona" type="number" min="0" step="1" placeholder="Masalan: 4" oninput="calcRom()">
+          <div style="display:flex;align-items:center;gap:4px"><button class="step-btn" onclick="stepInp('rom-korona',-1,1)">−</button><input class="sinp" id="rom-korona" type="number" min="0" step="1" oninput="calcRom()"><button class="step-btn" onclick="stepInp('rom-korona',1,1)">+</button></div>
         </div>
         <div class="fl-group">
           <div class="fl-label">Kalvak jami (dona)</div>
