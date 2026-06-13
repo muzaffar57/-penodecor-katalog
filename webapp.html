@@ -632,7 +632,7 @@ function addBelbog(num) {
   const r = selRazmer['b'+num];
   const bQid='b'+num+'_'+r+(qoplamali?'_q':'_nq');
   upsertSavat(bQid,'Belbog MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(BELBOG[num][r]),qty,'belbog');
-  setBtnAdded('bb_'+num);
+  document.getElementById('bq_'+num).value='';setBtnAdded('bb_'+num);
 }
 
 const ROM_GURUHLAR = {
