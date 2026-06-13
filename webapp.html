@@ -1216,7 +1216,7 @@ function addPlyastr(num) {
     upsertSavat(bazaId, 'Baza (Ustun '+en+') MODEL-'+num, en+' diametr', 'dona', bazaNarx, bazaQty, 'baza');
   }
 
-  setBtnAdded('pb_'+num);
+  document.getElementById('pq_'+num).value='';setBtnAdded('pb_'+num);
 }
 function renderUstun(c) {
   c.innerHTML += '<div class="sec-title">🏛️ Yumaloq ustun (Kolonna)</div>';
