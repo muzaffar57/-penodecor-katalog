@@ -1224,7 +1224,7 @@ function renderUstun(c) {
     <div class="sp-title">🏛️ Yumaloq ustun hisoblash</div>
     <div class="q2row">
       <div class="fl-group"><div class="fl-label">Balandligi (metr)</div>
-        <input class="sinp" id="u-h" type="number" min="0.5" step="0.5" placeholder="Masalan: 3" oninput="calcUstun()"></div>
+        <div style="display:flex;align-items:center;gap:4px"><button class="step-btn" onclick="stepInp('u-h',-1,1)">−</button><input class="sinp" id="u-h" type="number" min="0" step="1" oninput="calcUstun()"><button class="step-btn" onclick="stepInp('u-h',1,1)">+</button></div></div>
       <div class="fl-group"><div class="fl-label">Diametri (sm)</div>
         <input class="sinp" id="u-d" type="number" min="10" step="1" placeholder="Masalan: 30" oninput="calcUstun()"></div>
     </div>
