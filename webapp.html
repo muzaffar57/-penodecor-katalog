@@ -577,7 +577,7 @@ function addKarniz(num) {
   const r = selRazmer['k'+num];
   const kQid='k'+num+'_'+r+(qoplamali?'_q':'_nq');
   upsertSavat(kQid,'Karniz MODEL-'+num+(qoplamali?' (Qoplamali)':' (Qoplamasiz)'),r,'metr',applyQ(KARNIZ[num][r]),qty,'karniz');
-  setBtnAdded('kb_'+num);
+  document.getElementById('kq_'+num).value='';setBtnAdded('kb_'+num);
 }
 
 // ===== BELBOG =====
