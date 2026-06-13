@@ -1537,7 +1537,7 @@ function renderKalvak(c) {
     </div>
     <div class="q2row">
       <div class="fl-group"><div class="fl-label">Balandligi (sm)</div>
-        <input class="sinp" id="kal-h" type="number" min="1" step="1" placeholder="sm" oninput="calcKalvak()"></div>
+        <div style="display:flex;align-items:center;gap:4px"><button class="step-btn" onclick="stepInp('kal-h',-1,1)">−</button><input class="sinp" id="kal-h" type="number" min="0" step="1" oninput="calcKalvak()"><button class="step-btn" onclick="stepInp('kal-h',1,1)">+</button></div></div>
       <div class="fl-group"><div class="fl-label">Eni (sm)</div>
         <input class="sinp" id="kal-w" type="number" min="1" step="1" placeholder="sm" oninput="calcKalvak()"></div>
     </div>
